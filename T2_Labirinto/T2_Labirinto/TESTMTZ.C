@@ -122,9 +122,14 @@ static MTZ_tppMatriz EncontrarMatriz( int indice ) ;
                return TST_CondRetParm ;
             } /* if */
 
-			matDada = EncontrarMatriz(indiceMtz);
-
-            CondRetObtido = MTZ_CriarMatriz( &matDada , dim , ExcluirCaracter ) ; 
+			if (indiceMtz == 0) {
+				CondRetObtido = MTZ_CriarMatriz( &matriz0 , dim , ExcluirCaracter ) ;
+			} else if (indiceMtz == 1) {
+				CondRetObtido = MTZ_CriarMatriz( &matriz1 , dim , ExcluirCaracter ) ; 
+			} else if (indiceMtz == 2) {
+				CondRetObtido = MTZ_CriarMatriz( &matriz2 , dim , ExcluirCaracter ) ; 
+			} else
+				return TST_CondRetNaoConhec;
 
             return TST_CompararInt( CondRetEsperada , CondRetObtido ,
                                     "Retorno errado ao criar matriz." );
@@ -237,9 +242,21 @@ static MTZ_tppMatriz EncontrarMatriz( int indice ) ;
             {
                return TST_CondRetParm ;
             } /* if */
-
-			matDada = EncontrarMatriz(indiceMtz);
-            CondRetObtido = MTZ_DestruirMatriz( &matDada ) ;
+			
+			if (indiceMtz == 0) {
+				CondRetObtido = MTZ_DestruirMatriz( &matriz0 ) ;
+				//free(matriz0);
+				matriz0 = NULL;
+			} else if (indiceMtz == 1) {
+				CondRetObtido = MTZ_DestruirMatriz( &matriz1 ) ;
+				//free(matriz1);
+				matriz1 = NULL;
+			} else if (indiceMtz == 2) {
+				CondRetObtido = MTZ_DestruirMatriz( &matriz2 ) ;
+				//free(matriz2);
+				matriz2 = NULL;
+			} else
+				return TST_CondRetNaoConhec;
 
             return TST_CompararInt( CondRetEsperada , CondRetObtido ,
                                     "Retorno errado ao destruir matriz." ); ;
@@ -278,7 +295,6 @@ static MTZ_tppMatriz EncontrarMatriz( int indice ) ;
      switch (indice) {
 	 case 0:
 		 return matriz0;
-
 	 case 1:
 		 return matriz1;
 	 case 2:
