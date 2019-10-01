@@ -16,6 +16,7 @@
 *  $HA Histórico de evolução:
 *     Versão  Autor    Data     Observações
 *       1.00   aaf   26/08/2019 Início do desenvolvimento
+*       1.01   aaf   30/09/2019 Alteração para não usar listas nem estruturas estáticas
 *
 *  $ED Descrição do módulo
 *     Este módulo contém as funções específicas para o teste do
