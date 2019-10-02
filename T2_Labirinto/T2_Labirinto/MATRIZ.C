@@ -292,7 +292,7 @@
 
       return MTZ_CondRetOK;
 
-   } /* Fim função: MTZ Obter valor corrente */
+   } /* Fim função: MTZ Voltar para o primeiro */
 
 
 /*****  Código das funções encapsuladas no módulo  *****/
