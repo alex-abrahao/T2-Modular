@@ -91,182 +91,164 @@ static MTZ_tppMatriz EncontrarMatriz( int indice ) ;
 *
 ***********************************************************************/
 
-   TST_tpCondRet TST_EfetuarComando( char * ComandoTeste )
-   {
+TST_tpCondRet TST_EfetuarComando( char * ComandoTeste ) {
 
-      MTZ_tpCondRet CondRetObtido   = MTZ_CondRetOK ;
-      MTZ_tpCondRet CondRetEsperada = MTZ_CondRetFaltouMemoria ;
+    MTZ_tpCondRet CondRetObtido   = MTZ_CondRetOK ;
+    MTZ_tpCondRet CondRetEsperada = MTZ_CondRetFaltouMemoria ;
                                       /* inicializa para qualquer coisa */
 
-      char ValorEsperado = '?'  ;
-      char ValorObtido   = '!'  ;
-      char ValorDado     = '\0' ;
-	  char * pChar = NULL;
-	  MTZ_tppMatriz matDada;
+    char ValorEsperado = '?'  ;
+    char ValorObtido   = '!'  ;
+    char ValorDado     = '\0' ;
+    char * pChar = NULL;
+    MTZ_tppMatriz matDada;
 
-      int  NumLidos = -1 ;
+    int  NumLidos = -1 ;
 
-      TST_tpCondRet Ret ;
+    TST_tpCondRet Ret ;
 
-	   int indiceMtz;
+    int indiceMtz;
 
       /* Testar MTZ Criar matriz */
 
-         if ( strcmp( ComandoTeste , CRIAR_MTZ_CMD ) == 0 )
-         {
-			int dim;
+    if ( strcmp( ComandoTeste , CRIAR_MTZ_CMD ) == 0 ) {
 
-            NumLidos = LER_LerParametros( "iii" ,
-                               &indiceMtz, &dim, &CondRetEsperada ) ;
-            if ( NumLidos != 3 )
-            {
-               return TST_CondRetParm ;
-            } /* if */
+        int dim;
 
-			if (indiceMtz == 0) {
-				CondRetObtido = MTZ_CriarMatriz( &matriz0 , dim , ExcluirCaracter ) ;
-			} else if (indiceMtz == 1) {
-				CondRetObtido = MTZ_CriarMatriz( &matriz1 , dim , ExcluirCaracter ) ; 
-			} else if (indiceMtz == 2) {
-				CondRetObtido = MTZ_CriarMatriz( &matriz2 , dim , ExcluirCaracter ) ; 
-			} else
-				return TST_CondRetNaoConhec;
+        NumLidos = LER_LerParametros( "iii" ,
+            &indiceMtz, &dim, &CondRetEsperada ) ;
+        if ( NumLidos != 3 ) {
+            return TST_CondRetParm ;
+        } /* if */
 
-            return TST_CompararInt( CondRetEsperada , CondRetObtido ,
-                                    "Retorno errado ao criar matriz." );
+        if (indiceMtz == 0) {
+            CondRetObtido = MTZ_CriarMatriz( &matriz0 , dim , ExcluirCaracter ) ;
+        } else if (indiceMtz == 1) {
+            CondRetObtido = MTZ_CriarMatriz( &matriz1 , dim , ExcluirCaracter ) ; 
+        } else if (indiceMtz == 2) {
+            CondRetObtido = MTZ_CriarMatriz( &matriz2 , dim , ExcluirCaracter ) ; 
+        } else
+            return TST_CondRetNaoConhec;
 
-         } /* fim ativa: Testar MTZ Criar matriz */
+        return TST_CompararInt( CondRetEsperada , CondRetObtido ,
+            "Retorno errado ao criar matriz." );
 
-      /* Testar MTZ Inserir elemento na casa corrente */
+    } /* fim ativa: Testar MTZ Criar matriz */
 
-         else if ( strcmp( ComandoTeste , INS_ELM_CMD ) == 0 )
-         {
-            NumLidos = LER_LerParametros( "ici" ,
-                               &indiceMtz, &ValorDado , &CondRetEsperada ) ;
-            if ( NumLidos != 3 )
-            {
-               return TST_CondRetParm ;
-            } /* if */
+    /* Testar MTZ Inserir elemento na casa corrente */
+    else if ( strcmp( ComandoTeste , INS_ELM_CMD ) == 0 ) {
 
-			matDada = EncontrarMatriz(indiceMtz);
-			pChar = (char *) malloc(sizeof(char));
+        NumLidos = LER_LerParametros( "ici" ,
+            &indiceMtz, &ValorDado , &CondRetEsperada ) ;
+        if ( NumLidos != 3 ) {
+            return TST_CondRetParm ;
+        } /* if */
 
-			if ( pChar == NULL )
-            {
-               return TST_CondRetMemoria ;
-            } /* if */
+        matDada = EncontrarMatriz(indiceMtz);
+        pChar = (char *) malloc(sizeof(char));
 
-			*pChar = ValorDado;
+        if ( pChar == NULL ) {
+            return TST_CondRetMemoria ;
+        } /* if */
 
-            CondRetObtido = MTZ_InserirElementoNaCasaCorrente( matDada , (void *) pChar ) ;
+        *pChar = ValorDado;
 
-            return TST_CompararInt( CondRetEsperada , CondRetObtido ,
-                                    "Retorno errado inserir o elemento." );
+        CondRetObtido = MTZ_InserirElementoNaCasaCorrente( matDada , (void *) pChar ) ;
 
-         } /* fim ativa: Inserir elemento na casa corrente */
+        return TST_CompararInt( CondRetEsperada , CondRetObtido ,
+            "Retorno errado inserir o elemento." );
 
-      /* Testar MTZ Obter valor corrente */
+    } /* fim ativa: Inserir elemento na casa corrente */
 
-         else if ( strcmp( ComandoTeste , OBTER_VAL_CMD ) == 0 )
-         {
-			
-            NumLidos = LER_LerParametros( "ici" ,
-                               &indiceMtz, &ValorEsperado , &CondRetEsperada ) ;
-            if ( NumLidos != 3 )
-            {
-               return TST_CondRetParm ;
-            } /* if */
+    /* Testar MTZ Obter valor corrente */
+    else if ( strcmp( ComandoTeste , OBTER_VAL_CMD ) == 0 ) {
 
-			matDada = EncontrarMatriz(indiceMtz);
-            CondRetObtido = MTZ_ObterValorCorrente( matDada, (void **) &pChar ) ;
+        NumLidos = LER_LerParametros( "ici" ,
+            &indiceMtz, &ValorEsperado , &CondRetEsperada ) ;
+        if ( NumLidos != 3 ) {
+            return TST_CondRetParm ;
+        } /* if */
 
-            Ret = TST_CompararInt( CondRetEsperada , CondRetObtido ,
-                                   "Retorno errado ao obter valor corrente." );
+        matDada = EncontrarMatriz(indiceMtz);
+        CondRetObtido = MTZ_ObterValorCorrente( matDada, (void **) &pChar ) ;
 
-            if ( Ret != TST_CondRetOK )
-            {
-               return Ret ;
-            } /* if */
+        Ret = TST_CompararInt( CondRetEsperada , CondRetObtido ,
+            "Retorno errado ao obter valor corrente.");
 
-			if ( CondRetObtido == MTZ_CondRetMatrizNaoExiste && matDada == NULL ) {
-				return TST_CondRetOK;
-			}
+        if ( Ret != TST_CondRetOK ) {
+            return Ret ;
+        } /* if */
 
-			if ( CondRetObtido == MTZ_CondRetCasaVazia && pChar == NULL ) {
-				return TST_CondRetOK;
-			}
+        if ( CondRetObtido == MTZ_CondRetMatrizNaoExiste && matDada == NULL ) {
+            return TST_CondRetOK;
+        }
 
-			Ret = TST_CompararPonteiroNulo( 1 , pChar,
-                                           "Retorno errado: Ponteiro para char nulo") ;
+        if ( CondRetObtido == MTZ_CondRetCasaVazia && pChar == NULL ) {
+            return TST_CondRetOK;
+        }
 
-			if ( Ret != TST_CondRetOK )
-            {
-               return Ret ;
-            } /* if */
+        Ret = TST_CompararPonteiroNulo( 1 , pChar,
+            "Retorno errado: Ponteiro para char nulo") ;
 
-			ValorObtido = *pChar;
+        if ( Ret != TST_CondRetOK ) {
+            return Ret ;
+        } /* if */
 
-            return TST_CompararChar( ValorEsperado , ValorObtido ,
-                                     "O valor está errado." ) ;
+        ValorObtido = *pChar;
 
-         } /* fim ativa: Testar MTZ Obter valor corrente */
+        return TST_CompararChar( ValorEsperado , ValorObtido ,
+            "O valor está errado.") ;
 
-      /* Testar MTZ Andar em Direção */
+     } /* fim ativa: Testar MTZ Obter valor corrente */
 
-         else if ( strcmp( ComandoTeste , ANDAR_CMD ) == 0 )
-         {
-		    MTZ_tpDirecao dir;
+    /* Testar MTZ Andar em Direção */
+    else if ( strcmp( ComandoTeste , ANDAR_CMD ) == 0 ) {
+        
+        MTZ_tpDirecao dir;
 
-            NumLidos = LER_LerParametros( "iii" ,
-                               &indiceMtz, &dir, &CondRetEsperada ) ;
-            if ( NumLidos != 3 )
-            {
-               return TST_CondRetParm ;
-            } /* if */
+        NumLidos = LER_LerParametros( "iii" ,
+            &indiceMtz, &dir, &CondRetEsperada ) ;
+        if ( NumLidos != 3 ) {
+            return TST_CondRetParm ;
+        } /* if */
 
-			matDada = EncontrarMatriz(indiceMtz);
-            CondRetObtido = MTZ_AndarDirecao( matDada , dir ) ;
+        matDada = EncontrarMatriz(indiceMtz);
+        CondRetObtido = MTZ_AndarDirecao( matDada , dir ) ;
 
-            return TST_CompararInt( CondRetEsperada , CondRetObtido ,
-                                    "Retorno errado ao andar." );
+        return TST_CompararInt( CondRetEsperada , CondRetObtido ,
+            "Retorno errado ao andar." );
 
-         } /* fim ativa: Testar MTZ Andar em Direção */
+    } /* fim ativa: Testar MTZ Andar em Direção */
 
-      /* Testar MTZ Destruir Matriz */
+    /* Testar MTZ Destruir Matriz */
+    else if ( strcmp( ComandoTeste , DESTROI_CMD ) == 0 ) {
 
-         else if ( strcmp( ComandoTeste , DESTROI_CMD ) == 0 )
-         {
+        NumLidos = LER_LerParametros( "ii" ,
+            &indiceMtz, &CondRetEsperada ) ;
+        if ( NumLidos != 2 ) {
+            return TST_CondRetParm ;
+        } /* if */
 
-			NumLidos = LER_LerParametros( "ii" ,
-                               &indiceMtz, &CondRetEsperada ) ;
-            if ( NumLidos != 2 )
-            {
-               return TST_CondRetParm ;
-            } /* if */
-			
-			if (indiceMtz == 0) {
-				CondRetObtido = MTZ_DestruirMatriz( &matriz0 ) ;
-				//free(matriz0);
-				matriz0 = NULL;
-			} else if (indiceMtz == 1) {
-				CondRetObtido = MTZ_DestruirMatriz( &matriz1 ) ;
-				//free(matriz1);
-				matriz1 = NULL;
-			} else if (indiceMtz == 2) {
-				CondRetObtido = MTZ_DestruirMatriz( &matriz2 ) ;
-				//free(matriz2);
-				matriz2 = NULL;
-			} else
-				return TST_CondRetNaoConhec;
+        if (indiceMtz == 0) {
+            CondRetObtido = MTZ_DestruirMatriz( &matriz0 ) ;
+            matriz0 = NULL;
+        } else if (indiceMtz == 1) {
+            CondRetObtido = MTZ_DestruirMatriz( &matriz1 ) ;
+            matriz1 = NULL;
+        } else if (indiceMtz == 2) {
+            CondRetObtido = MTZ_DestruirMatriz( &matriz2 ) ;
+            matriz2 = NULL;
+        } else
+            return TST_CondRetParm;
 
-            return TST_CompararInt( CondRetEsperada , CondRetObtido ,
-                                    "Retorno errado ao destruir matriz." ); ;
+        return TST_CompararInt( CondRetEsperada , CondRetObtido ,
+            "Retorno errado ao destruir matriz." );
 
-         } /* fim ativa: Testar MTZ Destruir Matriz */
+    } /* fim ativa: Testar MTZ Destruir Matriz */
 
-      return TST_CondRetNaoConhec ;
+    return TST_CondRetNaoConhec ;
 
-   } /* Fim função: TMTZ Efetuar operações de teste específicas para matriz */
+} /* Fim função: TMTZ Efetuar operações de teste específicas para matriz */
 
 /*****  Código das funções encapsuladas no módulo  *****/
 
@@ -276,13 +258,12 @@ static MTZ_tppMatriz EncontrarMatriz( int indice ) ;
 *
 ***********************************************************************/
 
-   void ExcluirCaracter( void * pValor )
-   {
+void ExcluirCaracter( void * pValor ) {
 
-     if (pValor != NULL)
-      free( pValor ) ;
+    if (pValor != NULL)
+        free( pValor ) ;
 
-   } /* Fim função: TMTZ Excluir caracter */
+} /* Fim função: TMTZ Excluir caracter */
 
 /***********************************************************************
 *
@@ -290,20 +271,19 @@ static MTZ_tppMatriz EncontrarMatriz( int indice ) ;
 *
 ***********************************************************************/
 
-   MTZ_tppMatriz EncontrarMatriz( int indice )
-   {
+MTZ_tppMatriz EncontrarMatriz( int indice ) {
 
-     switch (indice) {
-	 case 0:
-		 return matriz0;
-	 case 1:
-		 return matriz1;
-	 case 2:
-		 return matriz2;
-	 default:
-		 return NULL;
-	 }
+    switch (indice) {
+    case 0:
+        return matriz0;
+    case 1:
+        return matriz1;
+    case 2:
+        return matriz2;
+    default:
+        return NULL;
+    }
 
-   } /* Fim função: TMTZ Encontrar matriz */
+} /* Fim função: TMTZ Encontrar matriz */
 
 /********** Fim do módulo de implementação: Módulo de teste específico **********/
