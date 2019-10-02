@@ -19,6 +19,7 @@
 *  $HA Histórico de evolução:
 *     Versão  Autor    Data     Observações
 *       1.00   aaf   26/08/2019 Início do desenvolvimento
+*       1.01   aaf   02/10/2019 Assertivas de entrada e saída
 *
 *  $ED Descrição do módulo
 *     Implementa matrizes genéricas duplamente encadeadas.
@@ -153,6 +154,14 @@ typedef struct tgMatriz * MTZ_tppMatriz ;
 *     MTZ_CondRetFaltouMemoria
 *     MTZ_CondRetErroEstrutura   - Caso a dimensão da matriz seja menor que zero ou o ponteiro seja nulo
 *
+*  Condições de acoplamento
+*
+*  $EAE Assertivas de entradas esperadas
+*     ppMtz não contém lixo
+*
+*  $EAS Assertivas de saída esperadas
+*     Valem as assertivas estruturais da Matriz Genérica com Cabeça
+*
 ***********************************************************************/
 
 MTZ_tpCondRet MTZ_CriarMatriz(MTZ_tppMatriz * ppMtz, int n, void ( * ExcluirValor ) ( void * pValor ) ) ;
@@ -172,6 +181,12 @@ MTZ_tpCondRet MTZ_CriarMatriz(MTZ_tppMatriz * ppMtz, int n, void ( * ExcluirValo
 *  $FV Valor retornado
 *     MTZ_CondRetOK
 *     MTZ_CondRetMatrizNaoExiste   - Caso o ponteiro seja nulo
+*
+*  $EAE Assertivas de entradas esperadas
+*     Valem as assertivas estruturais da Matriz Genérica com Cabeça
+*
+*  $EAE Assertivas de saída esperadas
+*     pMtz != NULL
 *
 ***********************************************************************/
 
@@ -193,6 +208,12 @@ MTZ_tpCondRet MTZ_CriarMatriz(MTZ_tppMatriz * ppMtz, int n, void ( * ExcluirValo
 *     MTZ_CondRetOK
 *     MTZ_CondRetDirecaoNaoExisteOuInvalida
 *     MTZ_CondRetMatrizNaoExiste
+*
+*  $EAE Assertivas de entradas esperadas
+*     pMtz != NULL
+*
+*  $EAE Assertivas de saída esperadas
+*     pMtz != NULL
 *
 ***********************************************************************/
 
@@ -216,6 +237,12 @@ MTZ_tpCondRet MTZ_CriarMatriz(MTZ_tppMatriz * ppMtz, int n, void ( * ExcluirValo
 *     MTZ_CondRetErroEstrutura
 *	    MTZ_CondRetMatrizNaoExiste
 *
+*  $EAE Assertivas de entradas esperadas
+*     Valem as assertivas estruturais da Matriz Genérica com Cabeça
+*
+*  $EAE Assertivas de saída esperadas
+*     Valem as assertivas estruturais da Matriz Genérica com Cabeça
+*
 ***********************************************************************/
 
    MTZ_tpCondRet MTZ_InserirElementoNaCasaCorrente( MTZ_tppMatriz pMtz, void * pElemento ) ;
@@ -238,6 +265,12 @@ MTZ_tpCondRet MTZ_CriarMatriz(MTZ_tppMatriz * ppMtz, int n, void ( * ExcluirValo
 *     MTZ_CondRetCasaVazia
 *     MTZ_CondRetErroEstrutura   - Caso o ponteiro para valor seja nulo
 *
+*  $EAE Assertivas de entradas esperadas
+*     Valem as assertivas estruturais da Matriz Genérica com Cabeça
+*
+*  $EAS Assertivas de saída esperadas
+*     Valem as assertivas estruturais da Matriz Genérica com Cabeça
+*
 ***********************************************************************/
 
    MTZ_tpCondRet MTZ_ObterValorCorrente( MTZ_tppMatriz pMtz, void ** valor ) ;
@@ -255,6 +288,13 @@ MTZ_tpCondRet MTZ_CriarMatriz(MTZ_tppMatriz * ppMtz, int n, void ( * ExcluirValo
 *  $FV Valor retornado
 *     MTZ_CondRetOK
 *     MTZ_CondRetMatrizNaoExiste
+*
+*  $EAE Assertivas de entradas esperadas
+*     Valem as assertivas estruturais da Matriz Genérica com Cabeça
+*
+*  $EAE Assertivas de saída esperadas
+*     Valem as assertivas estruturais da Matriz Genérica com Cabeça
+*     A casa corrente da matriz será posta em (0,0)
 *
 ***********************************************************************/
 
