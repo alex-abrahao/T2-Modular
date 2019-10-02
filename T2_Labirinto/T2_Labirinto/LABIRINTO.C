@@ -79,6 +79,8 @@ LAB_tpCondRet LAB_CriarLabirinto( LAB_tppLabirinto * ppLab, int tam ) {
 		return LAB_CondRetFaltouMemoria;
 	}
 
+	(*ppLab)->id = 0;
+
 
 
 	// WIP: Implementar
@@ -97,6 +99,8 @@ LAB_tpCondRet LAB_DestruirLabirinto( LAB_tppLabirinto * ppLab ) {
 	if (ppLab == NULL || *ppLab == NULL) return LAB_CondRetLabirintoNaoExiste;
 
 	// WIP: Implementar
+
+	MTZ_DestruirMatriz(&((*ppLab)->pMatriz));
 
 	free(*ppLab);
 	*ppLab = NULL;
