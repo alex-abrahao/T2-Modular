@@ -27,12 +27,18 @@
     <ClInclude Include="TST_ESPC.H">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="LABIRINTO.H">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MATRIZ.C">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TESTMTZ.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LABIRINTO.C">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

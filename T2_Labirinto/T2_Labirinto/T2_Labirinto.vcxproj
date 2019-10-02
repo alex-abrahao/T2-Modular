@@ -76,11 +76,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="GENERICO.H" />
+    <ClInclude Include="LABIRINTO.H" />
     <ClInclude Include="LERPARM.H" />
     <ClInclude Include="MATRIZ.H" />
     <ClInclude Include="TST_ESPC.H" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="LABIRINTO.C" />
     <ClCompile Include="MATRIZ.C" />
     <ClCompile Include="TESTMTZ.C" />
   </ItemGroup>
