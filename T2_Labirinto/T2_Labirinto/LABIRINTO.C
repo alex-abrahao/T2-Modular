@@ -98,6 +98,9 @@ LAB_tpCondRet LAB_DestruirLabirinto( LAB_tppLabirinto * ppLab ) {
 
 	// WIP: Implementar
 
+	free(*ppLab);
+	*ppLab = NULL;
+
 	return LAB_CondRetOK;
 
 } /* Fim função: LAB Destruir labirinto */

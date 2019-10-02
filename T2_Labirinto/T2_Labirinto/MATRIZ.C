@@ -244,7 +244,6 @@
 *  Função: MTZ Inserir elemento na casa corrente
 *  ****/
 
-
    MTZ_tpCondRet MTZ_InserirElementoNaCasaCorrente( MTZ_tppMatriz pMtz, void * pElemento ) {
 
       // Tratar se a matriz existe
