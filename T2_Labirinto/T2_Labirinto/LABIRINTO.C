@@ -40,21 +40,21 @@
 *
 ***********************************************************************/
 
-   typedef struct tgLabirinto {
-       
-         MTZ_tppMatriz pMatriz ;
-               /* Ponteiro para a matriz base para o labirinto */
+typedef struct tgLabirinto {
+   
+	MTZ_tppMatriz pMatriz ;
+        	/* Ponteiro para a matriz base para o labirinto */
 
-         char id;
-               /* Caracter identificador da matriz (opcional) */
+	char id;
+        	/* Caracter identificador do labirinto (opcional) */
 
-   } tpLabirinto ;
+} tpLabirinto ;
 
 /*****  Dados encapsulados no módulo  *****/
 
 /***** Protótipos das funções encapuladas no módulo *****/
 
-
+static void ExcluirValor( void * pValor );
 
 /*****  Código das funções exportadas pelo módulo  *****/
 
@@ -66,6 +66,20 @@
 LAB_tpCondRet LAB_CriarLabirinto( LAB_tppLabirinto * ppLab, int tam ) {
 
 	if (ppLab == NULL || tam <= 0) return LAB_CondRetErroEstrutura;
+
+	// Alocar espaço
+	*ppLab = (LAB_tppLabirinto) malloc(sizeof(tpLabirinto));
+
+	if (*ppLab == NULL) return LAB_CondRetFaltouMemoria;
+
+	// Alocar matriz
+	if (MTZ_CriarMatriz( &((*ppLab)->pMatriz), tam, ExcluirValor) == MTZ_CondRetFaltouMemoria ) {
+		free(*ppLab);
+		*ppLab = NULL;
+		return LAB_CondRetFaltouMemoria;
+	}
+
+
 
 	// WIP: Implementar
 
@@ -152,6 +166,18 @@ int LAB_ExisteSolucao( LAB_tppLabirinto pLab ) {
 
 /*****  Código das funções encapsuladas no módulo  *****/
 
+/***********************************************************************
+*
+*  $FC Função: TMTZ Excluir valor
+*
+***********************************************************************/
 
+void ExcluirValor( void * pValor ) {
+
+	// WIP: Implementar para excluir o que tiver dentro da matriz
+    if (pValor != NULL)
+        free( pValor ) ;
+
+} /* Fim função: TMTZ Excluir caracter */
 
 /********** Fim do módulo de implementação: Módulo labirinto **********/
