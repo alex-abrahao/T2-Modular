@@ -39,6 +39,8 @@
 *                     o valor retornado com o valor <Char>
 *     "=destroi" <Int>
 *                   - chama a função MTZ_DestruirMatriz( )
+*     "=primeiro" <Int>
+*                   - chama a função MTZ_VoltarParaPrimeiro( )
 *
 ***************************************************************************/
 
@@ -59,6 +61,7 @@
 #define     ANDAR_CMD           "=andar"
 #define     OBTER_VAL_CMD       "=obter"
 #define     DESTROI_CMD         "=destruir"
+#define     PRIMEIRO_CMD         "=primeiro"
 
 /*****  Dados encapsulados no módulo  *****/
 
@@ -245,6 +248,24 @@ TST_tpCondRet TST_EfetuarComando( char * ComandoTeste ) {
             "Retorno errado ao destruir matriz." );
 
     } /* fim ativa: Testar MTZ Destruir Matriz */
+
+    /* Testar MTZ Voltar primeiro */
+    else if ( strcmp( ComandoTeste , PRIMEIRO_CMD ) == 0 ) {
+
+        NumLidos = LER_LerParametros( "ii" ,
+            &indiceMtz, &CondRetEsperada ) ;
+        if ( NumLidos != 2 ) {
+            return TST_CondRetParm ;
+        } /* if */
+
+        matDada = EncontrarMatriz(indiceMtz);
+
+        CondRetObtido = MTZ_VoltarParaPrimeiro( matDada ) ;
+
+        return TST_CompararInt( CondRetEsperada , CondRetObtido ,
+            "Retorno errado ao destruir matriz." );
+
+    } /* fim ativa: Testar MTZ Voltar primeiro */
 
     return TST_CondRetNaoConhec ;
 

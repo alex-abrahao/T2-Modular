@@ -279,6 +279,21 @@
 
    } /* Fim função: MTZ Obter valor corrente */
 
+/***************************************************************************
+*
+*  Função: MTZ Voltar para o primeiro
+*  ****/
+
+   MTZ_tpCondRet MTZ_VoltarParaPrimeiro( MTZ_tppMatriz pMtz ) {
+
+      if (pMtz == NULL) return MTZ_CondRetMatrizNaoExiste;
+
+      pMtz->pCasaCorr = pMtz->pPrimeiro; 
+
+      return MTZ_CondRetOK;
+
+   } /* Fim função: MTZ Obter valor corrente */
+
 
 /*****  Código das funções encapsuladas no módulo  *****/
 

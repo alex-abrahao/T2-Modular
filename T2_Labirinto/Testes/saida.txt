@@ -21,21 +21,22 @@ LES - Laboratório de Engenharia de Software DI/PUC-Rio
 >>>    1  Linha:    32  Retorno errado ao andar. Deveria ser: 0  É: 4
 <<<    0  Linha:    33  Falha esperada foi recuperada. 
    35  == Testes das funcoes com matrizes inexistentes
-   41  == Teste criar matriz
-   46  == Teste destruir matriz
-   50  == Teste criar matriz depois de ter destruido uma no mesmo ponteiro
-   55  == Teste destruir uma matriz que ja foi destruida
-   60  == Teste andar matriz
-   70  == Andar para um lugar inexistente e outro invalido
-   80  == Percorrer todas as casas da matriz 3x3
-   91  == Inserir caracter em diferentes casas da matriz e obter
-  105  == Inserir caracter em uma casa que ja tenha uma lista
-  109  == Destruir todas as matrizes usadas
-!!!    0  Linha:   113  // fim 
+   42  == Teste criar matriz
+   47  == Teste destruir matriz
+   51  == Teste criar matriz depois de ter destruido uma no mesmo ponteiro
+   56  == Teste destruir uma matriz que ja foi destruida
+   61  == Teste andar matriz
+   71  == Andar para um lugar inexistente e outro invalido
+   81  == Percorrer todas as casas da matriz 3x3
+   92  == Inserir caracter em diferentes casas da matriz e obter
+  106  == Inserir caracter em uma casa que ja tenha uma lista
+  110  == Voltar a primeira casa
+  117  == Destruir todas as matrizes usadas
+!!!    0  Linha:   122  // fim 
 
-!!! Número de linhas lidas:         113
-!!! Número de casos de teste:        13
-!!! Número comandos corretos:        74
+!!! Número de linhas lidas:         122
+!!! Número de casos de teste:        14
+!!! Número comandos corretos:        81
 !!! Número de falhas encontradas:     0
 
 !!! Não foram encontrados problemas

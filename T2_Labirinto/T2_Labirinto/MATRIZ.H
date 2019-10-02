@@ -164,15 +164,14 @@ MTZ_tpCondRet MTZ_CriarMatriz(MTZ_tppMatriz * ppMtz, int n, void ( * ExcluirValo
 *
 *  $ED Descrição da função
 *     Destrói a cabeça da matriz, anulando a matriz especificada.
-*     Faz nada caso o indice nao contenha uma matriz.
+*     Faz nada caso o ponteiro nao contenha uma matriz.
 *
 *  $EP Parametros
 *     $P ppMtz - Ponteiro para uma matriz
 *
 *  $FV Valor retornado
 *     MTZ_CondRetOK
-*     MTZ_CondRetMatrizNaoExiste
-*     MTZ_CondRetErroEstrutura   - Caso o ponteiro seja nulo
+*     MTZ_CondRetMatrizNaoExiste   - Caso o ponteiro seja nulo
 *
 ***********************************************************************/
 
@@ -183,9 +182,12 @@ MTZ_tpCondRet MTZ_CriarMatriz(MTZ_tppMatriz * ppMtz, int n, void ( * ExcluirValo
 *
 *  $FC Função: MTZ Andar em Direção
 *
+*  $ED Descrição da função
+*     Anda na direção especificada.
+*
 *  $EP Parâmetros
 *     $P pMtz - Ponteiro para uma matriz
-*     $P direcao - Direção a andar.
+*     $P direcao - Direção a andar
 *
 *  $FV Valor retornado
 *     MTZ_CondRetOK
@@ -239,6 +241,24 @@ MTZ_tpCondRet MTZ_CriarMatriz(MTZ_tppMatriz * ppMtz, int n, void ( * ExcluirValo
 ***********************************************************************/
 
    MTZ_tpCondRet MTZ_ObterValorCorrente( MTZ_tppMatriz pMtz, void ** valor ) ;
+
+/***********************************************************************
+*
+*  $FC Função: MTZ Voltar para o primeiro
+*
+*  $ED Descrição da função
+*     Volta o ponteiro corrente para o primeiro, ou seja, (0, 0).
+*
+*  $EP Parâmetros
+*     $P pMtz - Ponteiro para uma matriz
+*
+*  $FV Valor retornado
+*     MTZ_CondRetOK
+*     MTZ_CondRetMatrizNaoExiste
+*
+***********************************************************************/
+
+   MTZ_tpCondRet MTZ_VoltarParaPrimeiro( MTZ_tppMatriz pMtz ) ;
 
 
 #undef MATRIZ_EXT
