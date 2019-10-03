@@ -66,6 +66,7 @@ static void ExcluirValor( void * pValor );
 LAB_tpCondRet LAB_CriarLabirinto( LAB_tppLabirinto * ppLab, int tam ) {
 
 	if (ppLab == NULL || tam <= 0) return LAB_CondRetErroEstrutura;
+	if (*ppLab ! NULL) LAB_DestruirLabirinto( LAB_tppLabirinto * ppLab );
 
 	// Alocar espaço
 	*ppLab = (LAB_tppLabirinto) malloc(sizeof(tpLabirinto));
@@ -81,9 +82,15 @@ LAB_tpCondRet LAB_CriarLabirinto( LAB_tppLabirinto * ppLab, int tam ) {
 
 	(*ppLab)->id = 0;
 
-
-
 	// WIP: Implementar
+
+	// Preencher a casa (0, 0) com a entrada
+
+	// Preencher a saída em (tam - 1, tam - 1)
+
+	// Preencher as demais casas com espaços vazios
+
+	// Retornar o ponteiro da matriz para o início
 
 	return LAB_CondRetOK;
 
@@ -126,9 +133,23 @@ LAB_tpCondRet LAB_AndarDirecao( LAB_tppLabirinto pLab, LAB_tpDirecao direcao ) {
 
 /***************************************************************************
 *
-*  Função: LAB Imprimir labirinto
+*  Função: LAB Inserir elemento
 *  ****/
 
+LAB_tpCondRet LAB_InserirElemento( LAB_tppLabirinto pLab, LAB_tpElemCasa elemento ) {
+
+	if (pLab == NULL) return LAB_CondRetLabirintoNaoExiste;
+
+	// WIP: Implementar
+
+	return LAB_CondRetOK;
+
+} /* Fim função: LAB Inserir elemento */
+
+/***************************************************************************
+*
+*  Função: LAB Imprimir labirinto
+*  ****/
 
 LAB_tpCondRet LAB_ImprimirLabirinto( LAB_tppLabirinto pLab ) {
 

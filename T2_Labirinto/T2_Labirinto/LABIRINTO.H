@@ -19,6 +19,8 @@
 *  $HA Histórico de evolução:
 *     Versão  Autor    Data     Observações
 *       1.00   phd   26/09/2019 Início do desenvolvimento
+*       1.01   aaf   30/09/2019 Documentação inicial
+*       1.02   aaf   30/09/2019 Assertivas de entrada e saída
 *
 *  $ED Descrição do módulo
 *
@@ -61,8 +63,11 @@ typedef struct tgLabirinto * LAB_tppLabirinto ;
          LAB_CondRetFaltouMemoria = 4 ,
                /* Faltou memória ao alocar dados */
 
-		     LAB_CondRetNaoTemSolucao = 5
+		     LAB_CondRetNaoTemSolucao = 5 ,
 			         /* Labirinto não tem solução */
+
+         LAB_CondRetElementoInvalido = 6
+               /* Elemento inserido na posição é inválido */
 
    } LAB_tpCondRet ;
 
@@ -90,6 +95,29 @@ typedef struct tgLabirinto * LAB_tppLabirinto ;
     } LAB_tpDirecao ;
 
 /***********************************************************************
+ *
+ *  $TC Tipo de dados: LAB Elementos da casa
+ *
+ *
+ ***********************************************************************/
+
+    typedef enum {
+        
+        LAB_ElemVazio = 0 ,
+            /* Elemento que representa um espaço vazio */
+
+        LAB_ElemParede = 1 ,
+            /* Elemento que representa uma parede */
+
+        LAB_ElemEntrada = 2 ,
+            /* Elemento que representa a entrada do labirinto */
+
+        LAB_ElemSaida = 3 ,
+            /* Elemento que representa a saída do labirinto */
+
+    } LAB_tpElemCasa ;
+
+/***********************************************************************
 *
 *  $FC Função: LAB Criar labirinto
 *
@@ -105,6 +133,14 @@ typedef struct tgLabirinto * LAB_tppLabirinto ;
 *     LAB_CondRetOK
 *     LAB_CondRetFaltouMemoria
 *     LAB_CondRetErroEstrutura   - Caso a dimensão do labirinto seja menor que zero ou o ponteiro seja nulo
+*
+*  Condições de acoplamento
+*
+*  $EAE Assertivas de entradas esperadas
+*     ppLab não contém lixo
+*
+*  $EAS Assertivas de saída esperadas
+*     Valem as assertivas estruturais do Labirinto
 *
 ***********************************************************************/
 
@@ -124,6 +160,17 @@ LAB_tpCondRet LAB_CriarLabirinto( LAB_tppLabirinto * ppLab, int tam ) ;
 *  $FV Valor retornado
 *     LAB_CondRetOK
 *     LAB_CondRetLabirintoNaoExiste   - Caso o ponteiro seja nulo
+*
+*  Condições de acoplamento
+*
+*  $EAE Assertivas de entradas esperadas
+*     ppLab não contém lixo
+*     Valem as assertivas estruturais do Labirinto
+*
+*  $EAS Assertivas de saída esperadas
+*     *ppLab = NULL
+*     Todos os elementos dentro casas estarão liberados
+*     A estrutura de labirinto estará liberada
 *
 ***********************************************************************/
 
@@ -145,9 +192,52 @@ LAB_tpCondRet LAB_DestruirLabirinto( LAB_tppLabirinto * ppLab ) ;
 *     LAB_CondRetDirecaoNaoExisteOuInvalida
 *     LAB_CondRetLabirintoNaoExiste
 *
+*  Condições de acoplamento
+*
+*  $EAE Assertivas de entradas esperadas
+*     Valem as assertivas estruturais do Labirinto
+*
+*  $EAS Assertivas de saída esperadas
+*     Valem as assertivas estruturais do Labirinto
+*     Se a direção for inválida ou sair do labirinto, a posição corrente se manterá na última posição válida
+*     Se a direção for válida, a posição corrente estará movida na direção especificada
+*
 ***********************************************************************/
 
 LAB_tpCondRet LAB_AndarDirecao( LAB_tppLabirinto pLab, LAB_tpDirecao direcao ) ;
+
+/***********************************************************************
+*
+*  $FC Função: LAB Inserir elemento
+*
+*  $ED Descrição da função
+*     Muda o elemento presente na casa corrente do labirinto.
+*
+*  $EP Parâmetros
+*     $P pLab - Ponteiro para um labirinto
+*     $P elemento - Um elemento a ser posto na casa corrente
+*
+*  $FV Valor retornado
+*     LAB_CondRetOK
+*     LAB_CondRetLabirintoNaoExiste
+*     LAB_CondRetElementoInvalido
+*
+*  Condições de acoplamento
+*
+*  $EAE Assertivas de entradas esperadas
+*     Valem as assertivas estruturais do Labirinto
+*     Se o elemento presente na posição corrente for uma entrada ou saída, ele não será sobrescrito
+*
+*  $EAS Assertivas de saída esperadas
+*     Valem as assertivas estruturais do Labirinto
+*     Se o elemento for inválido, a posição corrente manterá o último elemento válido
+*     Se o elemento for válido, o elemento da posição corrente estará sobrescrito com o novo
+*     Se o elemento for uma entrada, a entrada antiga irá virar uma posição vazia
+*     Se o elemento for uma saída, a saída antiga irá virar uma posição vazia
+*
+***********************************************************************/
+
+LAB_tpCondRet LAB_InserirElemento( LAB_tppLabirinto pLab, LAB_tpElemCasa elemento ) ;
 
 /***********************************************************************
 *
@@ -163,27 +253,17 @@ LAB_tpCondRet LAB_AndarDirecao( LAB_tppLabirinto pLab, LAB_tpDirecao direcao ) ;
 *     LAB_CondRetOK
 *     LAB_CondRetLabirintoNaoExiste
 *
+*  Condições de acoplamento
+*
+*  $EAE Assertivas de entradas esperadas
+*     Valem as assertivas estruturais do Labirinto
+*
+*  $EAS Assertivas de saída esperadas
+*     Valem as assertivas estruturais do Labirinto
+*
 ***********************************************************************/
 
 LAB_tpCondRet LAB_ImprimirLabirinto( LAB_tppLabirinto pLab ) ;
-
-/***********************************************************************
-*
-*  $FC Função: LAB Voltar para a entrada
-*
-*  $ED Descrição da função
-*     Volta o ponteiro corrente para a entrada do labirinto.
-*
-*  $EP Parametros
-*     $P pLab - Ponteiro para um labirinto
-*
-*  $FV Valor retornado
-*     LAB_CondRetOK
-*     LAB_CondRetLabirintoNaoExiste
-*
-***********************************************************************/
-
-LAB_tpCondRet LAB_VoltarParaEntrada( LAB_tppLabirinto pLab ) ;
 
 /***********************************************************************
 *
@@ -198,6 +278,14 @@ LAB_tpCondRet LAB_VoltarParaEntrada( LAB_tppLabirinto pLab ) ;
 *  $FV Valor retornado
 *     0 - Não existe solução ou pLab é NULL
 *     1 - Existe solução
+*
+*  Condições de acoplamento
+*
+*  $EAE Assertivas de entradas esperadas
+*     Valem as assertivas estruturais do Labirinto
+*
+*  $EAS Assertivas de saída esperadas
+*     Valem as assertivas estruturais do Labirinto
 *
 ***********************************************************************/
 
