@@ -48,6 +48,24 @@ typedef struct tgLabirinto {
 	char id;
         	/* Caracter identificador do labirinto (opcional) */
 
+	int posXEntrada;
+        	/* Posição X da entrada do labirinto */
+
+	int posYEntrada;
+        	/* Posição Y da entrada do labirinto */
+
+	int posXSaida;
+        	/* Posição X da saída do labirinto */
+
+	int posYSaida;
+        	/* Posição Y da saída do labirinto */
+
+	int posXCorrente;
+        	/* Posição X corrente do labirinto */
+
+	int posYCorrente;
+        	/* Posição Y corrente do labirinto */
+
 } tpLabirinto ;
 
 /*****  Dados encapsulados no módulo  *****/
@@ -60,12 +78,15 @@ static void ExcluirValor( void * pValor );
 
 /***************************************************************************
 *
-*  Função: LAB Destruir labirinto
+*  Função: LAB Criar labirinto
 *  ****/
 
 LAB_tpCondRet LAB_CriarLabirinto( LAB_tppLabirinto * ppLab, int tam ) {
 
-	if (ppLab == NULL || tam <= 0) return LAB_CondRetErroEstrutura;
+	LAB_tpElemCasa * pElementoAux;
+	int linhaAtual, colunaAtual;
+
+	if (ppLab == NULL || tam <= 1) return LAB_CondRetErroEstrutura;
 	if (*ppLab ! NULL) LAB_DestruirLabirinto( LAB_tppLabirinto * ppLab );
 
 	// Alocar espaço
@@ -80,17 +101,45 @@ LAB_tpCondRet LAB_CriarLabirinto( LAB_tppLabirinto * ppLab, int tam ) {
 		return LAB_CondRetFaltouMemoria;
 	}
 
+	// Inicializa os valores segundo o padrão
 	(*ppLab)->id = 0;
+	(*ppLab)->posXEntrada = 0;
+	(*ppLab)->posYEntrada = 0;
+	(*ppLab)->posXSaida = tam - 1;
+	(*ppLab)->posYSaida = tam - 1;
+	(*ppLab)->posXCorrente = 0;
+	(*ppLab)->posYCorrente = 0;
 
-	// WIP: Implementar
+	// Todos os espaços para os elementos são alocados nessa função
 
-	// Preencher a casa (0, 0) com a entrada
+	// Preenchimento inicial
+	for (linhaAtual = 0; linhaAtual < tam; linhaAtual++) {
 
-	// Preencher a saída em (tam - 1, tam - 1)
+		for (colunaAtual = 0; colunaAtual < tam; colunaAtual++) {
+			
+			pElementoAux = (LAB_tpElemCasa *) malloc(sizeof(LAB_tpElemCasa));
+			if (pElementoAux == NULL) {
+				LAB_DestruirLabirinto( ppLab );
+				return LAB_CondRetFaltouMemoria;
+			}
+			// Preencher a casa (0, 0) com a entrada
+			if (colunaAtual == 0 && linhaAtual == 0)
+				*pElementoAux = LAB_ElemEntrada;
 
-	// Preencher as demais casas com espaços vazios
+			// Preencher a saída em (tam - 1, tam - 1)
+			else if (colunaAtual == tam - 1 && linhaAtual == tam - 1)
+				*pElementoAux = LAB_ElemSaida;
+			// Preencher as demais casas com espaços vazios
+			else
+				*pElementoAux = LAB_ElemVazio;
 
+			// Insere o elemento na matriz
+			MTZ_InserirElementoNaCasaCorrente( (*ppLab)->pMatriz, pElementoAux ) ;
+		}
+	}
+	
 	// Retornar o ponteiro da matriz para o início
+	MTZ_VoltarParaPrimeiro( (*ppLab)->pMatriz );
 
 	return LAB_CondRetOK;
 
@@ -104,8 +153,6 @@ LAB_tpCondRet LAB_CriarLabirinto( LAB_tppLabirinto * ppLab, int tam ) {
 LAB_tpCondRet LAB_DestruirLabirinto( LAB_tppLabirinto * ppLab ) {
 
 	if (ppLab == NULL || *ppLab == NULL) return LAB_CondRetLabirintoNaoExiste;
-
-	// WIP: Implementar
 
 	MTZ_DestruirMatriz(&((*ppLab)->pMatriz));
 
@@ -138,9 +185,21 @@ LAB_tpCondRet LAB_AndarDirecao( LAB_tppLabirinto pLab, LAB_tpDirecao direcao ) {
 
 LAB_tpCondRet LAB_InserirElemento( LAB_tppLabirinto pLab, LAB_tpElemCasa elemento ) {
 
+	LAB_tpElemCasa * pElementoPresente;
+
 	if (pLab == NULL) return LAB_CondRetLabirintoNaoExiste;
 
+	// Verificar se o elemento é válido
+	if (elemento > 3) return LAB_CondRetElementoInvalido;
+
+	// Pegar o ponteiro para o elemento da posição corrente
+	MTZ_ObterValorCorrente( pLab->pMatri, &pElementoPresente ) ;
+
+	// Se era uma entrada ou saida, ela terá que ser substituida por um elemento vazio
 	// WIP: Implementar
+
+	// Inserir o elemento na matriz
+	*pElementoPresente = elemento;
 
 	return LAB_CondRetOK;
 
@@ -160,21 +219,6 @@ LAB_tpCondRet LAB_ImprimirLabirinto( LAB_tppLabirinto pLab ) {
 	return LAB_CondRetOK;
 
 } /* Fim função: LAB Imprimir labirinto */
-
-/***************************************************************************
-*
-*  Função: LAB Voltar para a entrada
-*  ****/
-
-LAB_tpCondRet LAB_VoltarParaEntrada( LAB_tppLabirinto pLab ) {
-
-	if (pLab == NULL) return LAB_CondRetLabirintoNaoExiste;
-
-	// WIP: Implementar
-
-	return LAB_CondRetOK;
-
-} /* Fim função: LAB Voltar para a entrada */
 
 /***************************************************************************
 *

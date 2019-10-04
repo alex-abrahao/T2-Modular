@@ -138,9 +138,13 @@ typedef struct tgLabirinto * LAB_tppLabirinto ;
 *
 *  $EAE Assertivas de entradas esperadas
 *     ppLab não contém lixo
+*     tam > 1
 *
 *  $EAS Assertivas de saída esperadas
 *     Valem as assertivas estruturais do Labirinto
+*     A entrada do labirinto estará em (0, 0)
+*     A posição corrente do labirinto estará em (0, 0)
+*     A saída do labirinto estará em (tam - 1, tam - 1)
 *
 ***********************************************************************/
 

@@ -162,6 +162,7 @@ typedef struct tgMatriz * MTZ_tppMatriz ;
 *
 *  $EAS Assertivas de saída esperadas
 *     Valem as assertivas estruturais da Matriz Genérica com Cabeça
+*     A posição corrente da matriz estará em (0, 0)
 *
 ***********************************************************************/
 
