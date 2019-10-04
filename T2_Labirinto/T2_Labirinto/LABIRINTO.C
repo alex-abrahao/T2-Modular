@@ -169,10 +169,18 @@ LAB_tpCondRet LAB_DestruirLabirinto( LAB_tppLabirinto * ppLab ) {
 *  ****/
 
 LAB_tpCondRet LAB_AndarDirecao( LAB_tppLabirinto pLab, LAB_tpDirecao direcao ) {
-  
-	if (pLab == NULL) return LAB_CondRetLabirintoNaoExiste;
+  	
+  	MTZ_tpDirecao dirMatriz;
 
-	// WIP: Implementar
+	if (pLab == NULL) return LAB_CondRetLabirintoNaoExiste;
+	if (direcao < 0 || direcao > 3) return LAB_CondRetDirecaoNaoExisteOuInvalida;
+
+	// Traduzir a direção de labirinto para matriz
+	dirMatriz = ConverterDirecao( direcao );
+
+	// Verificar se não anda para fora do labirinto
+	if (MTZ_AndarDirecao( pLab->pMatriz, dirMatriz ) == MTZ_CondRetDirecaoNaoExisteOuInvalida)
+		return LAB_CondRetDirecaoNaoExisteOuInvalida;
 
 	return LAB_CondRetOK;
 
@@ -194,8 +202,10 @@ LAB_tpCondRet LAB_InserirElemento( LAB_tppLabirinto pLab, LAB_tpElemCasa element
 
 	// Pegar o ponteiro para o elemento da posição corrente
 	MTZ_ObterValorCorrente( pLab->pMatriz, (void **) &pElementoPresente ) ;
+	if (*pElementoPresente == elemento) return LAB_CondRetOK;
 
-	// Se era uma entrada ou saida, ela terá que ser substituida por um elemento vazio
+	// Se era uma entrada ou saida, ela terá que ser substituida por um elemento vazio e voltar para a corrente
+
 	// WIP: Implementar
 
 	// Inserir o elemento na matriz
@@ -240,16 +250,36 @@ int LAB_ExisteSolucao( LAB_tppLabirinto pLab ) {
 
 /***********************************************************************
 *
-*  $FC Função: TMTZ Excluir valor
+*  $FC Função: LAB Excluir valor
 *
 ***********************************************************************/
 
 void ExcluirValor( void * pValor ) {
 
-	// WIP: Implementar para excluir o que tiver dentro da matriz
     if (pValor != NULL)
         free( pValor ) ;
 
-} /* Fim função: TMTZ Excluir caracter */
+} /* Fim função: LAB Excluir valor */
+
+/***********************************************************************
+*
+*  $FC Função: LAB Converter direção
+*
+***********************************************************************/
+
+MTZ_tpDirecao ConverterDirecao( LAB_tpDirecao direcao ) {
+
+	switch (direcao) {
+    case LAB_DirNorte:
+        return MTZ_DirNorte;
+    case LAB_DirLeste:
+        return MTZ_DirLeste;
+    case LAB_DirSul:
+        return MTZ_DirSul;
+    default:
+        return MTZ_DirOeste;
+    }
+
+} /* Fim função: LAB Converter direção */
 
 /********** Fim do módulo de implementação: Módulo labirinto **********/

@@ -216,6 +216,7 @@ LAB_tpCondRet LAB_AndarDirecao( LAB_tppLabirinto pLab, LAB_tpDirecao direcao ) ;
 *
 *  $ED Descrição da função
 *     Muda o elemento presente na casa corrente do labirinto.
+*     Não faz nada caso o elemento inserido seja igual ao da posição corrente.
 *
 *  $EP Parâmetros
 *     $P pLab - Ponteiro para um labirinto
