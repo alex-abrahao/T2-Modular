@@ -16,6 +16,7 @@
 *  $HA Histórico de evolução:
 *     Versão  Autor    Data     Observações
 *       1.00   phd   26/09/2019 Início do desenvolvimento
+*       1.10   aaf   03/10/2019 Término da implementação das funções do T2
 *
 ***************************************************************************/
 
@@ -235,6 +236,15 @@ LAB_tpCondRet LAB_InserirElemento( LAB_tppLabirinto pLab, LAB_tpElemCasa element
 
 	// Inserir o elemento na matriz
 	*pElementoPresente = elemento;
+
+	// Atualizar nova entrada ou saida
+	if (elemento == LAB_ElemEntrada) {
+		pLab->posXEntrada = pLab->posXCorrente;
+		pLab->posYEntrada = pLab->posYCorrente;
+	} else if (elemento == LAB_ElemSaida) {
+		pLab->posXSaida = pLab->posXCorrente;
+		pLab->posYSaida = pLab->posYCorrente;
+	}
 
 	return LAB_CondRetOK;
 
