@@ -74,6 +74,8 @@ typedef struct tgLabirinto {
 
 static void ExcluirValor( void * pValor );
 
+static MTZ_tpDirecao ConverterDirecao( LAB_tpDirecao direcao );
+
 /*****  Código das funções exportadas pelo módulo  *****/
 
 /***************************************************************************
@@ -135,7 +137,15 @@ LAB_tpCondRet LAB_CriarLabirinto( LAB_tppLabirinto * ppLab, int tam ) {
 
 			// Insere o elemento na matriz
 			MTZ_InserirElementoNaCasaCorrente( (*ppLab)->pMatriz, pElementoAux ) ;
+
+			// Anda para direita
+			MTZ_AndarDirecao( (*ppLab)->pMatriz,  MTZ_DirLeste) ;
 		}
+		// Volta para a primeira coluna
+		while (MTZ_AndarDirecao( (*ppLab)->pMatriz,  MTZ_DirOeste) != MTZ_CondRetDirecaoNaoExisteOuInvalida);
+
+		// Anda para baixo
+		MTZ_AndarDirecao( (*ppLab)->pMatriz,  MTZ_DirSul) ;
 	}
 	
 	// Retornar o ponteiro da matriz para o início
@@ -204,7 +214,12 @@ LAB_tpCondRet LAB_InserirElemento( LAB_tppLabirinto pLab, LAB_tpElemCasa element
 	MTZ_ObterValorCorrente( pLab->pMatriz, (void **) &pElementoPresente ) ;
 	if (*pElementoPresente == elemento) return LAB_CondRetOK;
 
-	// Se era uma entrada ou saida, ela terá que ser substituida por um elemento vazio e voltar para a corrente
+	// Se existe na posição corrente uma entrada ou saida, não poderá ser sobrescrita
+	if (*pElementoPresente == LAB_ElemEntrada || *pElementoPresente == LAB_ElemSaida)
+		return LAB_CondRetElementoInvalido;
+
+	// Se o novo elemento é uma entrada ou saida, a antiga terá que ser substituida por um elemento vazio e voltar para a corrente
+	//if ()
 
 	// WIP: Implementar
 
