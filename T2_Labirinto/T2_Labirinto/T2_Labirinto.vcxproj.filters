@@ -35,10 +35,10 @@
     <ClCompile Include="MATRIZ.C">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TESTMTZ.C">
+    <ClCompile Include="LABIRINTO.C">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="LABIRINTO.C">
+    <ClCompile Include="TESTLAB.C">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

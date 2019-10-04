@@ -84,7 +84,7 @@
   <ItemGroup>
     <ClCompile Include="LABIRINTO.C" />
     <ClCompile Include="MATRIZ.C" />
-    <ClCompile Include="TESTMTZ.C" />
+    <ClCompile Include="TESTLAB.C" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="ArcaboucoTeste.lib" />
