@@ -87,12 +87,9 @@ TST_tpCondRet TST_EfetuarComando( char * ComandoTeste ) {
 
     int ValorEsperado = 0  ;
     int ValorObtido   = 1  ;
-    LAB_tpElemCasa *ValorDado ;
-    LAB_tpElemCasa *pInt;
+    LAB_tpElemCasa ValorDado ;
 
-    int  NumLidos = -1 ;
-
-    TST_tpCondRet Ret ;
+	int  NumLidos = -1 ;
 
       /* Testar LAB Criar labirinto */
 
@@ -122,15 +119,7 @@ TST_tpCondRet TST_EfetuarComando( char * ComandoTeste ) {
             return TST_CondRetParm ;
         } /* if */
 
-        pInt = (LAB_tpElemCasa *)malloc(sizeof(LAB_tpElemCasa));
-
-        if ( pInt == NULL ) {
-            return TST_CondRetMemoria ;
-        } /* if */
-
-        pInt = ValorDado;
-
-        CondRetObtido = LAB_InserirElemento( labirintoTeste , *pInt ) ;
+        CondRetObtido = LAB_InserirElemento( labirintoTeste , ValorDado ) ;
 
         return TST_CompararInt( CondRetEsperada , CondRetObtido ,
             "Retorno errado inserir o elemento." );
