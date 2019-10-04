@@ -61,7 +61,7 @@
 #define     ANDAR_CMD           "=andar"
 #define     OBTER_VAL_CMD       "=obter"
 #define     DESTROI_CMD         "=destruir"
-#define     PRIMEIRO_CMD         "=primeiro"
+#define     PRIMEIRO_CMD        "=primeiro"
 
 /*****  Dados encapsulados no módulo  *****/
 
