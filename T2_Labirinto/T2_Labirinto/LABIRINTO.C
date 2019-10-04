@@ -87,7 +87,7 @@ LAB_tpCondRet LAB_CriarLabirinto( LAB_tppLabirinto * ppLab, int tam ) {
 	int linhaAtual, colunaAtual;
 
 	if (ppLab == NULL || tam <= 1) return LAB_CondRetErroEstrutura;
-	if (*ppLab ! NULL) LAB_DestruirLabirinto( LAB_tppLabirinto * ppLab );
+	if (*ppLab != NULL) LAB_DestruirLabirinto( ppLab );
 
 	// Alocar espaço
 	*ppLab = (LAB_tppLabirinto) malloc(sizeof(tpLabirinto));
@@ -193,7 +193,7 @@ LAB_tpCondRet LAB_InserirElemento( LAB_tppLabirinto pLab, LAB_tpElemCasa element
 	if (elemento > 3) return LAB_CondRetElementoInvalido;
 
 	// Pegar o ponteiro para o elemento da posição corrente
-	MTZ_ObterValorCorrente( pLab->pMatri, &pElementoPresente ) ;
+	MTZ_ObterValorCorrente( pLab->pMatriz, (void **) &pElementoPresente ) ;
 
 	// Se era uma entrada ou saida, ela terá que ser substituida por um elemento vazio
 	// WIP: Implementar
