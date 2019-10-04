@@ -76,6 +76,8 @@ static void ExcluirValor( void * pValor );
 
 static MTZ_tpDirecao ConverterDirecao( LAB_tpDirecao direcao );
 
+static int RetirarEntradaOuSaida( LAB_tppLabirinto pLab, LAB_tpElemCasa tipoElem );
+
 /*****  Código das funções exportadas pelo módulo  *****/
 
 /***************************************************************************
@@ -192,6 +194,12 @@ LAB_tpCondRet LAB_AndarDirecao( LAB_tppLabirinto pLab, LAB_tpDirecao direcao ) {
 	if (MTZ_AndarDirecao( pLab->pMatriz, dirMatriz ) == MTZ_CondRetDirecaoNaoExisteOuInvalida)
 		return LAB_CondRetDirecaoNaoExisteOuInvalida;
 
+	// Atualizar as coordenadas da posição corrente
+	if (direcao == LAB_DirLeste || direcao == LAB_DirOeste)
+		pLab->posXCorrente += (direcao == LAB_DirLeste) ? 1 : -1;
+	else
+		pLab->posYCorrente += (direcao == LAB_DirSul) ? 1 : -1;
+
 	return LAB_CondRetOK;
 
 } /* Fim função: LAB Andar em Direção */
@@ -219,9 +227,11 @@ LAB_tpCondRet LAB_InserirElemento( LAB_tppLabirinto pLab, LAB_tpElemCasa element
 		return LAB_CondRetElementoInvalido;
 
 	// Se o novo elemento é uma entrada ou saida, a antiga terá que ser substituida por um elemento vazio e voltar para a corrente
-	//if ()
+	if (elemento == LAB_ElemEntrada || elemento == LAB_ElemSaida) {
 
-	// WIP: Implementar
+		if (RetirarEntradaOuSaida( pLab, elemento ) == 1)
+			return LAB_CondRetErroEstrutura;
+	}
 
 	// Inserir o elemento na matriz
 	*pElementoPresente = elemento;
@@ -296,5 +306,77 @@ MTZ_tpDirecao ConverterDirecao( LAB_tpDirecao direcao ) {
     }
 
 } /* Fim função: LAB Converter direção */
+
+/***********************************************************************
+*
+*  $FC Função: LAB Retirar entrada ou saída
+*
+*  $FV Valor retornado
+*     0 - Caso tenha executado corretamente
+*     1 - Caso tenha ocorrido problema ao executar
+*
+*  $EAE Assertivas de entradas esperadas
+*     pLab != NULL
+*     tipoElem é Entrada ou Saida
+*
+*  $EAE Assertivas de saída esperadas
+*     A entrada ou saída terá sido transformada em elemento vazio (caso não haja erro)
+*
+***********************************************************************/
+
+int RetirarEntradaOuSaida( LAB_tppLabirinto pLab, LAB_tpElemCasa tipoElem ) {
+
+	MTZ_tpDirecao direcaoX, direcaoY;
+	int i = 0, qtdIteracoesX, qtdIteracoesY, retorno = 0, posXRetirar, posYRetirar;
+	LAB_tpElemCasa * pElementoPresente;
+
+	// Tratar se procura entrada ou saída
+	if (tipoElem == LAB_ElemEntrada) {
+		posXRetirar = pLab->posXEntrada;
+		posYRetirar = pLab->posYEntrada;
+	} else {
+		posXRetirar = pLab->posXSaida;
+		posYRetirar = pLab->posYSaida;
+	}
+
+	// Se o elemento estiver à esquerda da corrente, anda para oeste, senão anda para leste
+	direcaoX = (posXRetirar < pLab->posXCorrente) ? MTZ_DirOeste : MTZ_DirLeste;
+	qtdIteracoesX = posXRetirar - pLab->posXCorrente;
+	if (qtdIteracoesX < 0) qtdIteracoesX = -qtdIteracoesX;
+
+	// Se o elemento estiver acima da corrente, anda para norte, senão anda para sul
+	direcaoY = (posYRetirar < pLab->posYCorrente) ? MTZ_DirNorte : MTZ_DirSul;
+	qtdIteracoesY = posYRetirar - pLab->posYCorrente;
+	if (qtdIteracoesY < 0) qtdIteracoesY = -qtdIteracoesY;
+
+	// Anda até o elemento
+	for (i = 0; i < qtdIteracoesX; i++)
+		MTZ_AndarDirecao( pLab->pMatriz, direcaoX );
+
+	for (i = 0; i < qtdIteracoesY; i++)
+		MTZ_AndarDirecao( pLab->pMatriz, direcaoY );
+
+	// Verifica se o elemento é o procurado (senão da erro, retorna 1)
+	MTZ_ObterValorCorrente( pLab->pMatriz, (void **) &pElementoPresente ) ;
+	if (*pElementoPresente != tipoElem)
+		retorno = 1;
+
+	// Troca o elemento para casa vazia se nao tiver dado erro
+	if (retorno == 0)
+		*pElementoPresente = LAB_ElemVazio;
+
+	// Volta para a casa corrente fazendo o passo oposto da ida até a entrada
+	direcaoX = (direcaoX == MTZ_DirOeste) ? MTZ_DirLeste : MTZ_DirOeste;
+	direcaoY = (direcaoY == MTZ_DirNorte) ? MTZ_DirSul : MTZ_DirNorte;
+
+	for (i = 0; i < qtdIteracoesX; i++)
+		MTZ_AndarDirecao( pLab->pMatriz, direcaoX );
+
+	for (i = 0; i < qtdIteracoesY; i++)
+		MTZ_AndarDirecao( pLab->pMatriz, direcaoY );
+
+	// Se executou certo, retorna 0
+	return retorno;
+} /* Fim função: LAB Retirar entrada ou saída */
 
 /********** Fim do módulo de implementação: Módulo labirinto **********/

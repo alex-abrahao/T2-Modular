@@ -227,6 +227,7 @@ LAB_tpCondRet LAB_AndarDirecao( LAB_tppLabirinto pLab, LAB_tpDirecao direcao ) ;
 *     LAB_CondRetOK
 *     LAB_CondRetLabirintoNaoExiste
 *     LAB_CondRetElementoInvalido
+*     LAB_CondRetErroEstrutura   - Caso não consiga retirar a entrada ou saida anterior
 *
 *  Condições de acoplamento
 *
