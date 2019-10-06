@@ -9,12 +9,13 @@
 == Inicializar valores
 
 =declararparm   OK			int 0
-=declararparm   NaoHead			int 1
-=declararparm   ErroEstrut		int 2
-=declararparm   DirInvalida		int 3
-=declararparm   MtzNaoExiste		int 4
-=declararparm   CasaVazia		int 5
-=declararparm   FaltaMem		int 6
+=declararparm   ErroEstrut		int 1
+=declararparm   DirInvalida		int 2
+=declararparm   LabNaoExiste		int 3
+=declararparm   FaltaMem		int 4
+=declararparm   SemSolucao		int 5
+=declararparm   ElemInvalido		int 6
+
 
 =declararparm   Norte			int 0
 =declararparm   Leste			int 1
@@ -27,95 +28,52 @@
 =declararparm	ElemSaida		int 3
 
 
-== Teste do comando recuperar
-=andar		mat2	0	OK
-=recuperar
+== Teste criar labirinto
+=criar	3	OK
+=criar	0	ErroEstrut
+=criar	-1	ErroEstrut
+=criar	5	OK
 
-== Testes das funcoes com matrizes inexistentes 
-=andar		mat1	0 		MtzNaoExiste
-=inselm		mat1	'a'		MtzNaoExiste
-=destruir	mat1			MtzNaoExiste
-=obter		mat1	'!' 	MtzNaoExiste
-=primeiro	mat1			MtzNaoExiste
+== Teste destruir labirinto
+=criar	4	OK
+=destruir	OK
 
-== Teste criar matriz 
-=criar	mat0	3	OK
-=criar	mat1	0	ErroEstrut
-=criar	mat1	-1	ErroEstrut
+== Teste destruir uma labirinto que ja foi destruido
+=criar		4	OK
+=destruir	OK
+=destruir	LabNaoExiste
 
-== Teste destruir matriz 
-=criar		mat2	2	OK
-=destruir	mat2	OK
+== Teste andar labirinto
+=criar	4		OK
+=andar	Leste		OK
+=andar	Sul		OK
+=andar	Oeste		OK
+=andar	Norte		OK
 
-== Teste criar matriz depois de ter destruido uma no mesmo ponteiro
-=criar		mat1	3	OK
-=destruir	mat1		OK
-=criar		mat1	4	OK
+== Andar para um lugar inexistente e outro invalido
+=andar	11		DirInvalida
+=andar	Sudeste		DirInvalida
+=andar	Norte		DirInvalida
+=andar	Sul		OK
+=andar	Sul		OK
+=andar	Sul		DirInvalida
+=andar	Norte		OK
+=andar	Norte		OK
+=andar	Noroeste	DirInvalida
 
-== Teste destruir uma matriz que ja foi destruida
-=criar		mat2	2	OK
-=destruir	mat2		OK
-=destruir	mat2		MtzNaoExiste
 
-== Teste andar matriz 
-=andar	mat0	Leste		OK
-=andar	mat0	Sul			OK
-=andar	mat0	Nordeste	OK
-=andar	mat0	Sudoeste	OK
-=andar	mat0	Sudeste		OK
-=andar	mat0	Noroeste	OK
-=andar	mat0	Oeste		OK
-=andar	mat0	Norte		OK
-
-== Andar para um lugar inexistente e outro invalido 
-=andar	mat0	11		DirInvalida
-=andar	mat0	Norte	DirInvalida
-=andar	mat0	Sul		OK
-=andar	mat0	Sul		OK
-=andar	mat0	Sul		DirInvalida
-=andar	mat0	Norte	OK
-=andar	mat0	Norte	OK
-=andar	mat0	Norte	DirInvalida
-
-== Percorrer todas as casas da matriz 3x3 
-=andar	mat0	Leste		OK
-=andar	mat0	Leste		OK
-=andar	mat0	Sul			OK
-=andar	mat0	Sul			OK
-=andar	mat0	Oeste		OK
-=andar	mat0	Norte		OK
-=andar	mat0	Sudoeste	OK
-=andar	mat0	Norte		OK
-=andar	mat0	Norte		OK
-
-== Inserir caracter em diferentes casas da matriz e obter
-=criar		mat1	2		OK
-=inselm		mat1	'a'		OK
-=obter		mat1	'a'		OK
-=andar		mat1	Sul		OK
-=inselm		mat1	'b'		OK
-=obter		mat1	'b'		OK
-=andar		mat1	Leste	OK
-=inselm		mat1	'c'		OK
-=obter		mat1	'c'		OK
-=andar		mat1	Norte	OK
-=inselm		mat1	'd'		OK
-=obter		mat1	'd'		OK
-
-== Inserir caracter em uma casa que ja tenha uma lista
-=andar		mat1	Sudoeste	OK
-=inselm		mat1	'c'			OK
-
-== Voltar a primeira casa
-=criar		mat2	3			OK
-=andar		mat2	Sudeste		OK
-=primeiro	mat2				OK
-=andar		mat2	Norte		DirInvalida
-=andar		mat2	Oeste		DirInvalida
-
-== Destruir todas as matrizes usadas
-=destruir	mat0	OK
-=destruir	mat1	OK
-=destruir	mat2	OK
-
+== Inserir elementos e andar em diferentes casas do labirinto
+==andar	Leste	OK
+==inselm	ElemParede	OK
+==andar	Sul	OK
+==inselm	ElemEntrada	OK
+==andar Sul	OK
+==inselm	ElemVazio	OK
+==andar Oeste	OK
+==inselm	Chao	ElemInvalido
+==inselm	ElemSaida	OK
+==andar	Oeste	OK
+==inserir	ElemVazio	OK
+==andar	SUL	OK
+==inserir	ElemParede	OK
 // fim

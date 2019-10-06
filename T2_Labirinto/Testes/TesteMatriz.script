@@ -15,7 +15,7 @@
 =declararparm   NaoHead			int 1
 =declararparm   ErroEstrut		int 2
 =declararparm   DirInvalida		int 3
-=declararparm   MtzNaoExiste	int 4
+=declararparm   MtzNaoExiste		int 4
 =declararparm   CasaVazia		int 5
 =declararparm   FaltaMem		int 6
 
@@ -23,7 +23,7 @@
 =declararparm   Nordeste	int 1
 =declararparm   Leste		int 2
 =declararparm   Sudeste		int 3
-=declararparm   Sul			int 4
+=declararparm   Sul		int 4
 =declararparm   Sudoeste	int 5
 =declararparm   Oeste		int 6
 =declararparm   Noroeste	int 7

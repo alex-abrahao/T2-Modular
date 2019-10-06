@@ -63,7 +63,7 @@ typedef struct tgLabirinto * LAB_tppLabirinto ;
          LAB_CondRetFaltouMemoria = 4 ,
                /* Faltou memória ao alocar dados */
 
-		     LAB_CondRetNaoTemSolucao = 5 ,
+		 LAB_CondRetNaoTemSolucao = 5 ,
 			         /* Labirinto não tem solução */
 
          LAB_CondRetElementoInvalido = 6
