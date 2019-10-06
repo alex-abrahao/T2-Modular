@@ -15,8 +15,9 @@
 *
 *  $HA Histórico de evolução:
 *     Versão  Autor    Data     Observações
-*       1.00   aaf   26/08/2019 Início do desenvolvimento
-*       1.01   aaf   30/09/2019 Alteração para não usar listas nem estruturas estáticas
+*       1.00   phd   03/10/2019 Início do desenvolvimento
+*       1.01   aaf   03/10/2019 Alteração no teste de inserir elemento
+*		1.02   phd	 05/10/2019 Documentação
 *
 *  $ED Descrição do módulo
 *     Este módulo contém as funções específicas para o teste do
@@ -27,7 +28,8 @@
 *     Comandos de teste específicos para testar o módulo labirinto:
 *
 *     "=criar"  <Int> <Int>
-*                   - chama a função LAB_CriarLabirinto( )
+*                   - chama a função LAB_CriarLabirinto( <Int> )
+*                     Obs. notação: <Int> é o tamanho do labirinto a ser criado.
 *     "=inselm" <Int> <Int>
 *                   - chama a função LAB_InserirElemento( <Int> )
 *                     Obs. notação: <Int> é o valor do parâmetro
