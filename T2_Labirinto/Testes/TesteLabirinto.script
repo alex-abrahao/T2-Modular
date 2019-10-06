@@ -67,7 +67,7 @@
 =andar	Norte	OK
 =andar	Norte	OK
 
-== Inserir elementos invalidos
+== Inserir elementos invalidos, paredes na entrada e na saida
 =criar	2			OK
 =inselm	9			ElemInvalido
 =inselm	ElemParede	ElemInvalido
@@ -102,9 +102,9 @@
 == Trocar saida de lugar
 =criar		3			OK
 =andar		Leste		OK
-=andar		Leste		OK
-=inselm		ElemSaida	OK
 =andar		Sul			OK
+=inselm		ElemSaida	OK
+=andar		Leste		OK
 =andar		Sul			OK
 =inselm		ElemVazio	OK
 
