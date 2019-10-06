@@ -100,13 +100,14 @@ LAB_tpCondRet LAB_CriarLabirinto( LAB_tppLabirinto * ppLab, int tam ) {
 	if (*ppLab == NULL) return LAB_CondRetFaltouMemoria;
 
 	// Alocar matriz
+	(*ppLab)->pMatriz = NULL;
 	if (MTZ_CriarMatriz( &((*ppLab)->pMatriz), tam, ExcluirValor) == MTZ_CondRetFaltouMemoria ) {
 		free(*ppLab);
 		*ppLab = NULL;
 		return LAB_CondRetFaltouMemoria;
 	}
 
-	// Inicializa os valores segundo o padrão
+	// // Inicializa os valores segundo o padrão
 	(*ppLab)->id = 0;
 	(*ppLab)->posXEntrada = 0;
 	(*ppLab)->posYEntrada = 0;
@@ -115,9 +116,9 @@ LAB_tpCondRet LAB_CriarLabirinto( LAB_tppLabirinto * ppLab, int tam ) {
 	(*ppLab)->posXCorrente = 0;
 	(*ppLab)->posYCorrente = 0;
 
-	// Todos os espaços para os elementos são alocados nessa função
+	// // Todos os espaços para os elementos são alocados nessa função
 
-	// Preenchimento inicial
+	// // Preenchimento inicial
 	for (linhaAtual = 0; linhaAtual < tam; linhaAtual++) {
 
 		for (colunaAtual = 0; colunaAtual < tam; colunaAtual++) {
