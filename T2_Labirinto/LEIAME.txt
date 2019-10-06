@@ -1,0 +1,45 @@
+/************************************************/
+
+Instruções de utilização dos programas:
+
+/************************************************/
+
+Na subpasta chamada LABIRINTO há os módulos de implementação, interface e testes
+correspondentes ao módulo LABIRINTO, sendo eles o LABIRINTO.H, LABIRINTO.C e TESTLAB.C,
+além dos arquivos necessários para criar a lista de testes automatizados,
+sendo eles o de script TesteLabirinto.script, a biblioteca ArcaboucoTeste.lib e
+as demais interfaces que o acompanham para os testes.
+
+Na subpasta chamada MATRIZ há os módulos de implementação, interface e testes
+correspondentes ao módulo MATRIZ, sendo eles o MATRIZ.H, MATRIZ.C e TESTMTZ.C,
+além dos arquivos necessários para criar a lista de testes automatizados,
+sendo eles o de script TesteMatriz.script, a biblioteca ArcaboucoTeste.lib e
+as demais interfaces que o acompanham para os testes.
+
+/************************************************/
+
+Instruções de Execução dos Testes:
+
+/************************************************/
+Para executar os testes do módulo LABIRINTO, entre na subpasta LABIRINTO e
+abra (clique duas vezes em cima) o arquivo ExecutaTestesLabirinto.bat
+A saída do resultado dos testes estará em outro arquivo chamado
+SaidaLabirinto.txt.
+
+Para executar os testes do módulo MATRIZ, entre na subpasta MATRIZ e
+abra (clique duas vezes em cima) o arquivo ExecutaTestesMatriz.bat
+A saída do resultado dos testes estará em outro arquivo chamado
+SaidaMatriz.txt.
+
+
+/************************************************/
+
+Documentação:
+
+/************************************************/
+
+Na subpasta chamada Documentação estão contidos os pdfs da documentação de requisitos,
+do modelo estrutural e do diagrama de módulos. Esses documentos podem ser acessados
+para que o usuário obtenha um maior entendimento sobre as funcionalidades e uso dos módulos.
+
+/************************************************/

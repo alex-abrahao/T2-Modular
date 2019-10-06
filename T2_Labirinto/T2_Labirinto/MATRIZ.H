@@ -22,7 +22,7 @@
 *       1.01   aaf   02/10/2019 Assertivas de entrada e saída
 *
 *  $ED Descrição do módulo
-*     Implementa matrizes genéricas duplamente encadeadas.
+*     Implementa matrizes genéricas com encadeamento nas oito direções.
 *     Podem existir n matrizes em operação simultaneamente.
 *     As matrizes possuem uma cabeça encapsulando o seu estado.
 *

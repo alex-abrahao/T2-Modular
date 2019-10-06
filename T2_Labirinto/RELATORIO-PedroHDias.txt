@@ -1,0 +1,11 @@
+19/9 - 2 horas - Projetar - Reunião com os membros do grupo e definir funções
+
+23/9 - 2 horas - Projetar - Elaboração da documentação de requisitos
+
+26/09 - 4 horas - Codificar Módulo - Iniciei a codificação do LABIRINTO.c e do LABIRINTO.h
+
+28/10 - 3 horas - Codificar Módulo - Fiz um protótipo de algumas funções
+
+03/10 - 3 horas - Codificar Módulo - Iniciei a codificação do TESTLAB.c
+
+05/10 - 1 hora - Especificar os Módulos - Documentação do TESTLAB.c

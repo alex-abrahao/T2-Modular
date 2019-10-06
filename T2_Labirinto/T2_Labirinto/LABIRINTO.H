@@ -4,7 +4,7 @@
 *
 *  $MCD Módulo de definição: Módulo labirinto
 *
-*  Arquivo gerado:              LAB.H
+*  Arquivo gerado:              LABIRINTO.H
 *  Letras identificadoras:      LAB
 *
 *  Nome da base de software:    Exemplo de teste automatizado
@@ -23,7 +23,25 @@
 *       1.02   aaf   30/09/2019 Assertivas de entrada e saída
 *
 *  $ED Descrição do módulo
+*     Descreve funções de criação e manipulação de labirintos.
+*     Podem existir n labirintos em operação simultaneamente.
+*     Os labirintos possuem uma cabeça encapsulando o seu estado.
 *
+*     Cada labirinto armazena em cada posição um único valor do tipo
+*        LAB_tpElemCasa, que representa o conteúdo da posição.
+*
+*     Cada labirinto tem sempre apenas uma saída e uma entrada, que não podem
+*        estar na mesma posição.
+*
+*     Na criação de um labirinto de tamanho n:
+*        - a entrada é posta na posição (0, 0);
+*        - a saída é posta na posição (n - 1, n - 1);
+*        - as demais casas são preenchidas com elementos vazios.
+*
+*     O usuário pode andar livremente por qualquer posição dentro do labirinto,
+*       alterando os elementos na posição corrente.
+*
+*     O labirinto pode não ter solução.
 *
 ***************************************************************************/
 
