@@ -8,18 +8,17 @@
 
 == Inicializar valores
 
-=declararparm   OK			int 0
+=declararparm   OK				int 0
 =declararparm   ErroEstrut		int 1
 =declararparm   DirInvalida		int 2
-=declararparm   LabNaoExiste		int 3
+=declararparm   LabNaoExiste	int 3
 =declararparm   FaltaMem		int 4
 =declararparm   SemSolucao		int 5
-=declararparm   ElemInvalido		int 6
-
+=declararparm   ElemInvalido	int 6
 
 =declararparm   Norte			int 0
 =declararparm   Leste			int 1
-=declararparm   Sul			int 2
+=declararparm   Sul				int 2
 =declararparm   Oeste			int 3
 
 =declararparm	ElemVazio		int 0
@@ -27,11 +26,20 @@
 =declararparm	ElemEntrada		int 2
 =declararparm	ElemSaida		int 3
 
+== Teste do funcionamento correto do arcabouco
+=destruir	OK
+=recuperar
+
+== Teste com labirintos inexistentes
+=destruir				LabNaoExiste
+=andar		Leste		LabNaoExiste
+=inselm		ElemEntrada	LabNaoExiste
 
 == Teste criar labirinto
-=criar	3	OK
 =criar	0	ErroEstrut
 =criar	-1	ErroEstrut
+=criar	1	ErroEstrut
+=criar	3	OK
 =criar	5	OK
 
 == Teste destruir labirinto
@@ -44,36 +52,63 @@
 =destruir	LabNaoExiste
 
 == Teste andar labirinto
-=criar	4		OK
+=criar	3			OK
 =andar	Leste		OK
-=andar	Sul		OK
+=andar	Sul			OK
 =andar	Oeste		OK
 =andar	Norte		OK
 
 == Andar para um lugar inexistente e outro invalido
 =andar	11		DirInvalida
-=andar	Sudeste		DirInvalida
-=andar	Norte		DirInvalida
+=andar	Norte	DirInvalida
 =andar	Sul		OK
 =andar	Sul		OK
 =andar	Sul		DirInvalida
-=andar	Norte		OK
-=andar	Norte		OK
-=andar	Noroeste	DirInvalida
+=andar	Norte	OK
+=andar	Norte	OK
 
+== Inserir elementos invalidos
+=criar	2			OK
+=inselm	9			ElemInvalido
+=inselm	ElemParede	ElemInvalido
+=andar	Sul			OK
+=andar	Leste		OK
+=inselm	ElemParede	ElemInvalido
 
 == Inserir elementos e andar em diferentes casas do labirinto
-==andar	Leste	OK
-==inselm	ElemParede	OK
-==andar	Sul	OK
-==inselm	ElemEntrada	OK
-==andar Sul	OK
-==inselm	ElemVazio	OK
-==andar Oeste	OK
-==inselm	Chao	ElemInvalido
-==inselm	ElemSaida	OK
-==andar	Oeste	OK
-==inserir	ElemVazio	OK
-==andar	SUL	OK
-==inserir	ElemParede	OK
+=criar		4			OK
+=andar		Leste		OK
+=inselm		ElemParede	OK
+=andar		Leste		OK
+=inselm		ElemEntrada	OK
+=andar 		Sul			OK
+=inselm		ElemVazio	OK
+=andar 		Sul			OK
+=inselm		ElemSaida	OK
+=andar		Oeste		OK
+=inselm		ElemVazio	OK
+=andar		Norte		OK
+=inselm		ElemParede	OK
+
+== Trocar entrada de lugar
+=criar		3			OK
+=andar		Leste		OK
+=andar		Leste		OK
+=inselm		ElemEntrada	OK
+=andar		Oeste		OK
+=andar		Oeste		OK
+=inselm		ElemVazio	OK
+
+== Trocar saida de lugar
+=criar		3			OK
+=andar		Leste		OK
+=andar		Leste		OK
+=inselm		ElemSaida	OK
+=andar		Sul			OK
+=andar		Sul			OK
+=inselm		ElemVazio	OK
+
+== Destruir o labirinto usado nos testes
+=destruir	OK
+
 // fim
