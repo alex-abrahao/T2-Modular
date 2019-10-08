@@ -15,7 +15,7 @@
 03/10; 15 min; revisar código do módulo, diagnosticar e corrigir os problemas encontrados; Revisar arquivo de testes do labirinto e corrigir problemas de coerência.
 03/10; 2:40h; codificar as funções; Implementação de InserirElemento.
 04/10; 1h; especificar os módulos, projetar; Criar o desenho das estruturas do modelo físico.
-04/10; 15 min; codificar as funções, diagnosticar e corrigir os problemas encontrados ; Correção na função de InserirElemento, adicionado arquivo batch de teste de labirinto.
+04/10; 15 min; codificar as funções, diagnosticar e corrigir os problemas encontrados; Correção na função de InserirElemento, adicionado arquivo batch de teste de labirinto.
 04/10; 1h; especificar os módulos, projetar; Elaborar um exemplo para o modelo físico e criar o desenho.
 05/10; 30 min; revisar script de teste; Corrigir erros de digitação e inserir casos de teste que faltavam.
 05/10; 25 min; realizar os testes, diagnosticar e corrigir os problemas encontrados; Realizar testes de todos os casos, consertar um bug na função de criação de labirinto.

@@ -1,0 +1,5 @@
+19/09; 2 horas; projetar; Reunião para tratar sobre o andamento do trabalho e definição de tarefas 
+24/09; 3 horas; projetar; Elaboração da documentação de requisitos
+03/10; 4 horas; redigir script de teste, projetar;
+04/10; 6 horas; redigir script de teste, projetar, revisar código do módulo; Elaboração do script de teste para verificação das funções e revisão dos arquivos de implementação do módulo
+05/10; 4 horas; redigir script de teste, revisar script de teste, realizar os testes, diagnosticar e corrigir problemas encontrados; Elaboração do script de teste do labirinto, revisão dos arquivos de implementação do módulo e dos scripts de teste e correção dos problemas que foram encontrados na hora da verificação
