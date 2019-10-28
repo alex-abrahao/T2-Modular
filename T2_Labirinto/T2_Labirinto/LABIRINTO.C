@@ -79,6 +79,8 @@ static MTZ_tpDirecao ConverterDirecao( LAB_tpDirecao direcao );
 
 static int RetirarEntradaOuSaida( LAB_tppLabirinto pLab, LAB_tpElemCasa tipoElem );
 
+static void ImprimirCasa( LAB_tpElemCasa elemento );
+
 /*****  Código das funções exportadas pelo módulo  *****/
 
 /***************************************************************************
@@ -258,9 +260,41 @@ LAB_tpCondRet LAB_InserirElemento( LAB_tppLabirinto pLab, LAB_tpElemCasa element
 
 LAB_tpCondRet LAB_ImprimirLabirinto( LAB_tppLabirinto pLab ) {
 
+	LAB_tpElemCasa * pElementoCorrente = NULL;
+	int contLinha = 0, contColuna = 0;
+
 	if (pLab == NULL) return LAB_CondRetLabirintoNaoExiste;
 
 	// WIP: Implementar
+	printf("\n\n");
+
+	// Guardar a casa corrente
+
+	// Andar para o inicio
+	MTZ_VoltarParaPrimeiro(pLab->pMatriz);
+
+	// Imprimir tudo
+	do {
+
+		do {
+			MTZ_ObterValorCorrente(pLab->pMatriz, &pElementoCorrente);
+			ImprimirCasa(*pElementoCorrente);
+		} while (MTZ_AndarDirecao(pLab->pMatriz, MTZ_DirLeste) != MTZ_CondRetDirecaoNaoExisteOuInvalida);
+
+		// Volta para o inicio da linha
+		while (MTZ_AndarDirecao(pLab->pMatriz, MTZ_DirOeste) != MTZ_CondRetDirecaoNaoExisteOuInvalida);
+		printf("\n");
+
+	} while (MTZ_AndarDirecao(pLab->pMatriz, MTZ_DirSul) != MTZ_CondRetDirecaoNaoExisteOuInvalida);
+
+	// Voltar para a casa corrente certa
+	MTZ_VoltarParaPrimeiro(pLab->pMatriz);
+	for (contLinha = 0; contLinha < pLab->posXCorrente; contLinha++)
+		MTZ_AndarDirecao(pLab->pMatriz, MTZ_DirLeste);
+	for (contColuna = 0; contColuna < pLab->posYCorrente; contColuna++)
+		MTZ_AndarDirecao(pLab->pMatriz, MTZ_DirSul);
+
+	printf("\n");
 
 	return LAB_CondRetOK;
 
@@ -389,5 +423,35 @@ int RetirarEntradaOuSaida( LAB_tppLabirinto pLab, LAB_tpElemCasa tipoElem ) {
 	// Se executou certo, retorna 0
 	return retorno;
 } /* Fim função: LAB Retirar entrada ou saída */
+
+/***********************************************************************
+*
+*  $FC Função: LAB Imprimir Casa
+*
+***********************************************************************/
+
+void ImprimirCasa( LAB_tpElemCasa elemento ) {
+
+	char c;
+
+	switch (elemento) {
+    case LAB_ElemParede:
+    	c = 254;
+        break;
+    case LAB_ElemEntrada:
+    	c = 'E';
+        break;
+    case LAB_ElemSaida:
+        c = 'S';
+        break;
+    default:
+    	c = ' ';
+        break;
+    }
+
+    printf("%c", c);
+    return;
+
+} /* Fim função: LAB Imprimir Casa */
 
 /********** Fim do módulo de implementação: Módulo labirinto **********/
