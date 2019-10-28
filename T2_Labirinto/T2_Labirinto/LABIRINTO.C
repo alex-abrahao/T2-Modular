@@ -277,7 +277,7 @@ LAB_tpCondRet LAB_ImprimirLabirinto( LAB_tppLabirinto pLab ) {
 	do {
 
 		do {
-			MTZ_ObterValorCorrente(pLab->pMatriz, &pElementoCorrente);
+			MTZ_ObterValorCorrente(pLab->pMatriz, (void **) &pElementoCorrente);
 			ImprimirCasa(*pElementoCorrente);
 		} while (MTZ_AndarDirecao(pLab->pMatriz, MTZ_DirLeste) != MTZ_CondRetDirecaoNaoExisteOuInvalida);
 
