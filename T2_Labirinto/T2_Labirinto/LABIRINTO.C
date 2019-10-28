@@ -17,6 +17,7 @@
 *     Versão  Autor    Data     Observações
 *       1.00   phd   26/09/2019 Início do desenvolvimento
 *       1.10   aaf   03/10/2019 Término da implementação das funções do T2
+*       1.10   aaf   28/10/2019 Início da implementação das funções do T3
 *
 ***************************************************************************/
 
@@ -265,10 +266,7 @@ LAB_tpCondRet LAB_ImprimirLabirinto( LAB_tppLabirinto pLab ) {
 
 	if (pLab == NULL) return LAB_CondRetLabirintoNaoExiste;
 
-	// WIP: Implementar
 	printf("\n\n");
-
-	// Guardar a casa corrente
 
 	// Andar para o inicio
 	MTZ_VoltarParaPrimeiro(pLab->pMatriz);
