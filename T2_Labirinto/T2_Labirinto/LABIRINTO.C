@@ -268,7 +268,7 @@ LAB_tpCondRet LAB_ImprimirLabirinto( LAB_tppLabirinto pLab ) {
 
 	printf("\n\n");
 
-	// Andar para o inicio
+	// Andar para o inicio sem alterar a marcação X e Y da posição corrente
 	MTZ_VoltarParaPrimeiro(pLab->pMatriz);
 
 	// Imprimir tudo
@@ -443,7 +443,7 @@ void ImprimirCasa( LAB_tpElemCasa elemento ) {
         c = 'S';
         break;
     default:
-    	c = ' ';
+    	c = 176;
         break;
     }
 

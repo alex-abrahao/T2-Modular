@@ -2,7 +2,7 @@
 #define LABIRINTO_
 /***************************************************************************
 *
-*  $MCD MÛdulo de definiÁ„o: MÛdulo labirinto
+*  $MCD M√≥dulo de defini√ß√£o: M√≥dulo labirinto
 *
 *  Arquivo gerado:              LABIRINTO.H
 *  Letras identificadoras:      LAB
@@ -12,36 +12,36 @@
 *
 *  Projeto: Disciplinas INF 1628 / 1301
 *  Gestor:  DI/PUC-Rio
-*  Autores: aaf - Alexandre Abrah„o Ferreira
-*           jmb - Jo„o Marcello Bessa
+*  Autores: aaf - Alexandre Abrah√£o Ferreira
+*           jmb - Jo√£o Marcello Bessa
 *           phd - Pedro Henrique Dias
 *
-*  $HA HistÛrico de evoluÁ„o:
-*     Vers„o  Autor    Data     ObservaÁıes
-*       1.00   phd   26/09/2019 InÌcio do desenvolvimento
-*       1.01   aaf   30/09/2019 DocumentaÁ„o inicial
-*       1.02   aaf   30/09/2019 Assertivas de entrada e saÌda
+*  $HA Hist√≥rico de evolu√ß√£o:
+*     Vers√£o  Autor    Data     Observa√ß√µes
+*       1.00   phd   26/09/2019 In√≠cio do desenvolvimento
+*       1.01   aaf   30/09/2019 Documenta√ß√£o inicial
+*       1.02   aaf   30/09/2019 Assertivas de entrada e sa√≠da
 *
-*  $ED DescriÁ„o do mÛdulo
-*     Descreve funÁıes de criaÁ„o e manipulaÁ„o de labirintos.
-*     Podem existir n labirintos em operaÁ„o simultaneamente.
-*     Os labirintos possuem uma cabeÁa encapsulando o seu estado.
+*  $ED Descri√ß√£o do m√≥dulo
+*     Descreve fun√ß√µes de cria√ß√£o e manipula√ß√£o de labirintos.
+*     Podem existir n labirintos em opera√ß√£o simultaneamente.
+*     Os labirintos possuem uma cabe√ßa encapsulando o seu estado.
 *
-*     Cada labirinto armazena em cada posiÁ„o um ˙nico valor do tipo
-*        LAB_tpElemCasa, que representa o conte˙do da posiÁ„o.
+*     Cada labirinto armazena em cada posi√ß√£o um √∫nico valor do tipo
+*        LAB_tpElemCasa, que representa o conte√∫do da posi√ß√£o.
 *
-*     Cada labirinto tem sempre apenas uma saÌda e uma entrada, que n„o podem
-*        estar na mesma posiÁ„o.
+*     Cada labirinto tem sempre apenas uma sa√≠da e uma entrada, que n√£o podem
+*        estar na mesma posi√ß√£o.
 *
-*     Na criaÁ„o de um labirinto de tamanho n:
-*        - a entrada È posta na posiÁ„o (0, 0);
-*        - a saÌda È posta na posiÁ„o (n - 1, n - 1);
-*        - as demais casas s„o preenchidas com elementos vazios.
+*     Na cria√ß√£o de um labirinto de tamanho n:
+*        - a entrada √© posta na posi√ß√£o (0, 0);
+*        - a sa√≠da √© posta na posi√ß√£o (n - 1, n - 1);
+*        - as demais casas s√£o preenchidas com elementos vazios.
 *
-*     O usu·rio pode andar livremente por qualquer posiÁ„o dentro do labirinto,
-*       alterando os elementos na posiÁ„o corrente.
+*     O usu√°rio pode andar livremente por qualquer posi√ß√£o dentro do labirinto,
+*       alterando os elementos na posi√ß√£o corrente.
 *
-*     O labirinto pode n„o ter soluÁ„o.
+*     O labirinto pode n√£o ter solu√ß√£o.
 *
 ***************************************************************************/
 
@@ -51,15 +51,15 @@
    #define LABIRINTO_EXT extern
 #endif
 
-/***** DeclaraÁıes exportadas pelo mÛdulo *****/
+/***** Declara√ß√µes exportadas pelo m√≥dulo *****/
 
-/* Tipo referÍncia para um labirinto */
+/* Tipo refer√™ncia para um labirinto */
 
 typedef struct tgLabirinto * LAB_tppLabirinto ;
 
 /***********************************************************************
 *
-*  $TC Tipo de dados: LAB CondiÁoes de retorno
+*  $TC Tipo de dados: LAB Condi√ßoes de retorno
 *
 *
 ***********************************************************************/
@@ -70,28 +70,28 @@ typedef struct tgLabirinto * LAB_tppLabirinto ;
                /* Executou correto */
 
          LAB_CondRetErroEstrutura = 1 ,
-               /* Estrutura do labirinto est· errada */
+               /* Estrutura do labirinto est√° errada */
 
          LAB_CondRetDirecaoNaoExisteOuInvalida = 2 ,
-               /* Direcao nao existe ou È invalida (sai do labirinto) */
+               /* Direcao nao existe ou √© invalida (sai do labirinto) */
 
          LAB_CondRetLabirintoNaoExiste = 3 ,
-               /* Labirinto n„o existe */
+               /* Labirinto n√£o existe */
 
          LAB_CondRetFaltouMemoria = 4 ,
-               /* Faltou memÛria ao alocar dados */
+               /* Faltou mem√≥ria ao alocar dados */
 
 		 LAB_CondRetNaoTemSolucao = 5 ,
-			         /* Labirinto n„o tem soluÁ„o */
+			         /* Labirinto n√£o tem solu√ß√£o */
 
          LAB_CondRetElementoInvalido = 6
-               /* Elemento inserido na posiÁ„o È inv·lido */
+               /* Elemento inserido na posi√ß√£o √© inv√°lido */
 
    } LAB_tpCondRet ;
 
 /***********************************************************************
  *
- *  $TC Tipo de dados: LAB DireÁıes
+ *  $TC Tipo de dados: LAB Dire√ß√µes
  *
  *
  ***********************************************************************/
@@ -99,16 +99,16 @@ typedef struct tgLabirinto * LAB_tppLabirinto ;
     typedef enum {
         
         LAB_DirNorte = 0 ,
-            /* Andar na direÁ„o Norte */
+            /* Andar na dire√ß√£o Norte */
 
         LAB_DirLeste = 1 ,
-            /* Andar na direÁ„o Leste */
+            /* Andar na dire√ß√£o Leste */
 
         LAB_DirSul = 2 ,
-            /* Andar na direÁ„o Sul */
+            /* Andar na dire√ß√£o Sul */
 
         LAB_DirOeste = 3 ,
-            /* Andar na direÁ„o Oeste */
+            /* Andar na dire√ß√£o Oeste */
 
     } LAB_tpDirecao ;
 
@@ -122,7 +122,7 @@ typedef struct tgLabirinto * LAB_tppLabirinto ;
     typedef enum {
         
         LAB_ElemVazio = 0 ,
-            /* Elemento que representa um espaÁo vazio */
+            /* Elemento que representa um espa√ßo vazio */
 
         LAB_ElemParede = 1 ,
             /* Elemento que representa uma parede */
@@ -131,38 +131,38 @@ typedef struct tgLabirinto * LAB_tppLabirinto ;
             /* Elemento que representa a entrada do labirinto */
 
         LAB_ElemSaida = 3 ,
-            /* Elemento que representa a saÌda do labirinto */
+            /* Elemento que representa a sa√≠da do labirinto */
 
     } LAB_tpElemCasa ;
 
 /***********************************************************************
 *
-*  $FC FunÁ„o: LAB Criar labirinto
+*  $FC Fun√ß√£o: LAB Criar labirinto
 *
-*  $ED DescriÁ„o da funÁ„o
+*  $ED Descri√ß√£o da fun√ß√£o
 *     Cria um novo labirinto n x n.
-*     Caso j· exista um labirinto no ponteiro especificado, este ser· destruÌdo.
+*     Caso j√° exista um labirinto no ponteiro especificado, este ser√° destru√≠do.
 *
 *  $EP Parametros
 *     $P ppLab - Ponteiro de ponteiro para um labirinto
-*     $P tam - Tamanho do labirinto (dimens„o n x n)
+*     $P tam - Tamanho do labirinto (dimens√£o n x n)
 *
 *  $FV Valor retornado
 *     LAB_CondRetOK
 *     LAB_CondRetFaltouMemoria
-*     LAB_CondRetErroEstrutura   - Caso a dimens„o do labirinto seja menor que zero ou o ponteiro seja nulo
+*     LAB_CondRetErroEstrutura   - Caso a dimens√£o do labirinto seja menor que zero ou o ponteiro seja nulo
 *
-*  CondiÁıes de acoplamento
+*  Condi√ß√µes de acoplamento
 *
 *  $EAE Assertivas de entradas esperadas
-*     ppLab n„o contÈm lixo
+*     ppLab n√£o cont√©m lixo
 *     tam > 1
 *
-*  $EAS Assertivas de saÌda esperadas
+*  $EAS Assertivas de sa√≠da esperadas
 *     Valem as assertivas estruturais do Labirinto
-*     A entrada do labirinto estar· em (0, 0)
-*     A posiÁ„o corrente do labirinto estar· em (0, 0)
-*     A saÌda do labirinto estar· em (tam - 1, tam - 1)
+*     A entrada do labirinto estar√° em (0, 0)
+*     A posi√ß√£o corrente do labirinto estar√° em (0, 0)
+*     A sa√≠da do labirinto estar√° em (tam - 1, tam - 1)
 *
 ***********************************************************************/
 
@@ -170,10 +170,10 @@ LAB_tpCondRet LAB_CriarLabirinto( LAB_tppLabirinto * ppLab, int tam ) ;
 
 /***********************************************************************
 *
-*  $FC FunÁ„o: LAB Destruir labirinto
+*  $FC Fun√ß√£o: LAB Destruir labirinto
 *
-*  $ED DescriÁ„o da funÁ„o
-*     DestrÛi o labirinto.
+*  $ED Descri√ß√£o da fun√ß√£o
+*     Destr√≥i o labirinto.
 *     Faz nada caso o ponteiro nao contenha um labirinto.
 *
 *  $EP Parametros
@@ -183,16 +183,16 @@ LAB_tpCondRet LAB_CriarLabirinto( LAB_tppLabirinto * ppLab, int tam ) ;
 *     LAB_CondRetOK
 *     LAB_CondRetLabirintoNaoExiste   - Caso o ponteiro seja nulo
 *
-*  CondiÁıes de acoplamento
+*  Condi√ß√µes de acoplamento
 *
 *  $EAE Assertivas de entradas esperadas
-*     ppLab n„o contÈm lixo
+*     ppLab n√£o cont√©m lixo
 *     Valem as assertivas estruturais do Labirinto
 *
-*  $EAS Assertivas de saÌda esperadas
+*  $EAS Assertivas de sa√≠da esperadas
 *     *ppLab = NULL
-*     Todos os elementos dentro casas estar„o liberados
-*     A estrutura de labirinto estar· liberada
+*     Todos os elementos dentro casas estar√£o liberados
+*     A estrutura de labirinto estar√° liberada
 *
 ***********************************************************************/
 
@@ -200,29 +200,29 @@ LAB_tpCondRet LAB_DestruirLabirinto( LAB_tppLabirinto * ppLab ) ;
 
 /***********************************************************************
 *
-*  $FC FunÁ„o: LAB Andar em DireÁ„o
+*  $FC Fun√ß√£o: LAB Andar em Dire√ß√£o
 *
-*  $ED DescriÁ„o da funÁ„o
-*     Anda na direÁ„o especificada.
+*  $ED Descri√ß√£o da fun√ß√£o
+*     Anda na dire√ß√£o especificada.
 *
-*  $EP Par‚metros
+*  $EP Par√¢metros
 *     $P pLab - Ponteiro para um labirinto
-*     $P direcao - DireÁ„o a andar
+*     $P direcao - Dire√ß√£o a andar
 *
 *  $FV Valor retornado
 *     LAB_CondRetOK
 *     LAB_CondRetDirecaoNaoExisteOuInvalida
 *     LAB_CondRetLabirintoNaoExiste
 *
-*  CondiÁıes de acoplamento
+*  Condi√ß√µes de acoplamento
 *
 *  $EAE Assertivas de entradas esperadas
 *     Valem as assertivas estruturais do Labirinto
 *
-*  $EAS Assertivas de saÌda esperadas
+*  $EAS Assertivas de sa√≠da esperadas
 *     Valem as assertivas estruturais do Labirinto
-*     Se a direÁ„o for inv·lida ou sair do labirinto, a posiÁ„o corrente se manter· na ˙ltima posiÁ„o v·lida
-*     Se a direÁ„o for v·lida, a posiÁ„o corrente estar· movida na direÁ„o especificada
+*     Se a dire√ß√£o for inv√°lida ou sair do labirinto, a posi√ß√£o corrente se manter√° na √∫ltima posi√ß√£o v√°lida
+*     Se a dire√ß√£o for v√°lida, a posi√ß√£o corrente estar√° movida na dire√ß√£o especificada
 *
 ***********************************************************************/
 
@@ -230,14 +230,14 @@ LAB_tpCondRet LAB_AndarDirecao( LAB_tppLabirinto pLab, LAB_tpDirecao direcao ) ;
 
 /***********************************************************************
 *
-*  $FC FunÁ„o: LAB Inserir elemento
+*  $FC Fun√ß√£o: LAB Inserir elemento
 *
-*  $ED DescriÁ„o da funÁ„o
+*  $ED Descri√ß√£o da fun√ß√£o
 *     Muda o elemento presente na casa corrente do labirinto.
-*     N„o faz nada caso o elemento inserido seja igual ao da posiÁ„o corrente ou esteja sobrescrevendo
-*     uma saÌda ou entrada.
+*     N√£o faz nada caso o elemento inserido seja igual ao da posi√ß√£o corrente ou esteja sobrescrevendo
+*     uma sa√≠da ou entrada.
 *
-*  $EP Par‚metros
+*  $EP Par√¢metros
 *     $P pLab - Ponteiro para um labirinto
 *     $P elemento - Um elemento a ser posto na casa corrente
 *
@@ -245,20 +245,20 @@ LAB_tpCondRet LAB_AndarDirecao( LAB_tppLabirinto pLab, LAB_tpDirecao direcao ) ;
 *     LAB_CondRetOK
 *     LAB_CondRetLabirintoNaoExiste
 *     LAB_CondRetElementoInvalido
-*     LAB_CondRetErroEstrutura   - Caso n„o consiga retirar a entrada ou saida anterior
+*     LAB_CondRetErroEstrutura   - Caso n√£o consiga retirar a entrada ou saida anterior
 *
-*  CondiÁıes de acoplamento
+*  Condi√ß√µes de acoplamento
 *
 *  $EAE Assertivas de entradas esperadas
 *     Valem as assertivas estruturais do Labirinto
-*     Se o elemento presente na posiÁ„o corrente for uma entrada ou saÌda, ele n„o ser· sobrescrito
+*     Se o elemento presente na posi√ß√£o corrente for uma entrada ou sa√≠da, ele n√£o ser√° sobrescrito
 *
-*  $EAS Assertivas de saÌda esperadas
+*  $EAS Assertivas de sa√≠da esperadas
 *     Valem as assertivas estruturais do Labirinto
-*     Se o elemento for inv·lido, a posiÁ„o corrente manter· o ˙ltimo elemento v·lido
-*     Se o elemento for v·lido, o elemento da posiÁ„o corrente estar· sobrescrito com o novo
-*     Se o elemento for uma entrada, a entrada antiga ir· virar uma posiÁ„o vazia
-*     Se o elemento for uma saÌda, a saÌda antiga ir· virar uma posiÁ„o vazia
+*     Se o elemento for inv√°lido, a posi√ß√£o corrente manter√° o √∫ltimo elemento v√°lido
+*     Se o elemento for v√°lido, o elemento da posi√ß√£o corrente estar√° sobrescrito com o novo
+*     Se o elemento for uma entrada, a entrada antiga ir√° virar uma posi√ß√£o vazia
+*     Se o elemento for uma sa√≠da, a sa√≠da antiga ir√° virar uma posi√ß√£o vazia
 *
 ***********************************************************************/
 
@@ -266,24 +266,29 @@ LAB_tpCondRet LAB_InserirElemento( LAB_tppLabirinto pLab, LAB_tpElemCasa element
 
 /***********************************************************************
 *
-*  $FC FunÁ„o: LAB Imprimir labirinto
+*  $FC Fun√ß√£o: LAB Imprimir labirinto
 *
-*  $ED DescriÁ„o da funÁ„o
+*  $ED Descri√ß√£o da fun√ß√£o
 *     Imprime na tela o labirinto apontado, caso exista.
+*     Significado dos caracteres impressos:
+*     - '‚ñ†': Parede
+*     - 'E': Entrada
+*     - 'S': Sa√≠da
+*     - '‚ñë': Vazio
 *
-*  $EP Par‚metros
+*  $EP Par√¢metros
 *     $P pLab - Ponteiro para um labirinto
 *
 *  $FV Valor retornado
 *     LAB_CondRetOK
 *     LAB_CondRetLabirintoNaoExiste
 *
-*  CondiÁıes de acoplamento
+*  Condi√ß√µes de acoplamento
 *
 *  $EAE Assertivas de entradas esperadas
 *     Valem as assertivas estruturais do Labirinto
 *
-*  $EAS Assertivas de saÌda esperadas
+*  $EAS Assertivas de sa√≠da esperadas
 *     Valem as assertivas estruturais do Labirinto
 *
 ***********************************************************************/
@@ -292,24 +297,24 @@ LAB_tpCondRet LAB_ImprimirLabirinto( LAB_tppLabirinto pLab ) ;
 
 /***********************************************************************
 *
-*  $FC FunÁ„o: LAB Existe soluÁ„o
+*  $FC Fun√ß√£o: LAB Existe solu√ß√£o
 *
-*  $ED DescriÁ„o da funÁ„o
-*     Verifica se o labirinto possui uma soluÁ„o
+*  $ED Descri√ß√£o da fun√ß√£o
+*     Verifica se o labirinto possui uma solu√ß√£o
 *
 *  $EP Parametros
 *     $P pLab - Ponteiro para um labirinto
 *
 *  $FV Valor retornado
-*     0 - N„o existe soluÁ„o ou pLab È NULL
-*     1 - Existe soluÁ„o
+*     0 - N√£o existe solu√ß√£o ou pLab √© NULL
+*     1 - Existe solu√ß√£o
 *
-*  CondiÁıes de acoplamento
+*  Condi√ß√µes de acoplamento
 *
 *  $EAE Assertivas de entradas esperadas
 *     Valem as assertivas estruturais do Labirinto
 *
-*  $EAS Assertivas de saÌda esperadas
+*  $EAS Assertivas de sa√≠da esperadas
 *     Valem as assertivas estruturais do Labirinto
 *
 ***********************************************************************/
@@ -318,7 +323,7 @@ int LAB_ExisteSolucao( LAB_tppLabirinto pLab ) ;
 
 #undef LAB_EXT
 
-/********** Fim do mÛdulo de definiÁ„o: MÛdulo matriz **********/
+/********** Fim do m√≥dulo de defini√ß√£o: M√≥dulo matriz **********/
 
 #else
 #endif
