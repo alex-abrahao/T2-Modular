@@ -90,7 +90,8 @@ typedef struct tgConteudoPosicao {
         	/* Número de vezes que o algoritmo de resolução passou pela posição */
 
 	LAB_tpDirecao direcaoVolta;
-        	/* Direção para seguir na volta do algoritmo de resolução */
+        	/* Direção para seguir na volta do algoritmo de resolução.
+        	   Caso seja -1, não é uma casa que passou pelo algoritmo. */
 
 } tpConteudoPosicao ;
 
@@ -115,7 +116,7 @@ static void ImprimirCasa( LAB_tpElemCasa elemento );
 
 LAB_tpCondRet LAB_CriarLabirinto( LAB_tppLabirinto * ppLab, int tam ) {
 
-	LAB_tpElemCasa * pElementoAux;
+	tpConteudoPosicao * pConteudoAux;
 	int linhaAtual, colunaAtual;
 
 	if (ppLab == NULL || tam <= 1) return LAB_CondRetErroEstrutura;
@@ -134,7 +135,7 @@ LAB_tpCondRet LAB_CriarLabirinto( LAB_tppLabirinto * ppLab, int tam ) {
 		return LAB_CondRetFaltouMemoria;
 	}
 
-	// // Inicializa os valores segundo o padrão
+	// Inicializa os valores segundo o padrão
 	(*ppLab)->id = 0;
 	(*ppLab)->posXEntrada = 0;
 	(*ppLab)->posYEntrada = 0;
@@ -143,40 +144,44 @@ LAB_tpCondRet LAB_CriarLabirinto( LAB_tppLabirinto * ppLab, int tam ) {
 	(*ppLab)->posXCorrente = 0;
 	(*ppLab)->posYCorrente = 0;
 
-	// // Todos os espaços para os elementos são alocados nessa função
+	// Todos os espaços para os elementos são alocados nessa função
 
-	// // Preenchimento inicial
+	// Preenchimento inicial
 	for (linhaAtual = 0; linhaAtual < tam; linhaAtual++) {
 
 		for (colunaAtual = 0; colunaAtual < tam; colunaAtual++) {
 			
-			pElementoAux = (LAB_tpElemCasa *) malloc(sizeof(LAB_tpElemCasa));
-			if (pElementoAux == NULL) {
+			pConteudoAux = (tpConteudoPosicao *) malloc(sizeof(tpConteudoPosicao));
+			if (pConteudoAux == NULL) {
 				LAB_DestruirLabirinto( ppLab );
 				return LAB_CondRetFaltouMemoria;
 			}
+
+			// Preenche os campos padrões
+			pConteudoAux->numPassagens = 0;
+			pConteudoAux->direcaoVolta = -1;
 			// Preencher a casa (0, 0) com a entrada
 			if (colunaAtual == 0 && linhaAtual == 0)
-				*pElementoAux = LAB_ElemEntrada;
+				pConteudoAux->elemento = LAB_ElemEntrada;
 
 			// Preencher a saída em (tam - 1, tam - 1)
 			else if (colunaAtual == tam - 1 && linhaAtual == tam - 1)
-				*pElementoAux = LAB_ElemSaida;
+				pConteudoAux->elemento = LAB_ElemSaida;
 			// Preencher as demais casas com espaços vazios
 			else
-				*pElementoAux = LAB_ElemVazio;
+				pConteudoAux->elemento = LAB_ElemVazio;
 
-			// Insere o elemento na matriz
-			MTZ_InserirElementoNaCasaCorrente( (*ppLab)->pMatriz, pElementoAux ) ;
+			// Insere o conteudo na matriz
+			MTZ_InserirElementoNaCasaCorrente( (*ppLab)->pMatriz, pConteudoAux ) ;
 
 			// Anda para direita
-			MTZ_AndarDirecao( (*ppLab)->pMatriz,  MTZ_DirLeste) ;
+			MTZ_AndarDirecao( (*ppLab)->pMatriz, MTZ_DirLeste) ;
 		}
 		// Volta para a primeira coluna
-		while (MTZ_AndarDirecao( (*ppLab)->pMatriz,  MTZ_DirOeste) != MTZ_CondRetDirecaoNaoExisteOuInvalida);
+		while (MTZ_AndarDirecao( (*ppLab)->pMatriz, MTZ_DirOeste) != MTZ_CondRetDirecaoNaoExisteOuInvalida);
 
 		// Anda para baixo
-		MTZ_AndarDirecao( (*ppLab)->pMatriz,  MTZ_DirSul) ;
+		MTZ_AndarDirecao( (*ppLab)->pMatriz, MTZ_DirSul) ;
 	}
 	
 	// Retornar o ponteiro da matriz para o início
@@ -240,7 +245,7 @@ LAB_tpCondRet LAB_AndarDirecao( LAB_tppLabirinto pLab, LAB_tpDirecao direcao ) {
 
 LAB_tpCondRet LAB_InserirElemento( LAB_tppLabirinto pLab, LAB_tpElemCasa elemento ) {
 
-	LAB_tpElemCasa * pElementoPresente;
+	tpConteudoPosicao * pConteudoPresente;
 
 	if (pLab == NULL) return LAB_CondRetLabirintoNaoExiste;
 
@@ -248,11 +253,11 @@ LAB_tpCondRet LAB_InserirElemento( LAB_tppLabirinto pLab, LAB_tpElemCasa element
 	if (elemento > 3) return LAB_CondRetElementoInvalido;
 
 	// Pegar o ponteiro para o elemento da posição corrente
-	MTZ_ObterValorCorrente( pLab->pMatriz, (void **) &pElementoPresente ) ;
-	if (*pElementoPresente == elemento) return LAB_CondRetOK;
+	MTZ_ObterValorCorrente(pLab->pMatriz, (void **) &pConteudoPresente);
+	if (pConteudoPresente->elemento == elemento) return LAB_CondRetOK;
 
 	// Se existe na posição corrente uma entrada ou saida, não poderá ser sobrescrita
-	if (*pElementoPresente == LAB_ElemEntrada || *pElementoPresente == LAB_ElemSaida)
+	if (pConteudoPresente->elemento == LAB_ElemEntrada || pConteudoPresente->elemento == LAB_ElemSaida)
 		return LAB_CondRetElementoInvalido;
 
 	// Se o novo elemento é uma entrada ou saida, a antiga terá que ser substituida por um elemento vazio e voltar para a corrente
@@ -263,7 +268,7 @@ LAB_tpCondRet LAB_InserirElemento( LAB_tppLabirinto pLab, LAB_tpElemCasa element
 	}
 
 	// Inserir o elemento na matriz
-	*pElementoPresente = elemento;
+	pConteudoPresente->elemento = elemento;
 
 	// Atualizar nova entrada ou saida
 	if (elemento == LAB_ElemEntrada) {
@@ -285,7 +290,8 @@ LAB_tpCondRet LAB_InserirElemento( LAB_tppLabirinto pLab, LAB_tpElemCasa element
 
 LAB_tpCondRet LAB_ImprimirLabirinto( LAB_tppLabirinto pLab ) {
 
-	LAB_tpElemCasa * pElementoCorrente = NULL;
+	tpConteudoPosicao * pConteudoPresente = NULL;
+
 	int contLinha = 0, contColuna = 0;
 
 	if (pLab == NULL) return LAB_CondRetLabirintoNaoExiste;
@@ -299,8 +305,8 @@ LAB_tpCondRet LAB_ImprimirLabirinto( LAB_tppLabirinto pLab ) {
 	do {
 
 		do {
-			MTZ_ObterValorCorrente(pLab->pMatriz, (void **) &pElementoCorrente);
-			ImprimirCasa(*pElementoCorrente);
+			MTZ_ObterValorCorrente(pLab->pMatriz, (void **) &pConteudoPresente);
+			ImprimirCasa(pConteudoPresente->elemento);
 		} while (MTZ_AndarDirecao(pLab->pMatriz, MTZ_DirLeste) != MTZ_CondRetDirecaoNaoExisteOuInvalida);
 
 		// Volta para o inicio da linha
@@ -395,7 +401,7 @@ int RetirarEntradaOuSaida( LAB_tppLabirinto pLab, LAB_tpElemCasa tipoElem ) {
 
 	MTZ_tpDirecao direcaoX, direcaoY;
 	int i = 0, qtdIteracoesX, qtdIteracoesY, retorno = 0, posXRetirar, posYRetirar;
-	LAB_tpElemCasa * pElementoPresente;
+	tpConteudoPosicao * pConteudoPresente;
 
 	// Tratar se procura entrada ou saída
 	if (tipoElem == LAB_ElemEntrada) {
@@ -424,13 +430,13 @@ int RetirarEntradaOuSaida( LAB_tppLabirinto pLab, LAB_tpElemCasa tipoElem ) {
 		MTZ_AndarDirecao( pLab->pMatriz, direcaoY );
 
 	// Verifica se o elemento é o procurado (senão da erro, retorna 1)
-	MTZ_ObterValorCorrente( pLab->pMatriz, (void **) &pElementoPresente ) ;
-	if (*pElementoPresente != tipoElem)
+	MTZ_ObterValorCorrente( pLab->pMatriz, (void **) &pConteudoPresente) ;
+	if (pConteudoPresente->elemento != tipoElem)
 		retorno = 1;
 
 	// Troca o elemento para casa vazia se nao tiver dado erro
 	if (retorno == 0)
-		*pElementoPresente = LAB_ElemVazio;
+		pConteudoPresente->elemento = LAB_ElemVazio;
 
 	// Volta para a casa corrente fazendo o passo oposto da ida até a entrada
 	direcaoX = (direcaoX == MTZ_DirOeste) ? MTZ_DirLeste : MTZ_DirOeste;
