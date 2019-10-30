@@ -70,6 +70,30 @@ typedef struct tgLabirinto {
 
 } tpLabirinto ;
 
+/***********************************************************************
+*
+*  $TC Tipo de dados: LAB Descritor do dado armazenado na posição do labirinto
+*
+*
+*  $ED Descrição do tipo
+*     Contém as informações necessárias para definir as posições do labirinto 
+*	  e os dados para o algoritmo de resolução.
+*
+***********************************************************************/
+
+typedef struct tgConteudoPosicao {
+   
+	LAB_tpElemCasa elemento ;
+        	/* Ponteiro para a matriz base para o labirinto */
+
+	int numPassagens;
+        	/* Número de vezes que o algoritmo de resolução passou pela posição */
+
+	LAB_tpDirecao direcaoVolta;
+        	/* Direção para seguir na volta do algoritmo de resolução */
+
+} tpConteudoPosicao ;
+
 /*****  Dados encapsulados no módulo  *****/
 
 /***** Protótipos das funções encapuladas no módulo *****/
