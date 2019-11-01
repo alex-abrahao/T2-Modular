@@ -83,11 +83,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="LABIRINTO.C" />
+    <ClCompile Include="MAIN.C" />
     <ClCompile Include="MATRIZ.C" />
     <ClCompile Include="TESTLAB.C" />
   </ItemGroup>
   <ItemGroup>
-    <Library Include="ArcaboucoTeste.lib" />
+    <Library Include="..\..\..\arcabouco\simples\ArcaboucoTeste.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
