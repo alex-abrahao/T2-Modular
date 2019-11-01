@@ -81,7 +81,7 @@ typedef struct tgLabirinto * LAB_tppLabirinto ;
          LAB_CondRetFaltouMemoria = 4 ,
                /* Faltou memória ao alocar dados */
 
-		 LAB_CondRetNaoTemSolucao = 5 ,
+         LAB_CondRetNaoTemSolucao = 5 ,
 			         /* Labirinto não tem solução */
 
          LAB_CondRetElementoInvalido = 6
@@ -297,17 +297,19 @@ LAB_tpCondRet LAB_ImprimirLabirinto( LAB_tppLabirinto pLab ) ;
 
 /***********************************************************************
 *
-*  $FC Função: LAB Existe solução
+*  $FC Função: LAB Exibir solução
 *
 *  $ED Descrição da função
-*     Verifica se o labirinto possui uma solução
+*     Caso o labirinto possua uma solução, ela é exibida na tela e retorna LAB_CondRetOK.
+*     Caso contrário, é exibida uma mensagem informativa na tela e retorna LAB_CondRetNaoTemSolucao.
 *
 *  $EP Parametros
 *     $P pLab - Ponteiro para um labirinto
 *
 *  $FV Valor retornado
-*     0 - Não existe solução ou pLab é NULL
-*     1 - Existe solução
+*     LAB_CondRetOK
+*     LAB_CondRetLabirintoNaoExiste
+*     LAB_CondRetNaoTemSolucao
 *
 *  Condições de acoplamento
 *
@@ -319,7 +321,7 @@ LAB_tpCondRet LAB_ImprimirLabirinto( LAB_tppLabirinto pLab ) ;
 *
 ***********************************************************************/
 
-int LAB_ExisteSolucao( LAB_tppLabirinto pLab ) ;
+LAB_tpCondRet LAB_ExibirSolucao( LAB_tppLabirinto pLab ) ;
 
 #undef LAB_EXT
 
