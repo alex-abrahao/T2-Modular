@@ -296,7 +296,7 @@ LAB_tpCondRet LAB_ImprimirLabirinto( LAB_tppLabirinto pLab ) {
 
 	if (pLab == NULL) return LAB_CondRetLabirintoNaoExiste;
 
-	printf("\n\n");
+	printf("\n");
 
 	// Andar para o inicio sem alterar a marcação X e Y da posição corrente
 	MTZ_VoltarParaPrimeiro(pLab->pMatriz);

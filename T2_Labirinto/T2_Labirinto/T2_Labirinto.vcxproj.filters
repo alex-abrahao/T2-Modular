@@ -41,6 +41,9 @@
     <ClCompile Include="TESTLAB.C">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MAIN.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Library Include="ArcaboucoTeste.lib">
