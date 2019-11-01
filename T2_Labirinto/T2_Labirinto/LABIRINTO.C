@@ -339,7 +339,23 @@ LAB_tpCondRet LAB_ExibeSolucao( LAB_tppLabirinto pLab ) {
 
 	// WIP: Implementar
 
-	return 0;
+	return LAB_CondRetOK;
+
+} /* Fim função: LAB Exibe solução */
+
+/***************************************************************************
+*
+*  Função: LAB Receber coordenadas
+*  ****/
+
+LAB_tpCondRet LAB_ReceberCoordenadas( LAB_tppLabirinto pLab, int * x, int * y ) {
+
+	if (pLab == NULL) return LAB_CondRetLabirintoNaoExiste;
+
+	*x = pLab->posXCorrente;
+	*y = pLab->posYCorrente;
+
+	return LAB_CondRetOK;
 
 } /* Fim função: LAB Exibe solução */
 

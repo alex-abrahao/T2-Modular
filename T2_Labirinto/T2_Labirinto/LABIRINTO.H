@@ -323,6 +323,32 @@ LAB_tpCondRet LAB_ImprimirLabirinto( LAB_tppLabirinto pLab ) ;
 
 LAB_tpCondRet LAB_ExibirSolucao( LAB_tppLabirinto pLab ) ;
 
+/***********************************************************************
+*
+*  $FC Função: LAB Receber coordenadas
+*
+*  $ED Descrição da função
+*     Insere no conteúdo de X e Y as coordenadas da posição corrente.
+*
+*  $EP Parametros
+*     $P pLab - Ponteiro para um labirinto
+*
+*  $FV Valor retornado
+*     LAB_CondRetOK
+*     LAB_CondRetLabirintoNaoExiste
+*
+*  Condições de acoplamento
+*
+*  $EAE Assertivas de entradas esperadas
+*     Valem as assertivas estruturais do Labirinto
+*
+*  $EAS Assertivas de saída esperadas
+*     Valem as assertivas estruturais do Labirinto
+*
+***********************************************************************/
+
+LAB_tpCondRet LAB_ReceberCoordenadas( LAB_tppLabirinto pLab, int * x, int * y ) ;
+
 #undef LAB_EXT
 
 /********** Fim do módulo de definição: Módulo matriz **********/
