@@ -330,18 +330,34 @@ LAB_tpCondRet LAB_ImprimirLabirinto( LAB_tppLabirinto pLab ) {
 
 /***************************************************************************
 *
-*  Função: LAB Existe solução
+*  Função: LAB Exibe solução
 *  ****/
 
-int LAB_ExisteSolucao( LAB_tppLabirinto pLab ) {
+LAB_tpCondRet LAB_ExibeSolucao( LAB_tppLabirinto pLab ) {
 
-	if (pLab == NULL) return 0;
+	if (pLab == NULL) return LAB_CondRetLabirintoNaoExiste;
 
 	// WIP: Implementar
 
-	return 0;
+	return LAB_CondRetOK;
 
-} /* Fim função: LAB Existe solução */
+} /* Fim função: LAB Exibe solução */
+
+/***************************************************************************
+*
+*  Função: LAB Receber coordenadas
+*  ****/
+
+LAB_tpCondRet LAB_ReceberCoordenadas( LAB_tppLabirinto pLab, int * x, int * y ) {
+
+	if (pLab == NULL) return LAB_CondRetLabirintoNaoExiste;
+
+	*x = pLab->posXCorrente;
+	*y = pLab->posYCorrente;
+
+	return LAB_CondRetOK;
+
+} /* Fim função: LAB Receber coordenadas */
 
 
 /*****  Código das funções encapsuladas no módulo  *****/
