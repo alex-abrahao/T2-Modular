@@ -322,7 +322,7 @@ LAB_tpCondRet LAB_ImprimirLabirinto( LAB_tppLabirinto pLab ) ;
 *
 ***********************************************************************/
 
-LAB_tpCondRet LAB_ExibirSolucao( LAB_tppLabirinto pLab ) ;
+LAB_tpCondRet LAB_ExibeSolucao( LAB_tppLabirinto pLab ) ;
 
 /***********************************************************************
 *
