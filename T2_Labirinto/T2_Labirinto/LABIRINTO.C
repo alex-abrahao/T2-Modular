@@ -357,7 +357,7 @@ LAB_tpCondRet LAB_ReceberCoordenadas( LAB_tppLabirinto pLab, int * x, int * y ) 
 
 	return LAB_CondRetOK;
 
-} /* Fim função: LAB Exibe solução */
+} /* Fim função: LAB Receber coordenadas */
 
 
 /*****  Código das funções encapsuladas no módulo  *****/

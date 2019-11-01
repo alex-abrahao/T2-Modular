@@ -21,6 +21,7 @@
 *       1.00   phd   26/09/2019 Início do desenvolvimento
 *       1.01   aaf   30/09/2019 Documentação inicial
 *       1.02   aaf   30/09/2019 Assertivas de entrada e saída
+*       1.10   aaf   01/11/2019 Atualização das funções de acesso
 *
 *  $ED Descrição do módulo
 *     Descreve funções de criação e manipulação de labirintos.
