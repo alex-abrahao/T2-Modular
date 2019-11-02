@@ -5,7 +5,7 @@
 
 int main(void) {
 	
-	char comando=0, parametro; //inicializa a variável comando para entrar no while
+	char comando=0, parametro, marcador = 250; //inicializa a variável comando para entrar no while
 	int tam = 3;
 	LAB_tpDirecao dir; //variavel pra andar
 	//LAB_tpCondRet CondRetObtido; //variavel que recebe o condret da funcao (ainda nao e utilizada)
@@ -19,17 +19,22 @@ int main(void) {
 	while ((getchar()) != '\n'); //limpa o buffer do scanf
 
 	printf("\n\n======================= MANIPULACAO DO LABIRINTO =======================\n");
-	printf("\n\nOS SEGUINTES COMANDOS ESTAO DISPONIBILIZADOS PARA MANIPULACAO DO LABIRINTO: \n\n");
+	printf("\nOS SEGUINTES COMANDOS ESTAO DISPONIBILIZADOS PARA MANIPULACAO DO LABIRINTO: \n\n");
 
-	printf("'i', PARA INSERIR UM ELEMENTO NA CASA CORRENTE DO LABIRINTO, SEGUIDO DO SEU PARAMETRO:\n-'p', para inserir uma parede\n-'v', para uma casa vazia\n-'e', para setar a entrada da matriz\n-'s', para setar a saida da matriz\n\n'a' PARA ANDAR PARA A PROXIMA CASA DO LABIRINTO\n-'n', para andar na direcao norte\n-'l', para andar na direcao leste\n-'s', para andar na direcao sul\n-'o', para andar na direcao oeste\n\n'd' PARA DESTRUIR O LABIRINTO\n'm' PARA MOSTRAR O LABIRINTO\n'r' PARA RESOLVER O LABIRINTO\n't' PARA REVER O TUTORIAL\n'q' PARA FECHAR O PROGRAMA, MOSTRANDO SER FRACO E NAO TER A CAPACIDADE DE MANUSEAR UM LABIRINTO\n\n");
+	printf("->'i', PARA INSERIR UM ELEMENTO NA CASA CORRENTE DO LABIRINTO, SEGUIDO DO SEU PARAMETRO APOS TER APERTADO A TECLA 'ENTER' OU TER DADO UM ESPACO ENTRE AS LETRAS:\n\n%c'p', para inserir uma parede\n%c'v', para uma casa vazia\n%c'e', para setar a entrada da matriz\n%c's', para setar a saida da matriz\n\n\n->'a' PARA ANDAR PARA A PROXIMA CASA DO LABIRINTO\n\n%c'n', para andar na direcao norte\n%c'l', para andar na direcao leste\n%c's', para andar na direcao sul\n%c'o', para andar na direcao oeste\n\n->'d' PARA DESTRUIR O LABIRINTO\n->'m' PARA MOSTRAR O LABIRINTO\n->'r' PARA RESOLVER O LABIRINTO\n->'t' PARA REVER O TUTORIAL\n->'q' PARA FINALIZAR O PROGRAMA\n\n", marcador, marcador, marcador, marcador, marcador, marcador, marcador);
 		
 	while(comando != 'q') { 
 		printf("Digite o comando desejado seguido do parametro, caso necessario: ");
-		scanf(" %c", &comando);
+		scanf("%c", &comando);
 
+		if (comando >= 65 || comando <= 90) //transformar letras maiusculas em minusculas
+			comando += 32;
 		//as funcoes ainda precisam receber os condrets para saber se tudo funcionou corretamente
 		if (comando == 'i') { //inserir elemento
 			scanf(" %c", &parametro);
+			
+			if (parametro >= 65 || parametro <= 90)
+				parametro += 32;
 			if (parametro == 'p' || parametro == 'v' || parametro == 'e' || parametro == 's'){
 				if(parametro == 'p')
 					parametroENUM = LAB_ElemParede;
@@ -48,6 +53,8 @@ int main(void) {
 
 		else if (comando == 'a'){ //assumindo como placeholder q andou com sucesso, msm q isso n seja verdade
 			scanf(" %c", &parametro);
+			if (parametro >= 65 || parametro <= 90)
+				parametro += 32;
 			if (parametro == 'n' || parametro == 'l' || parametro == 's' || parametro == 'o'){
 				if(parametro == 'n')
 					dir=LAB_DirNorte;
@@ -76,7 +83,7 @@ int main(void) {
 			LAB_ExibeSolucao( labTeste ); //N sei se essa funcao vai ser a q acha a solucao, mas e a mais proxima do q a gnt tem, entao botei como placeholder
 
 		else if (comando == 't')
-			printf("\n'i', PARA INSERIR UM ELEMENTO NA CASA CORRENTE DO LABIRINTO, SEGUIDO DO SEU PARAMETRO:\n-'p', para inserir uma parede\n-'v', para uma casa vazia\n-'e', para setar a entrada da matriz\n-'s', para setar a saida da matriz\n\n'a' PARA ANDAR PARA A PROXIMA CASA DO LABIRINTO\n-'n', para andar na direcao norte\n-'l', para andar na direcao leste\n-'s', para andar na direcao sul\n-'o', para andar na direcao oeste\n\n'd' PARA DESTRUIR O LABIRINTO\n'm' PARA MOSTRAR O LABIRINTO\n'r' PARA RESOLVER O LABIRINTO\n't' PARA REVER O TUTORIAL\n'q' PARA FECHAR O PROGRAMA, MOSTRANDO SER FRACO E NAO TER A CAPACIDADE DE MANUSEAR UM LABIRINTO\n\n");
+			printf("\n'i', PARA INSERIR UM ELEMENTO NA CASA CORRENTE DO LABIRINTO, SEGUIDO DO SEU PARAMETRO:\n-'p', para inserir uma parede\n-'v', para uma casa vazia\n-'e', para setar a entrada da matriz\n-'s', para setar a saida da matriz\n\n'a' PARA ANDAR PARA A PROXIMA CASA DO LABIRINTO\n-'n', para andar na direcao norte\n-'l', para andar na direcao leste\n-'s', para andar na direcao sul\n-'o', para andar na direcao oeste\n\n'd' PARA DESTRUIR O LABIRINTO\n'm' PARA MOSTRAR O LABIRINTO\n'r' PARA RESOLVER O LABIRINTO\n't' PARA REVER O TUTORIAL\n'q' PARA FINALIZAR O PROGRAMA\n\n", marcador, marcador, marcador, marcador, marcador, marcador, marcador, marcador);
 
 		else if (comando != 'q')
 			printf("COMANDO INVALIDO!\n");
