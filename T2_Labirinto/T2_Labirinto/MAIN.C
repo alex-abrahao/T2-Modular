@@ -27,13 +27,13 @@ int main(void) {
 		printf("Digite o comando desejado seguido do parametro, caso necessario: ");
 		scanf("%c", &comando);
 
-		if (comando >= 65 || comando <= 90) //transformar letras maiusculas em minusculas
+		if (comando >= 65 && comando <= 90) //transformar letras maiusculas em minusculas
 			comando += 32;
 		//as funcoes ainda precisam receber os condrets para saber se tudo funcionou corretamente
 		if (comando == 'i') { //inserir elemento
 			scanf(" %c", &parametro);
 			
-			if (parametro >= 65 || parametro <= 90)
+			if (parametro >= 65 && parametro <= 90)
 				parametro += 32;
 			if (parametro == 'p' || parametro == 'v' || parametro == 'e' || parametro == 's'){
 				if(parametro == 'p')
@@ -53,7 +53,7 @@ int main(void) {
 
 		else if (comando == 'a'){ //assumindo como placeholder q andou com sucesso, msm q isso n seja verdade
 			scanf(" %c", &parametro);
-			if (parametro >= 65 || parametro <= 90)
+			if (parametro >= 65 && parametro <= 90)
 				parametro += 32;
 			if (parametro == 'n' || parametro == 'l' || parametro == 's' || parametro == 'o'){
 				if(parametro == 'n')
