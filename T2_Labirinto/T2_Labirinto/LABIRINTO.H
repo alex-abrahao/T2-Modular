@@ -298,7 +298,7 @@ LAB_tpCondRet LAB_ImprimirLabirinto( LAB_tppLabirinto pLab ) ;
 
 /***********************************************************************
 *
-*  $FC Função: LAB Exibir solução
+*  $FC Função: LAB Exibe solução
 *
 *  $ED Descrição da função
 *     Caso o labirinto possua uma solução, ela é exibida na tela e retorna LAB_CondRetOK.
