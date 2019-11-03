@@ -333,6 +333,8 @@ LAB_tpCondRet LAB_ExibeSolucao( LAB_tppLabirinto pLab ) ;
 *
 *  $EP Parametros
 *     $P pLab - Ponteiro para um labirinto
+*     $P x - Ponteiro onde será posta a coordenada X
+*     $P y - Ponteiro onde será posta a coordenada Y
 *
 *  $FV Valor retornado
 *     LAB_CondRetOK
@@ -345,6 +347,8 @@ LAB_tpCondRet LAB_ExibeSolucao( LAB_tppLabirinto pLab ) ;
 *
 *  $EAS Assertivas de saída esperadas
 *     Valem as assertivas estruturais do Labirinto
+*     O conteúdo de x terá a coordenada X da posição corrente.
+*     O conteúdo de y terá a coordenada Y da posição corrente.
 *
 ***********************************************************************/
 
