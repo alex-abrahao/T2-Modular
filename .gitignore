@@ -458,3 +458,6 @@ healthchecksdb
 MigrationBackup/
 
 # End of https://www.gitignore.io/api/c,macos,windows,visualstudio
+
+# Outputs from automated tests
+[Ss]aida*.txt
