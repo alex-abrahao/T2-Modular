@@ -51,6 +51,9 @@ typedef struct tgLabirinto {
 	char id;
         	/* Caracter identificador do labirinto (opcional) */
 
+	int tam;
+        	/* Tamanho do labirinto */
+
 	int posXEntrada;
         	/* Posição X da entrada do labirinto */
 
@@ -110,7 +113,7 @@ static int RetirarEntradaOuSaida( LAB_tppLabirinto pLab, LAB_tpElemCasa tipoElem
 
 static void ImprimirTudo( LAB_tppLabirinto pLab, int solucao );
 
-static void ImprimirCasa( LAB_tpElemCasa elemento, int corrente, int solucao );
+static void ImprimirCasa( LAB_tpElemCasa elemento, int corrente, int solucao, LAB_tpDirecao direcao );
 
 static LAB_tpDirecao MenorDirecao( MTZ_tppMatriz pMtz );
 
@@ -144,6 +147,7 @@ LAB_tpCondRet LAB_CriarLabirinto( LAB_tppLabirinto * ppLab, int tam ) {
 
 	// Inicializa os valores segundo o padrão
 	(*ppLab)->id = 0;
+	(*ppLab)->tam = tam;
 	(*ppLab)->posXEntrada = 0;
 	(*ppLab)->posYEntrada = 0;
 	(*ppLab)->posXSaida = tam - 1;
@@ -312,15 +316,33 @@ LAB_tpCondRet LAB_ImprimirLabirinto( LAB_tppLabirinto pLab ) {
 
 LAB_tpCondRet LAB_ExibeSolucao( LAB_tppLabirinto pLab ) {
 
-	// FIXME: Fazer a conta para o limite
-	int numIteracoes = 0, limiteIteracoes = 10000;
+	// Definição do limite de iterações como tam^4
+	int numIteracoes = 0, limiteIteracoes = pLab->tam * pLab->tam * pLab->tam * pLab->tam;
+	int contLinha = 0, contColuna = 0;
 	// Direção = -1 significa direção inválida
 	LAB_tpDirecao ultimaDirecao = -1, direcaoAux;
 	tpConteudoPosicao * pConteudoAux = NULL;
 
 	if (pLab == NULL) return LAB_CondRetLabirintoNaoExiste;
 
-	// WIP: Falta limpar as casas antes (colocar -1 na direcao de volta, caso o lab já tenha sido solucionado previamente e o user alterou depois)
+	// Limpar as casas antes (colocar -1 na direcao de volta, caso o lab já tenha sido solucionado previamente e o user alterou depois)
+	// MTZ_VoltarParaPrimeiro(pLab->pMatriz);
+	// do {
+	// 	contLinha = 0;
+	// 	do {
+	// 		MTZ_ObterValorCorrente(pLab->pMatriz, (void **) &pConteudoAux);
+	// 		pConteudoAux->direcaoVolta = -1;
+	// 		contLinha++;
+	// 	} while (MTZ_AndarDirecao(pLab->pMatriz, MTZ_DirLeste) != MTZ_CondRetDirecaoNaoExisteOuInvalida);
+
+	// 	// Volta para o inicio da linha
+	// 	while (MTZ_AndarDirecao(pLab->pMatriz, MTZ_DirOeste) != MTZ_CondRetDirecaoNaoExisteOuInvalida);
+	// 	contColuna++;
+
+	// } while (MTZ_AndarDirecao(pLab->pMatriz, MTZ_DirSul) != MTZ_CondRetDirecaoNaoExisteOuInvalida);
+	// MTZ_VoltarParaPrimeiro(pLab->pMatriz);
+	// pLab->posXCorrente = 0;
+	// pLab->posYCorrente = 0;
 
 	// Andar até a entrada
 	IrEntradaOuSaida( pLab, LAB_ElemEntrada );
@@ -348,6 +370,7 @@ LAB_tpCondRet LAB_ExibeSolucao( LAB_tppLabirinto pLab ) {
 				pLab->posYCorrente = 0;
 				// Exibe na tela a solução
 				ImprimirTudo(pLab, 1);
+				printf("Numero total de tentativas ate encontrar: %d\n", numIteracoes);
 				// Retorna OK
 				return LAB_CondRetOK;
 			}
@@ -357,23 +380,31 @@ LAB_tpCondRet LAB_ExibeSolucao( LAB_tppLabirinto pLab ) {
 			switch (ultimaDirecao) {
 		    case LAB_DirNorte:
 		        pConteudoAux->direcaoVolta = LAB_DirSul;
+				break;
 		    case LAB_DirLeste:
 		        pConteudoAux->direcaoVolta = LAB_DirOeste;
+				break;
 		    case LAB_DirSul:
 		        pConteudoAux->direcaoVolta = LAB_DirNorte;
+				break;
 		    default:
 		        pConteudoAux->direcaoVolta = LAB_DirLeste;
+				break;
 		    }
 
 			ultimaDirecao = MenorDirecao(pLab->pMatriz);
 		}
+
 		MTZ_ObterValorCorrente( pLab->pMatriz, (void **) &pConteudoAux );
-		// Volta incrementando 1 no número de passagens
-		pConteudoAux->numPassagens += 1;
-		// e removendo a direção de volta
-		direcaoAux = pConteudoAux->direcaoVolta;
-		pConteudoAux->direcaoVolta = -1;
-		LAB_AndarDirecao( pLab, direcaoAux );
+		while (pConteudoAux->elemento != LAB_ElemEntrada) {
+			// Volta incrementando 1 no número de passagens
+			pConteudoAux->numPassagens += 1;
+			// e removendo a direção de volta
+			direcaoAux = pConteudoAux->direcaoVolta;
+			pConteudoAux->direcaoVolta = -1;
+			LAB_AndarDirecao( pLab, direcaoAux );
+			MTZ_ObterValorCorrente( pLab->pMatriz, (void **) &pConteudoAux );
+		}
 
 		// Incrementa o contador
 		numIteracoes++;
@@ -385,6 +416,7 @@ LAB_tpCondRet LAB_ExibeSolucao( LAB_tppLabirinto pLab ) {
 	pLab->posYCorrente = 0;
 
 	// Se chegou até aqui, não achou solução
+	printf("Numero total de tentativas sem solucao: %d\n", numIteracoes);
 	return LAB_CondRetNaoTemSolucao;
 
 } /* Fim função: LAB Exibe solução */
@@ -452,7 +484,6 @@ void IrEntradaOuSaida( LAB_tppLabirinto pLab, LAB_tpElemCasa tipoElem ) {
 
 	MTZ_tpDirecao direcaoX, direcaoY;
 	int i = 0, qtdIteracoesX, qtdIteracoesY, posXRetirar, posYRetirar;
-	tpConteudoPosicao * pConteudoPresente;
 
 	// Tratar se procura entrada ou saída
 	if (tipoElem == LAB_ElemEntrada) {
@@ -575,7 +606,7 @@ void ImprimirTudo( LAB_tppLabirinto pLab, int solucao ) {
 		contLinha = 0;
 		do {
 			MTZ_ObterValorCorrente(pLab->pMatriz, (void **) &pConteudoPresente);
-			ImprimirCasa(pConteudoPresente->elemento, (contLinha == pLab->posXCorrente && contColuna == pLab->posYCorrente), (solucao && pConteudoPresente->direcaoVolta != -1));
+			ImprimirCasa(pConteudoPresente->elemento, (contLinha == pLab->posXCorrente && contColuna == pLab->posYCorrente), (solucao && pConteudoPresente->direcaoVolta != -1), pConteudoPresente->direcaoVolta);
 			contLinha++;
 		} while (MTZ_AndarDirecao(pLab->pMatriz, MTZ_DirLeste) != MTZ_CondRetDirecaoNaoExisteOuInvalida);
 
@@ -601,13 +632,27 @@ void ImprimirTudo( LAB_tppLabirinto pLab, int solucao ) {
 *
 ***********************************************************************/
 
-void ImprimirCasa( LAB_tpElemCasa elemento, int corrente, int solucao ) {
+void ImprimirCasa( LAB_tpElemCasa elemento, int corrente, int solucao, LAB_tpDirecao direcao ) {
 
 	char c, aux;
 
 	if (solucao) {
-		c = 'R';
+		switch (direcao) {
+	    case LAB_DirNorte:
+	    	c = 'n';
+	        break;
+	    case LAB_DirSul:
+	    	c = 's';
+	        break;
+	    case LAB_DirLeste:
+	        c = 'l';
+	        break;
+	    default:
+	    	c = 'o';
+	        break;
+	    }
 		aux = c;
+
 	} else {
 		switch (elemento) {
 	    case LAB_ElemParede:

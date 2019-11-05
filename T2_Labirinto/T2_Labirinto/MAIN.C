@@ -162,5 +162,7 @@ int main(void) {
 		while ((getchar()) != '\n'); // limpa o buffer do scanf
 	}
 
+	LAB_DestruirLabirinto( &labTeste );
+
 	return 0;
 }
