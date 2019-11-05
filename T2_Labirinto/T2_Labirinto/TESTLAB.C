@@ -57,6 +57,7 @@
 #define     INS_ELM_CMD         "=inselm"
 #define     ANDAR_CMD           "=andar"
 #define     DESTROI_CMD         "=destruir"
+#define		RECEBER_CMD			"=receber"
 
 /*****  Dados encapsulados no módulo  *****/
 
@@ -162,6 +163,22 @@ TST_tpCondRet TST_EfetuarComando( char * ComandoTeste ) {
             "Retorno errado ao destruir labirinto." );
 
     } /* fim ativa: Testar LAB Destruir Labirinto */
+	
+	else if ( strcmp( ComandoTeste , RECEBER_CMD ) == 0 ) {
+        
+        int x, y;
+
+        NumLidos = LER_LerParametros( "iii" ,
+			&x, &y, &CondRetEsperada ) ;
+        if ( NumLidos != 3 ) {
+            return TST_CondRetParm ;
+        } /* if */
+
+        CondRetObtido = LAB_ReceberCoordenadas(labirintoTeste, &x, &y);
+
+        return TST_CompararInt( CondRetEsperada , CondRetObtido ,
+            "Retorno errado ao andar." );
+	}
 
     return TST_CondRetNaoConhec ;
 

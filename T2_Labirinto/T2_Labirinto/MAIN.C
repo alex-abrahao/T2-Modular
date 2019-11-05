@@ -25,7 +25,16 @@
 #include "LABIRINTO.H"
 #include "TST_ESPC.H"
 #include <stdio.h>
-#include <ctype.h>
+
+void exibeTutorial(void) {
+	printf("->'i', PARA INSERIR UM ELEMENTO NA CASA CORRENTE DO LABIRINTO, SEGUIDO DO SEU PARAMETRO APOS TER APERTADO A TECLA 'ENTER' OU TER DADO UM ESPACO ENTRE AS LETRAS:\n%c'p', para inserir uma parede\n%c'v', para uma casa vazia\n%c'e', para setar a entrada da matriz\n%c's', para setar a saida da matriz\n\n\n->'a' PARA ANDAR PARA A PROXIMA CASA DO LABIRINTO, SEGUIDO DO SEU PARAMETRO APOS TER APERTADO A TECLA 'ENTER' OU TER DADO UM ESPACO ENTRE AS LETRAS:\n%c'n', para andar na direcao norte\n%c'l', para andar na direcao leste\n%c's', para andar na direcao sul\n%c'o', para andar na direcao oeste\n\n->'d' PARA DESTRUIR O LABIRINTO\n->'m' PARA MOSTRAR O LABIRINTO\n->'r' PARA RESOLVER O LABIRINTO\n->'t' PARA REVER O TUTORIAL\n->'q' PARA FINALIZAR O PROGRAMA\n\n", 250, 250, 250, 250, 250, 250, 250, 250);
+}
+
+char paraMinuscula(char letra) {
+	if (letra >= 65 && letra <= 90) // transforma letras maiusculas em minusculas
+		letra += 32;
+	return letra;
+}
 
 int main(void) {
 	
@@ -45,20 +54,19 @@ int main(void) {
 	printf("\n\n======================= MANIPULACAO DO LABIRINTO =======================\n");
 	printf("\nOS SEGUINTES COMANDOS ESTAO DISPONIBILIZADOS PARA MANIPULACAO DO LABIRINTO: \n\n");
 
-	printf("->'i', PARA INSERIR UM ELEMENTO NA CASA CORRENTE DO LABIRINTO, SEGUIDO DO SEU PARAMETRO APOS TER APERTADO A TECLA 'ENTER' OU TER DADO UM ESPACO ENTRE AS LETRAS:\n%c'p', para inserir uma parede\n%c'v', para uma casa vazia\n%c'e', para setar a entrada da matriz\n%c's', para setar a saida da matriz\n\n\n->'a' PARA ANDAR PARA A PROXIMA CASA DO LABIRINTO, SEGUIDO DO SEU PARAMETRO APOS TER APERTADO A TECLA 'ENTER' OU TER DADO UM ESPACO ENTRE AS LETRAS:\n%c'n', para andar na direcao norte\n%c'l', para andar na direcao leste\n%c's', para andar na direcao sul\n%c'o', para andar na direcao oeste\n\n->'d' PARA DESTRUIR O LABIRINTO\n->'m' PARA MOSTRAR O LABIRINTO\n->'r' PARA RESOLVER O LABIRINTO\n->'t' PARA REVER O TUTORIAL\n->'q' PARA FINALIZAR O PROGRAMA\n\n", 250, 250, 250, 250, 250, 250, 250);
+	exibeTutorial();
 		
 	while(comando != 'q') { // while q so termina qnd o usuario digitar 'q'
 		printf("Digite o comando desejado seguido do parametro, caso necessario: ");
-		scanf(" %c", &comando); // recebe o comando desejado
+		scanf("%c", &comando); // recebe o comando desejado
 
-		if (comando >= 65 && comando <= 90) // transforma letras maiusculas em minusculas
-			comando += 32;
+		comando = paraMinuscula(comando);
 
 		if (comando == 'i') { // inserir elemento
 			scanf(" %c", &parametro); // recebe o parametro que ja foi dado junto ao comando
 
-			if (parametro >= 65 && parametro <= 90) // transforma letras maiusculas em minusculas
-				parametro += 32;
+			parametro = paraMinuscula(parametro); // transforma letras maiusculas em minusculas
+				
 
 			if (parametro == 'p' || parametro == 'v' || parametro == 'e' || parametro == 's'){ // determina se o parametro e valido
 				if(parametro == 'p')
@@ -67,7 +75,7 @@ int main(void) {
 					parametroENUM = LAB_ElemVazio;
 				else if(parametro == 'e')
 					parametroENUM = LAB_ElemEntrada;
-				else if(parametro == 's')
+				else
 					parametroENUM = LAB_ElemSaida;
 				CondRetObtido = LAB_InserirElemento( labTeste, parametroENUM );
 
@@ -75,7 +83,7 @@ int main(void) {
 					printf("Ocorreu um problema durante a criacao do labirinto, pois o labirinto nao existe!\n");
 				else if (CondRetObtido == LAB_CondRetElementoInvalido)
 					printf("Nao se pode inserir elementos no lugar da Saida ou da Entrada!\n");
-				else if (CondRetObtido == LAB_CondRetOK)
+				else
 					printf("Elemento inserido com sucesso!\n");
 			}
 			else
@@ -84,9 +92,8 @@ int main(void) {
 
 		else if (comando == 'a'){ // andar para uma direcao
 			scanf(" %c", &parametro);
-
-			if (parametro >= 65 && parametro <= 90)
-				parametro += 32;
+			
+			parametro = paraMinuscula(parametro);
 
 			if (parametro == 'n' || parametro == 'l' || parametro == 's' || parametro == 'o'){
 				if(parametro == 'n')
@@ -103,7 +110,7 @@ int main(void) {
 					printf("Ocorreu um problema durante a criacao do labirinto, pois o labirinto nao existe!\n");
 				else if (CondRetObtido == LAB_CondRetDirecaoNaoExisteOuInvalida)
 					printf("Nao se pode andar para fora do labirinto!\n");
-				else if (CondRetObtido == LAB_CondRetOK){
+				else {
 					LAB_ReceberCoordenadas( labTeste, &x, &y );
 					printf("Andou com sucesso! Agora na coordenada: (%d,%d)\n", x, y);
 				}
@@ -125,8 +132,9 @@ int main(void) {
 					scanf(" %d", &tam);
 					LAB_CriarLabirinto(&labTeste, tam);
 				}
-				else if(comando != 'q')
-					printf("COMANDO INVALIDO!\n");
+				else 
+					if(comando != 'q')
+						printf("COMANDO INVALIDO!\n");
 			}
 		}
 
