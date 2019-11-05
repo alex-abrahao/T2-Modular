@@ -105,7 +105,7 @@ static MTZ_tpDirecao ConverterDirecao( LAB_tpDirecao direcao );
 
 static int RetirarEntradaOuSaida( LAB_tppLabirinto pLab, LAB_tpElemCasa tipoElem );
 
-static void ImprimirCasa( LAB_tpElemCasa elemento );
+static void ImprimirCasa( LAB_tpElemCasa elemento, int corrente );
 
 /*****  Código das funções exportadas pelo módulo  *****/
 
@@ -303,15 +303,17 @@ LAB_tpCondRet LAB_ImprimirLabirinto( LAB_tppLabirinto pLab ) {
 
 	// Imprimir tudo
 	do {
-
+		contLinha = 0;
 		do {
 			MTZ_ObterValorCorrente(pLab->pMatriz, (void **) &pConteudoPresente);
-			ImprimirCasa(pConteudoPresente->elemento);
+			ImprimirCasa(pConteudoPresente->elemento, (contLinha == pLab->posXCorrente && contColuna == pLab->posYCorrente));
+			contLinha++;
 		} while (MTZ_AndarDirecao(pLab->pMatriz, MTZ_DirLeste) != MTZ_CondRetDirecaoNaoExisteOuInvalida);
 
 		// Volta para o inicio da linha
 		while (MTZ_AndarDirecao(pLab->pMatriz, MTZ_DirOeste) != MTZ_CondRetDirecaoNaoExisteOuInvalida);
-		printf("\n");
+		printf("\n\n");
+		contColuna++;
 
 	} while (MTZ_AndarDirecao(pLab->pMatriz, MTZ_DirSul) != MTZ_CondRetDirecaoNaoExisteOuInvalida);
 
@@ -321,8 +323,6 @@ LAB_tpCondRet LAB_ImprimirLabirinto( LAB_tppLabirinto pLab ) {
 		MTZ_AndarDirecao(pLab->pMatriz, MTZ_DirLeste);
 	for (contColuna = 0; contColuna < pLab->posYCorrente; contColuna++)
 		MTZ_AndarDirecao(pLab->pMatriz, MTZ_DirSul);
-
-	printf("\n");
 
 	return LAB_CondRetOK;
 
@@ -474,13 +474,13 @@ int RetirarEntradaOuSaida( LAB_tppLabirinto pLab, LAB_tpElemCasa tipoElem ) {
 *
 ***********************************************************************/
 
-void ImprimirCasa( LAB_tpElemCasa elemento ) {
+void ImprimirCasa( LAB_tpElemCasa elemento, int corrente ) {
 
-	char c;
+	char c, aux;
 
 	switch (elemento) {
     case LAB_ElemParede:
-    	c = 254;
+    	c = 219;
         break;
     case LAB_ElemEntrada:
     	c = 'E';
@@ -493,7 +493,12 @@ void ImprimirCasa( LAB_tpElemCasa elemento ) {
         break;
     }
 
-    printf("%c", c);
+	if (corrente)
+		aux = 'C';
+	else
+		aux = c;
+
+    printf("%c%c  ", c, aux);
     return;
 
 } /* Fim função: LAB Imprimir Casa */
