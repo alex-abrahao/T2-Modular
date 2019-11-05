@@ -108,7 +108,9 @@ static void IrEntradaOuSaida( LAB_tppLabirinto pLab, LAB_tpElemCasa tipoElem );
 
 static int RetirarEntradaOuSaida( LAB_tppLabirinto pLab, LAB_tpElemCasa tipoElem );
 
-static void ImprimirCasa( LAB_tpElemCasa elemento, int corrente );
+static void ImprimirTudo( LAB_tppLabirinto pLab, int solucao );
+
+static void ImprimirCasa( LAB_tpElemCasa elemento, int corrente, int solucao );
 
 static LAB_tpDirecao MenorDirecao( MTZ_tppMatriz pMtz );
 
@@ -295,39 +297,9 @@ LAB_tpCondRet LAB_InserirElemento( LAB_tppLabirinto pLab, LAB_tpElemCasa element
 
 LAB_tpCondRet LAB_ImprimirLabirinto( LAB_tppLabirinto pLab ) {
 
-	tpConteudoPosicao * pConteudoPresente = NULL;
-
-	int contLinha = 0, contColuna = 0;
-
 	if (pLab == NULL) return LAB_CondRetLabirintoNaoExiste;
 
-	printf("\n");
-
-	// Andar para o inicio sem alterar a marcação X e Y da posição corrente
-	MTZ_VoltarParaPrimeiro(pLab->pMatriz);
-
-	// Imprimir tudo
-	do {
-		contLinha = 0;
-		do {
-			MTZ_ObterValorCorrente(pLab->pMatriz, (void **) &pConteudoPresente);
-			ImprimirCasa(pConteudoPresente->elemento, (contLinha == pLab->posXCorrente && contColuna == pLab->posYCorrente));
-			contLinha++;
-		} while (MTZ_AndarDirecao(pLab->pMatriz, MTZ_DirLeste) != MTZ_CondRetDirecaoNaoExisteOuInvalida);
-
-		// Volta para o inicio da linha
-		while (MTZ_AndarDirecao(pLab->pMatriz, MTZ_DirOeste) != MTZ_CondRetDirecaoNaoExisteOuInvalida);
-		printf("\n\n");
-		contColuna++;
-
-	} while (MTZ_AndarDirecao(pLab->pMatriz, MTZ_DirSul) != MTZ_CondRetDirecaoNaoExisteOuInvalida);
-
-	// Voltar para a casa corrente certa
-	MTZ_VoltarParaPrimeiro(pLab->pMatriz);
-	for (contLinha = 0; contLinha < pLab->posXCorrente; contLinha++)
-		MTZ_AndarDirecao(pLab->pMatriz, MTZ_DirLeste);
-	for (contColuna = 0; contColuna < pLab->posYCorrente; contColuna++)
-		MTZ_AndarDirecao(pLab->pMatriz, MTZ_DirSul);
+	ImprimirTudo(pLab, 0);
 
 	return LAB_CondRetOK;
 
@@ -341,14 +313,14 @@ LAB_tpCondRet LAB_ImprimirLabirinto( LAB_tppLabirinto pLab ) {
 LAB_tpCondRet LAB_ExibeSolucao( LAB_tppLabirinto pLab ) {
 
 	// FIXME: Fazer a conta para o limite
-	int numIteracoes = 0, limiteIteracoes = 200;
+	int numIteracoes = 0, limiteIteracoes = 10000;
 	// Direção = -1 significa direção inválida
 	LAB_tpDirecao ultimaDirecao = -1, direcaoAux;
 	tpConteudoPosicao * pConteudoAux = NULL;
 
 	if (pLab == NULL) return LAB_CondRetLabirintoNaoExiste;
 
-	// WIP: Implementar
+	// WIP: Falta limpar as casas antes (colocar -1 na direcao de volta, caso o lab já tenha sido solucionado previamente e o user alterou depois)
 
 	// Andar até a entrada
 	IrEntradaOuSaida( pLab, LAB_ElemEntrada );
@@ -375,7 +347,7 @@ LAB_tpCondRet LAB_ExibeSolucao( LAB_tppLabirinto pLab ) {
 				pLab->posXCorrente = 0;
 				pLab->posYCorrente = 0;
 				// Exibe na tela a solução
-				LAB_ImprimirLabirinto(pLab);
+				ImprimirTudo(pLab, 1);
 				// Retorna OK
 				return LAB_CondRetOK;
 			}
@@ -582,35 +554,81 @@ int RetirarEntradaOuSaida( LAB_tppLabirinto pLab, LAB_tpElemCasa tipoElem ) {
 	return retorno;
 } /* Fim função: LAB Retirar entrada ou saída */
 
+/***************************************************************************
+*
+*  Função: LAB Imprimir tudo
+*  ****/
+
+void ImprimirTudo( LAB_tppLabirinto pLab, int solucao ) {
+
+	tpConteudoPosicao * pConteudoPresente = NULL;
+
+	int contLinha = 0, contColuna = 0;
+
+	printf("\n");
+
+	// Andar para o inicio sem alterar a marcação X e Y da posição corrente
+	MTZ_VoltarParaPrimeiro(pLab->pMatriz);
+
+	// Imprimir tudo
+	do {
+		contLinha = 0;
+		do {
+			MTZ_ObterValorCorrente(pLab->pMatriz, (void **) &pConteudoPresente);
+			ImprimirCasa(pConteudoPresente->elemento, (contLinha == pLab->posXCorrente && contColuna == pLab->posYCorrente), (solucao && pConteudoPresente->direcaoVolta != -1));
+			contLinha++;
+		} while (MTZ_AndarDirecao(pLab->pMatriz, MTZ_DirLeste) != MTZ_CondRetDirecaoNaoExisteOuInvalida);
+
+		// Volta para o inicio da linha
+		while (MTZ_AndarDirecao(pLab->pMatriz, MTZ_DirOeste) != MTZ_CondRetDirecaoNaoExisteOuInvalida);
+		printf("\n\n");
+		contColuna++;
+
+	} while (MTZ_AndarDirecao(pLab->pMatriz, MTZ_DirSul) != MTZ_CondRetDirecaoNaoExisteOuInvalida);
+
+	// Voltar para a casa corrente certa
+	MTZ_VoltarParaPrimeiro(pLab->pMatriz);
+	for (contLinha = 0; contLinha < pLab->posXCorrente; contLinha++)
+		MTZ_AndarDirecao(pLab->pMatriz, MTZ_DirLeste);
+	for (contColuna = 0; contColuna < pLab->posYCorrente; contColuna++)
+		MTZ_AndarDirecao(pLab->pMatriz, MTZ_DirSul);
+
+} /* Fim função: LAB Imprimir tudo */
+
 /***********************************************************************
 *
 *  $FC Função: LAB Imprimir Casa
 *
 ***********************************************************************/
 
-void ImprimirCasa( LAB_tpElemCasa elemento, int corrente ) {
+void ImprimirCasa( LAB_tpElemCasa elemento, int corrente, int solucao ) {
 
 	char c, aux;
 
-	switch (elemento) {
-    case LAB_ElemParede:
-    	c = 219;
-        break;
-    case LAB_ElemEntrada:
-    	c = 'E';
-        break;
-    case LAB_ElemSaida:
-        c = 'S';
-        break;
-    default:
-    	c = 176;
-        break;
-    }
-
-	if (corrente)
-		aux = 'C';
-	else
+	if (solucao) {
+		c = 'R';
 		aux = c;
+	} else {
+		switch (elemento) {
+	    case LAB_ElemParede:
+	    	c = 219;
+	        break;
+	    case LAB_ElemEntrada:
+	    	c = 'E';
+	        break;
+	    case LAB_ElemSaida:
+	        c = 'S';
+	        break;
+	    default:
+	    	c = 176;
+	        break;
+	    }
+
+		if (corrente)
+			aux = 'C';
+		else
+			aux = c;
+	}
 
     printf("%c%c  ", c, aux);
     return;

@@ -149,6 +149,8 @@ int main(void) {
 
 			if (CondRetObtido == LAB_CondRetLabirintoNaoExiste)
 				printf("Ocorreu um problema durante a criacao do labirinto, pois o labirinto nao existe!\n");
+			else if (CondRetObtido == LAB_CondRetNaoTemSolucao)
+				printf("O labirinto nao tem solucao!\n");
 		}
 
 		else if (comando == 't') // imprimir o tutorial
