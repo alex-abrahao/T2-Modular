@@ -109,9 +109,10 @@
 =inselm		ElemVazio	OK
 
 == Receber as coordenadas da posicao corrente
-=criar		6
-=andar		Leste
+=criar		6		OK
+=andar		Leste		OK
 =receber	1	0	OK
+
 
 == Destruir o labirinto usado nos testes
 =destruir	OK
