@@ -271,11 +271,15 @@ LAB_tpCondRet LAB_InserirElemento( LAB_tppLabirinto pLab, LAB_tpElemCasa element
 *
 *  $ED Descrição da função
 *     Imprime na tela o labirinto apontado, caso exista.
+*     Para cada posição, são impressos 2 caracteres em sequência.
+*     Caso a posição impressa seja a corrente, o segundo caracter será o representante de corrente.
+*     Caso contrário, o segundo caracter será a repetição do primeiro.
 *     Significado dos caracteres impressos:
-*     - '■': Parede
+*     - '█': Parede
 *     - 'E': Entrada
 *     - 'S': Saída
 *     - '░': Vazio
+*     - 'C': Corrente
 *
 *  $EP Parâmetros
 *     $P pLab - Ponteiro para um labirinto

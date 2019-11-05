@@ -23,6 +23,7 @@
 
 #include   <malloc.h>
 #include   <stdio.h>
+#include   <limits.h>
 
 #include "MATRIZ.H"
 
@@ -103,9 +104,13 @@ static void ExcluirValor( void * pValor );
 
 static MTZ_tpDirecao ConverterDirecao( LAB_tpDirecao direcao );
 
+static void IrEntradaOuSaida( LAB_tppLabirinto pLab, LAB_tpElemCasa tipoElem );
+
 static int RetirarEntradaOuSaida( LAB_tppLabirinto pLab, LAB_tpElemCasa tipoElem );
 
 static void ImprimirCasa( LAB_tpElemCasa elemento, int corrente );
+
+static LAB_tpDirecao MenorDirecao( MTZ_tppMatriz pMtz );
 
 /*****  Código das funções exportadas pelo módulo  *****/
 
@@ -335,11 +340,80 @@ LAB_tpCondRet LAB_ImprimirLabirinto( LAB_tppLabirinto pLab ) {
 
 LAB_tpCondRet LAB_ExibeSolucao( LAB_tppLabirinto pLab ) {
 
+	// FIXME: Fazer a conta para o limite
+	int numIteracoes = 0, limiteIteracoes = 200;
+	// Direção = -1 significa direção inválida
+	LAB_tpDirecao ultimaDirecao = -1, direcaoAux;
+	tpConteudoPosicao * pConteudoAux = NULL;
+
 	if (pLab == NULL) return LAB_CondRetLabirintoNaoExiste;
 
 	// WIP: Implementar
 
-	return LAB_CondRetOK;
+	// Andar até a entrada
+	IrEntradaOuSaida( pLab, LAB_ElemEntrada );
+	pLab->posXCorrente = pLab->posXEntrada;
+	pLab->posYCorrente = pLab->posYEntrada;
+
+	// Para cada iteração, até o limite de execuções
+	while (numIteracoes < limiteIteracoes) {
+
+		// Anda para as posições adjacentes e volta, armazenando cada um dos valores
+		// Exceto para posições já visitadas ou inválidas
+		ultimaDirecao = MenorDirecao(pLab->pMatriz);
+		// Caso todas as direções sejam inválidas, sai do loop e volta para a entrada
+		while (ultimaDirecao != -1) {
+
+			// Anda para a casa determinada
+			LAB_AndarDirecao( pLab, ultimaDirecao );
+			MTZ_ObterValorCorrente( pLab->pMatriz, (void **) &pConteudoAux );
+			
+			// Se a casa for a saída, encontrou o caminho
+			if (pConteudoAux->elemento == LAB_ElemSaida) {
+				// Coloca o labirinto no (0, 0)
+				MTZ_VoltarParaPrimeiro(pLab->pMatriz);
+				pLab->posXCorrente = 0;
+				pLab->posYCorrente = 0;
+				// Exibe na tela a solução
+				LAB_ImprimirLabirinto(pLab);
+				// Retorna OK
+				return LAB_CondRetOK;
+			}
+
+			// Senão, anda para a direção com menor número armazenado
+			// e coloca nessa casa a direção para voltar no fim dessa passada
+			switch (ultimaDirecao) {
+		    case LAB_DirNorte:
+		        pConteudoAux->direcaoVolta = LAB_DirSul;
+		    case LAB_DirLeste:
+		        pConteudoAux->direcaoVolta = LAB_DirOeste;
+		    case LAB_DirSul:
+		        pConteudoAux->direcaoVolta = LAB_DirNorte;
+		    default:
+		        pConteudoAux->direcaoVolta = LAB_DirLeste;
+		    }
+
+			ultimaDirecao = MenorDirecao(pLab->pMatriz);
+		}
+		MTZ_ObterValorCorrente( pLab->pMatriz, (void **) &pConteudoAux );
+		// Volta incrementando 1 no número de passagens
+		pConteudoAux->numPassagens += 1;
+		// e removendo a direção de volta
+		direcaoAux = pConteudoAux->direcaoVolta;
+		pConteudoAux->direcaoVolta = -1;
+		LAB_AndarDirecao( pLab, direcaoAux );
+
+		// Incrementa o contador
+		numIteracoes++;
+	}
+
+	// Coloca o labirinto no (0, 0)
+	MTZ_VoltarParaPrimeiro(pLab->pMatriz);
+	pLab->posXCorrente = 0;
+	pLab->posYCorrente = 0;
+
+	// Se chegou até aqui, não achou solução
+	return LAB_CondRetNaoTemSolucao;
 
 } /* Fim função: LAB Exibe solução */
 
@@ -371,7 +445,7 @@ LAB_tpCondRet LAB_ReceberCoordenadas( LAB_tppLabirinto pLab, int * x, int * y ) 
 void ExcluirValor( void * pValor ) {
 
     if (pValor != NULL)
-        free( pValor ) ;
+        free( (tpConteudoPosicao *) pValor ) ;
 
 } /* Fim função: LAB Excluir valor */
 
@@ -395,6 +469,46 @@ MTZ_tpDirecao ConverterDirecao( LAB_tpDirecao direcao ) {
     }
 
 } /* Fim função: LAB Converter direção */
+
+/***********************************************************************
+*
+*  $FC Função: LAB Ir entrada ou saída
+*
+***********************************************************************/
+
+void IrEntradaOuSaida( LAB_tppLabirinto pLab, LAB_tpElemCasa tipoElem ) {
+
+	MTZ_tpDirecao direcaoX, direcaoY;
+	int i = 0, qtdIteracoesX, qtdIteracoesY, posXRetirar, posYRetirar;
+	tpConteudoPosicao * pConteudoPresente;
+
+	// Tratar se procura entrada ou saída
+	if (tipoElem == LAB_ElemEntrada) {
+		posXRetirar = pLab->posXEntrada;
+		posYRetirar = pLab->posYEntrada;
+	} else {
+		posXRetirar = pLab->posXSaida;
+		posYRetirar = pLab->posYSaida;
+	}
+
+	// Se o elemento estiver à esquerda da corrente, anda para oeste, senão anda para leste
+	direcaoX = (posXRetirar < pLab->posXCorrente) ? MTZ_DirOeste : MTZ_DirLeste;
+	qtdIteracoesX = posXRetirar - pLab->posXCorrente;
+	if (qtdIteracoesX < 0) qtdIteracoesX = -qtdIteracoesX;
+
+	// Se o elemento estiver acima da corrente, anda para norte, senão anda para sul
+	direcaoY = (posYRetirar < pLab->posYCorrente) ? MTZ_DirNorte : MTZ_DirSul;
+	qtdIteracoesY = posYRetirar - pLab->posYCorrente;
+	if (qtdIteracoesY < 0) qtdIteracoesY = -qtdIteracoesY;
+
+	// Anda até o elemento
+	for (i = 0; i < qtdIteracoesX; i++)
+		MTZ_AndarDirecao( pLab->pMatriz, direcaoX );
+
+	for (i = 0; i < qtdIteracoesY; i++)
+		MTZ_AndarDirecao( pLab->pMatriz, direcaoY );
+
+} /* Fim função: LAB Ir entrada ou saída */
 
 /***********************************************************************
 *
@@ -502,5 +616,64 @@ void ImprimirCasa( LAB_tpElemCasa elemento, int corrente ) {
     return;
 
 } /* Fim função: LAB Imprimir Casa */
+
+/***********************************************************************
+*
+*  $FC Função: LAB Menor direção
+*
+***********************************************************************/
+
+LAB_tpDirecao MenorDirecao( MTZ_tppMatriz pMtz ) {
+
+	// Inicializa tudo com INT_MAX para caso haja posições adjacentes inválidas
+	int i, menorIndice = 0;
+	int adjacentes[4] = {INT_MAX, INT_MAX, INT_MAX, INT_MAX};
+	tpConteudoPosicao * pConteudoAux = NULL;
+
+	// Verifica leste
+	if (MTZ_AndarDirecao( pMtz, MTZ_DirLeste ) == MTZ_CondRetOK) {
+		MTZ_ObterValorCorrente( pMtz, (void **) &pConteudoAux );
+		if ((pConteudoAux->elemento == LAB_ElemVazio || pConteudoAux->elemento == LAB_ElemSaida) && pConteudoAux->direcaoVolta == -1)
+			adjacentes[LAB_DirLeste] = pConteudoAux->numPassagens;
+		MTZ_AndarDirecao( pMtz, MTZ_DirOeste );
+	}
+
+	// Verifica oeste
+	if (MTZ_AndarDirecao( pMtz, MTZ_DirOeste ) == MTZ_CondRetOK) {
+		MTZ_ObterValorCorrente( pMtz, (void **) &pConteudoAux );
+		if ((pConteudoAux->elemento == LAB_ElemVazio || pConteudoAux->elemento == LAB_ElemSaida) && pConteudoAux->direcaoVolta == -1)
+			adjacentes[LAB_DirOeste] = pConteudoAux->numPassagens;
+		MTZ_AndarDirecao( pMtz, MTZ_DirLeste );
+	}
+
+	// Verifica norte
+	if (MTZ_AndarDirecao( pMtz, MTZ_DirNorte ) == MTZ_CondRetOK) {
+		MTZ_ObterValorCorrente( pMtz, (void **) &pConteudoAux );
+		if ((pConteudoAux->elemento == LAB_ElemVazio || pConteudoAux->elemento == LAB_ElemSaida) && pConteudoAux->direcaoVolta == -1)
+			adjacentes[LAB_DirNorte] = pConteudoAux->numPassagens;
+		MTZ_AndarDirecao( pMtz, MTZ_DirSul );
+	}
+
+	// Verifica sul
+	if (MTZ_AndarDirecao( pMtz, MTZ_DirSul ) == MTZ_CondRetOK) {
+		MTZ_ObterValorCorrente( pMtz, (void **) &pConteudoAux );
+		if ((pConteudoAux->elemento == LAB_ElemVazio || pConteudoAux->elemento == LAB_ElemSaida) && pConteudoAux->direcaoVolta == -1)
+			adjacentes[LAB_DirSul] = pConteudoAux->numPassagens;
+		MTZ_AndarDirecao( pMtz, MTZ_DirNorte );
+	}
+
+	// Verifica qual o menor (assume de início que o 0 (norte) é o menor)
+	for (i = 1; i < 4; i++) {
+		if (adjacentes[i] < adjacentes[menorIndice])
+			menorIndice = i;
+	}
+
+	// Se o índice apontar para INT_MAX é porque todas as direções são inválidas
+	if (adjacentes[menorIndice] == INT_MAX)
+		return -1;
+	else
+		return (LAB_tpDirecao) menorIndice;
+
+} /* Fim função: LAB Menor direção */
 
 /********** Fim do módulo de implementação: Módulo labirinto **********/
