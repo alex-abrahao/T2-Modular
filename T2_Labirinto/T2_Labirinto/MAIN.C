@@ -23,7 +23,6 @@
 ***************************************************************************/
 
 #include "LABIRINTO.H"
-#include "TST_ESPC.H"
 #include <stdio.h>
 
 void exibeTutorial(void) {
