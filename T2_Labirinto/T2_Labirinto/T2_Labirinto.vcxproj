@@ -83,7 +83,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="LABIRINTO.C" />
-    <ClCompile Include="MAIN.C" />
     <ClCompile Include="MATRIZ.C" />
     <ClCompile Include="TESTLAB.C" />
   </ItemGroup>
