@@ -18,6 +18,9 @@
 *       1.00   phd   03/10/2019 Início do desenvolvimento
 *       1.01   aaf   03/10/2019 Alteração no teste de inserir elemento
 *		1.02   phd	 05/10/2019 Documentação
+*		1.10   jmb   04/11/2019 Inserir teste da função ReceberCoordenadas
+*       1.20   jmb   05/11/2019 Inserir teste da função Imprimir Labirinto e Receber Solução
+*		1.21   phd	 06/11/2019 Documentação
 *
 *  $ED Descrição do módulo
 *     Este módulo contém as funções específicas para o teste do
@@ -106,8 +109,7 @@ TST_tpCondRet TST_EfetuarComando( char * ComandoTeste ) {
 
 	int  NumLidos = -1 ;
 
-      /* Testar LAB Criar labirinto */
-
+    /* Testar LAB Criar labirinto */
     if ( strcmp( ComandoTeste , CRIAR_LAB_CMD ) == 0 ) {
 
         int dim;
@@ -176,6 +178,7 @@ TST_tpCondRet TST_EfetuarComando( char * ComandoTeste ) {
 
     } /* fim ativa: Testar LAB Destruir Labirinto */
 	
+	/* Testar LAB Receber Coordenadas */
 	else if ( strcmp( ComandoTeste , RECEBER_CMD ) == 0 ) {
         
         int x, y;
@@ -190,8 +193,9 @@ TST_tpCondRet TST_EfetuarComando( char * ComandoTeste ) {
 
         return TST_CompararInt( CondRetEsperada , CondRetObtido ,
             "Retorno errado ao andar." );
-	}
+	} /* fim ativa: Testar LAB Receber Coordenadas */
 
+	/* Testar LAB Imprimir Labirinto */
 	else if ( strcmp( ComandoTeste , IMPRIMIR_CMD ) == 0 ) {
 
         NumLidos = LER_LerParametros( "i" ,
@@ -204,9 +208,10 @@ TST_tpCondRet TST_EfetuarComando( char * ComandoTeste ) {
 
         return TST_CompararInt( CondRetEsperada , CondRetObtido ,
             "Retorno errado ao andar." );
-	}
+	} /* fim ativa: Testar LAB Imprimir Labirinto */
 
-		else if ( strcmp( ComandoTeste , RESOLVER_CMD ) == 0 ) {
+	/* Testar LAB Exibe Solução */
+	else if ( strcmp( ComandoTeste , RESOLVER_CMD ) == 0 ) {
 
         NumLidos = LER_LerParametros( "i" ,
 			&CondRetEsperada ) ;
@@ -218,7 +223,7 @@ TST_tpCondRet TST_EfetuarComando( char * ComandoTeste ) {
 
         return TST_CompararInt( CondRetEsperada , CondRetObtido ,
             "Retorno errado ao andar." );
-		}
+		} /* fim ativa: Testar LAB Exibe Solução */
 
 
     return TST_CondRetNaoConhec ;
