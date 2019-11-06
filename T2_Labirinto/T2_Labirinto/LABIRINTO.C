@@ -699,16 +699,16 @@ LAB_tpDirecao MenorDirecao( MTZ_tppMatriz pMtz ) {
 	tpConteudoPosicao * pConteudoAux = NULL;
 
 	// Verifica leste
-	VerificaDirecao( pMtz, MTZ_DirLeste, adjacentes );
+	VerificaDirecao( pMtz, LAB_DirLeste, adjacentes );
 
 	// Verifica oeste
-	VerificaDirecao( pMtz, MTZ_DirOeste, adjacentes );
+	VerificaDirecao( pMtz, LAB_DirOeste, adjacentes );
 
 	// Verifica norte
-	VerificaDirecao( pMtz, MTZ_DirNorte, adjacentes );
+	VerificaDirecao( pMtz, LAB_DirNorte, adjacentes );
 
 	// Verifica sul
-	VerificaDirecao( pMtz, MTZ_DirSul, adjacentes );
+	VerificaDirecao( pMtz, LAB_DirSul, adjacentes );
 
 	// Verifica qual o menor (assume de início que o 0 (norte) é o menor)
 	for (i = 1; i < 4; i++) {
@@ -730,17 +730,20 @@ LAB_tpDirecao MenorDirecao( MTZ_tppMatriz pMtz ) {
 *
 ***********************************************************************/
 
-void VerificaDirecao( MTZ_tppMatriz pMtz, MTZ_tpDirecao direcao, int * adjacentes ) {
+void VerificaDirecao( MTZ_tppMatriz pMtz, LAB_tpDirecao direcao, int * adjacentes ) {
 
 	tpConteudoPosicao * pConteudoAux = NULL;
 	MTZ_tpDirecao direcaoOposta;
+	MTZ_tpDirecao direcaoConvertida;
 
-	switch(direcao) {
-	case LAB_DirNorte:
+	direcaoConvertida = ConverterDirecao( direcao );
+
+	switch(direcaoConvertida) {
+	case MTZ_DirNorte:
 		direcaoOposta = MTZ_DirSul;
 		break;
 	case MTZ_DirSul:
-		direcaoOposta = LAB_DirNorte;
+		direcaoOposta = MTZ_DirNorte;
 		break;
 	case MTZ_DirLeste:
 		direcaoOposta = MTZ_DirOeste;
@@ -751,7 +754,7 @@ void VerificaDirecao( MTZ_tppMatriz pMtz, MTZ_tpDirecao direcao, int * adjacente
 	}
 
 	// Verifica a direcao se ela existir
-	if (MTZ_AndarDirecao( pMtz, direcao ) == MTZ_CondRetOK) {
+	if (MTZ_AndarDirecao( pMtz, direcaoConvertida ) == MTZ_CondRetOK) {
 		MTZ_ObterValorCorrente( pMtz, (void **) &pConteudoAux );
 		if ((pConteudoAux->elemento == LAB_ElemVazio || pConteudoAux->elemento == LAB_ElemSaida) && pConteudoAux->direcaoVolta == -1)
 			adjacentes[direcao] = pConteudoAux->numPassagens;
