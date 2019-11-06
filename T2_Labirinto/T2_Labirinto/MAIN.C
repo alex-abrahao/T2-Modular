@@ -19,7 +19,7 @@
 *       1.10   phd   31/10/2019 Todas funções estao disponiveis
 *       1.20   jmb   02/11/2019 Otimizações
 *		1.30   phd   03/11/2019 Respostas adequadas aos CondRets recebidos
-*		1.30   aaf   06/11/2019 Revisão do tutorial
+*		1.31   aaf   06/11/2019 Revisão do tutorial
 *
 ***************************************************************************/
 
@@ -28,19 +28,19 @@
 
 /***** Protótipos das funções encapuladas no módulo *****/
 
-// funcao que torna as letras maiusculas em minusculas
 static char paraMinuscula(char letra);
 
-// funcao que imprime o tutorial da main
 static void exibeTutorial(void);
+
+/*****  Código das funções exportadas pelo módulo  *****/
 
 /***********************************************************************
 *
-*  $FC Função: TLAB Efetuar operações de teste específicas para o labirinto
+*  $FC Função: MLAB Main
 *
 *  $ED Descrição da função
 *     Main que contem as funções do labirinto disponiveis para o usuario
-*     criar e testar labirintos personalizados
+*     criar e testar labirintos personalizados.
 *
 *  $FV Valor retornado
 *     Int: 0
@@ -54,7 +54,7 @@ int main(void) {
 	LAB_tpDirecao dir; // variavel pra andar
 	LAB_tpCondRet CondRetObtido; // variavel que recebe o condret da funcao
 	LAB_tpElemCasa parametroENUM; // variavel que converte o caractere digitado para o o tipo de elemento que sera colocado na casa
-	LAB_tppLabirinto labTeste = NULL; // iniciação do labirinto
+	LAB_tppLabirinto labTeste = NULL; // inicialização do labirinto
 
 	printf("========================= CRIACAO DO LABIRINTO =========================\n\n");
 	printf("Primeiramente, escolha o tamanho que sera utilizado na criacao do labirinto: ");
@@ -73,7 +73,7 @@ int main(void) {
 
 	exibeTutorial();
 		
-	while(comando != 'q') { // while q so termina qnd o usuario digitar 'q'
+	while(comando != 'q') { // Enquanto o user não quiser terminar
 		printf("Digite o comando desejado seguido do parametro, caso necessario: ");
 		scanf("%c", &comando); // recebe o comando desejado
 
@@ -193,7 +193,7 @@ int main(void) {
 	LAB_DestruirLabirinto( &labTeste );
 
 	return 0;
-} /* Fim função: TLAB Main */
+} /* Fim função: MLAB Main */
 
 /***********************************************************************
 *
@@ -234,4 +234,3 @@ void exibeTutorial(void) {
 } /* Fim função: Exibe o tutorial da main  */
 
 /********** Fim do módulo de implementação: Main **********/
-
