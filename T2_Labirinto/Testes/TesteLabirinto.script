@@ -8,17 +8,17 @@
 
 == Inicializar valores
 
-=declararparm   OK				int 0
+=declararparm   OK			int 0
 =declararparm   ErroEstrut		int 1
 =declararparm   DirInvalida		int 2
-=declararparm   LabNaoExiste	int 3
+=declararparm   LabNaoExiste		int 3
 =declararparm   FaltaMem		int 4
 =declararparm   SemSolucao		int 5
-=declararparm   ElemInvalido	int 6
+=declararparm   ElemInvalido		int 6
 
 =declararparm   Norte			int 0
 =declararparm   Leste			int 1
-=declararparm   Sul				int 2
+=declararparm   Sul			int 2
 =declararparm   Oeste			int 3
 
 =declararparm	ElemVazio		int 0
@@ -133,6 +133,24 @@
 =andar	Sul	OK
 =inselm		ElemParede	OK
 =resolver	SemSolucao
+
+== Labirinto com solucao em mais de uma tentativa
+=criar		6		OK
+=andar		Leste		OK
+=inselm		ElemParede	OK
+=andar		Sul		OK
+=inselm		ElemParede	OK
+=andar		Leste		OK
+=andar		Leste		OK
+=inselm		ElemParede	OK
+=andar		Norte		OK
+=inselm		ElemParede	OK
+=andar		Sul		OK
+=andar		Sul		OK
+=andar		Sul		OK
+=andar		Sul		OK
+=inselm		ElemSaida	OK
+=resolver	OK
 
 == Imprimir o labirinto
 =imprimir	OK
