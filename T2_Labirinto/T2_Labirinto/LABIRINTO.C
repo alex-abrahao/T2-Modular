@@ -326,23 +326,23 @@ LAB_tpCondRet LAB_ExibeSolucao( LAB_tppLabirinto pLab ) {
 	if (pLab == NULL) return LAB_CondRetLabirintoNaoExiste;
 
 	// Limpar as casas antes (colocar -1 na direcao de volta, caso o lab já tenha sido solucionado previamente e o user alterou depois)
-	// MTZ_VoltarParaPrimeiro(pLab->pMatriz);
-	// do {
-	// 	contLinha = 0;
-	// 	do {
-	// 		MTZ_ObterValorCorrente(pLab->pMatriz, (void **) &pConteudoAux);
-	// 		pConteudoAux->direcaoVolta = -1;
-	// 		contLinha++;
-	// 	} while (MTZ_AndarDirecao(pLab->pMatriz, MTZ_DirLeste) != MTZ_CondRetDirecaoNaoExisteOuInvalida);
+	MTZ_VoltarParaPrimeiro(pLab->pMatriz);
+	do {
+		contLinha = 0;
+		do {
+			MTZ_ObterValorCorrente(pLab->pMatriz, (void **) &pConteudoAux);
+			pConteudoAux->direcaoVolta = -1;
+			contLinha++;
+		} while (MTZ_AndarDirecao(pLab->pMatriz, MTZ_DirLeste) != MTZ_CondRetDirecaoNaoExisteOuInvalida);
 
-	// 	// Volta para o inicio da linha
-	// 	while (MTZ_AndarDirecao(pLab->pMatriz, MTZ_DirOeste) != MTZ_CondRetDirecaoNaoExisteOuInvalida);
-	// 	contColuna++;
+		// Volta para o inicio da linha
+		while (MTZ_AndarDirecao(pLab->pMatriz, MTZ_DirOeste) != MTZ_CondRetDirecaoNaoExisteOuInvalida);
+		contColuna++;
 
-	// } while (MTZ_AndarDirecao(pLab->pMatriz, MTZ_DirSul) != MTZ_CondRetDirecaoNaoExisteOuInvalida);
-	// MTZ_VoltarParaPrimeiro(pLab->pMatriz);
-	// pLab->posXCorrente = 0;
-	// pLab->posYCorrente = 0;
+	} while (MTZ_AndarDirecao(pLab->pMatriz, MTZ_DirSul) != MTZ_CondRetDirecaoNaoExisteOuInvalida);
+	MTZ_VoltarParaPrimeiro(pLab->pMatriz);
+	pLab->posXCorrente = 0;
+	pLab->posYCorrente = 0;
 
 	// Andar até a entrada
 	IrEntradaOuSaida( pLab, LAB_ElemEntrada );
@@ -370,7 +370,7 @@ LAB_tpCondRet LAB_ExibeSolucao( LAB_tppLabirinto pLab ) {
 				pLab->posYCorrente = 0;
 				// Exibe na tela a solução
 				ImprimirTudo(pLab, 1);
-				printf("Numero total de tentativas ate encontrar: %d\n", numIteracoes);
+				printf("Numero total de tentativas ate encontrar: %d\n", numIteracoes + 1);
 				// Retorna OK
 				return LAB_CondRetOK;
 			}
@@ -416,7 +416,7 @@ LAB_tpCondRet LAB_ExibeSolucao( LAB_tppLabirinto pLab ) {
 	pLab->posYCorrente = 0;
 
 	// Se chegou até aqui, não achou solução
-	printf("Numero total de tentativas sem solucao: %d\n", numIteracoes);
+	printf("\nNumero total de tentativas sem solucao: %d\n", numIteracoes);
 	return LAB_CondRetNaoTemSolucao;
 
 } /* Fim função: LAB Exibe solução */
