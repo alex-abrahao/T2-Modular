@@ -26,9 +26,26 @@
 #include "LABIRINTO.H"
 #include <stdio.h>
 
+/***** Protótipos das funções encapuladas no módulo *****/
+
+// funcao que torna as letras maiusculas em minusculas
 static char paraMinuscula(char letra);
 
+// funcao que imprime o tutorial da main
 static void exibeTutorial(void);
+
+/***********************************************************************
+*
+*  $FC Função: TLAB Efetuar operações de teste específicas para o labirinto
+*
+*  $ED Descrição da função
+*     Main que contem as funções do labirinto disponiveis para o usuario
+*     criar e testar labirintos personalizados
+*
+*  $FV Valor retornado
+*     Int: 0
+*
+***********************************************************************/
 
 int main(void) {
 	
@@ -176,14 +193,24 @@ int main(void) {
 	LAB_DestruirLabirinto( &labTeste );
 
 	return 0;
-}
+} /* Fim função: TLAB Main */
 
+/***********************************************************************
+*
+*  $FC Função: Torna as letras maiusculas em minusculas
+*
+***********************************************************************/
 char paraMinuscula(char letra) {
-	if (letra >= 65 && letra <= 90) // transforma letras maiusculas em minusculas
+	if (letra >= 65 && letra <= 90)
 		letra += 32;
 	return letra;
-}
+} /* Fim função: Torna as letras maiusculas em minusculas  */
 
+/***********************************************************************
+*
+*  $FC Função: Exibe o tutorial da main
+*
+***********************************************************************/
 void exibeTutorial(void) {
 	printf("->'i', PARA INSERIR UM ELEMENTO NA CASA CORRENTE DO LABIRINTO, SEGUIDO DO SEU PARAMETRO:\n\
 	PARAMETROS PARA INSERIR:\n\
@@ -204,5 +231,7 @@ void exibeTutorial(void) {
 ->'r' PARA RESOLVER O LABIRINTO\n\
 ->'t' PARA REVER O TUTORIAL\n\
 ->'q' PARA FINALIZAR O PROGRAMA\n\n", 250, 250, 250, 250, 250, 250, 250, 250);
-}
+} /* Fim função: Exibe o tutorial da main  */
+
+/********** Fim do módulo de implementação: Main **********/
 
