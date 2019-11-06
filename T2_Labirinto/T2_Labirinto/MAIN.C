@@ -1,5 +1,5 @@
 /***************************************************************************
-*  $MCI Módulo de implementação: Módulo labirinto
+*  $MCI Módulo de implementação: Módulo main
 *
 *  Arquivo gerado:              MAIN.C
 *  Letras identificadoras:      MLAB
@@ -17,8 +17,9 @@
 *     Versão  Autor    Data     Observações
 *       1.00   jmb   30/10/2019 Início do desenvolvimento
 *       1.10   phd   31/10/2019 Todas funções estao disponiveis
-*       1.20   jmb   02/11/2019 Diversas otimizacoes
+*       1.20   jmb   02/11/2019 Otimizações
 *		1.30   phd   03/11/2019 Respostas adequadas aos CondRets recebidos
+*		1.30   aaf   06/11/2019 Revisão do tutorial
 *
 ***************************************************************************/
 
