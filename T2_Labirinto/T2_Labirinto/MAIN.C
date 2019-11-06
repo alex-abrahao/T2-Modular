@@ -148,6 +148,7 @@ int main(void) {
 					printf("Digite o comando desejado: ");
 					scanf(" %c", &comando);
 					if (comando == 'c'){
+						tam = 0;
 						printf("Escolha o tamanho do labirinto: ");
 						scanf(" %d", &tam); // recebe o tamanho desejado
 						while(LAB_CriarLabirinto(&labTeste, tam /* criação do labirinto */) != LAB_CondRetOK) {
