@@ -316,14 +316,16 @@ LAB_tpCondRet LAB_ImprimirLabirinto( LAB_tppLabirinto pLab ) {
 
 LAB_tpCondRet LAB_ExibeSolucao( LAB_tppLabirinto pLab ) {
 
-	// Definição do limite de iterações como tam^4
-	int numIteracoes = 0, limiteIteracoes = pLab->tam * pLab->tam * pLab->tam * pLab->tam;
+	int numIteracoes = 0, limiteIteracoes;
 	int contLinha = 0, contColuna = 0;
 	// Direção = -1 significa direção inválida
 	LAB_tpDirecao ultimaDirecao = -1, direcaoAux;
 	tpConteudoPosicao * pConteudoAux = NULL;
 
 	if (pLab == NULL) return LAB_CondRetLabirintoNaoExiste;
+
+	// Definição do limite de iterações como tam^4
+	limiteIteracoes = pLab->tam * pLab->tam * pLab->tam * pLab->tam;
 
 	// Limpar as casas antes (colocar -1 na direcao de volta, caso o lab já tenha sido solucionado previamente e o user alterou depois)
 	MTZ_VoltarParaPrimeiro(pLab->pMatriz);
