@@ -25,20 +25,14 @@
 #include "LABIRINTO.H"
 #include <stdio.h>
 
-void exibeTutorial(void) {
-	printf("->'i', PARA INSERIR UM ELEMENTO NA CASA CORRENTE DO LABIRINTO, SEGUIDO DO SEU PARAMETRO APOS TER APERTADO A TECLA 'ENTER' OU TER DADO UM ESPACO ENTRE AS LETRAS:\n\n%c'p', para inserir uma parede\n%c'v', para uma casa vazia\n%c'e', para setar a entrada da matriz\n%c's', para setar a saida da matriz\n\n\n->'a' PARA ANDAR PARA A PROXIMA CASA DO LABIRINTO, SEGUIDO DO SEU PARAMETRO APOS TER APERTADO A TECLA 'ENTER' OU TER DADO UM ESPACO ENTRE AS LETRAS:\n%c'n', para andar na direcao norte\n%c'l', para andar na direcao leste\n%c's', para andar na direcao sul\n%c'o', para andar na direcao oeste\n\n->'d' PARA DESTRUIR O LABIRINTO\n->'m' PARA MOSTRAR O LABIRINTO\n->'r' PARA RESOLVER O LABIRINTO\n->'t' PARA REVER O TUTORIAL\n->'q' PARA FINALIZAR O PROGRAMA\n\n", 250, 250, 250, 250, 250, 250, 250, 250);
-}
+static char paraMinuscula(char letra);
 
-char paraMinuscula(char letra) {
-	if (letra >= 65 && letra <= 90) // transforma letras maiusculas em minusculas
-		letra += 32;
-	return letra;
-}
+static void exibeTutorial(void);
 
 int main(void) {
 	
-	char comando=0, parametro; // inicializa as variáveis comando e parametro para entrar no while
-	int tam = 3, x, y; // inicializa as variáveis de tamanho e das coordenadas x e y
+	char comando = 0, parametro; // inicializa as variáveis comando e parametro para entrar no while
+	int tam = 0, x, y; // inicializa as variáveis de tamanho e das coordenadas x e y
 	LAB_tpDirecao dir; // variavel pra andar
 	LAB_tpCondRet CondRetObtido; // variavel que recebe o condret da funcao
 	LAB_tpElemCasa parametroENUM; // variavel que converte o caractere digitado para o o tipo de elemento que sera colocado na casa
@@ -47,8 +41,14 @@ int main(void) {
 	printf("========================= CRIACAO DO LABIRINTO =========================\n\n");
 	printf("Primeiramente, escolha o tamanho que sera utilizado na criacao do labirinto: ");
 	scanf(" %d", &tam); // recebe o tamanho desejado
-	LAB_CriarLabirinto(&labTeste, tam); // criação do labirinto
+	
 	while ((getchar()) != '\n'); // limpa o buffer do scanf
+
+	while(LAB_CriarLabirinto(&labTeste, tam /* criação do labirinto */) != LAB_CondRetOK) {
+		printf("Tamanho invalido, digite novamente: ");
+		scanf(" %d", &tam); // recebe o tamanho desejado
+		while ((getchar()) != '\n'); // limpa o buffer do scanf
+	}
 
 	printf("\n\n======================= MANIPULACAO DO LABIRINTO =======================\n");
 	printf("\nOS SEGUINTES COMANDOS ESTAO DISPONIBILIZADOS PARA MANIPULACAO DO LABIRINTO: \n\n");
@@ -65,8 +65,7 @@ int main(void) {
 			scanf(" %c", &parametro); // recebe o parametro que ja foi dado junto ao comando
 
 			parametro = paraMinuscula(parametro); // transforma letras maiusculas em minusculas
-				
-
+			
 			if (parametro == 'p' || parametro == 'v' || parametro == 'e' || parametro == 's'){ // determina se o parametro e valido
 				if(parametro == 'p')
 					parametroENUM = LAB_ElemParede;
@@ -120,20 +119,31 @@ int main(void) {
 
 		else if (comando == 'd'){ // destroi funcao
 			CondRetObtido = LAB_DestruirLabirinto( &labTeste );
-			printf("Labirinto destruido com sucesso!\n");
-			printf("Agora que o labirinto foi destruido, voce pode escolher entre finalizar o programa, digitando 'q', ou recriar o labirinto, digitando 'c'!\n");
+
+			if (CondRetObtido == LAB_CondRetLabirintoNaoExiste)
+				printf("Ocorreu um problema durante a criacao do labirinto, pois o labirinto nao existe!\n");
+			else {
+				printf("Labirinto destruido com sucesso!\n");
+				printf("Agora que o labirinto foi destruido, voce pode escolher entre finalizar o programa, digitando 'q', ou recriar o labirinto, digitando 'c'!\n");
 			
-			while(comando != 'q' && comando != 'c'){
-				printf("Digite o comando desejado: ");
-				scanf(" %c", &comando);
-				if (comando == 'c'){
-					printf("Escolha o tamanho do labirinto: ");
-					scanf(" %d", &tam);
-					LAB_CriarLabirinto(&labTeste, tam);
+				while(comando != 'q' && comando != 'c'){
+					printf("Digite o comando desejado: ");
+					scanf(" %c", &comando);
+					if (comando == 'c'){
+						printf("Escolha o tamanho do labirinto: ");
+						scanf(" %d", &tam); // recebe o tamanho desejado
+						while(LAB_CriarLabirinto(&labTeste, tam /* criação do labirinto */) != LAB_CondRetOK) {
+							printf("Tamanho invalido, digite novamente: ");
+							scanf(" %d", &tam); // recebe o tamanho desejado
+							while ((getchar()) != '\n'); // limpa o buffer do scanf
+						}
+					
+					}
+					else {
+						if(comando != 'q')
+							printf("COMANDO INVALIDO!\n");
+					}
 				}
-				else 
-					if(comando != 'q')
-						printf("COMANDO INVALIDO!\n");
 			}
 		}
 
@@ -155,8 +165,7 @@ int main(void) {
 		}
 
 		else if (comando == 't') // imprimir o tutorial
-			printf("\n'i', PARA INSERIR UM ELEMENTO NA CASA CORRENTE DO LABIRINTO, SEGUIDO DO SEU PARAMETRO:\n-'p', para inserir uma parede\n-'v', para uma casa vazia\n-'e', para setar a entrada da matriz\n-'s', para setar a saida da matriz\n\n'a' PARA ANDAR PARA A PROXIMA CASA DO LABIRINTO\n-'n', para andar na direcao norte\n-'l', para andar na direcao leste\n-'s', para andar na direcao sul\n-'o', para andar na direcao oeste\n\n'd' PARA DESTRUIR O LABIRINTO\n'm' PARA MOSTRAR O LABIRINTO\n'r' PARA RESOLVER O LABIRINTO\n't' PARA REVER O TUTORIAL\n'q' PARA FINALIZAR O PROGRAMA\n\n", 250, 250, 250, 250, 250, 250, 250, 250);
-
+			exibeTutorial();
 		else if (comando != 'q') // fechar o programa
 			printf("COMANDO INVALIDO!\n");
 
@@ -167,3 +176,32 @@ int main(void) {
 
 	return 0;
 }
+
+char paraMinuscula(char letra) {
+	if (letra >= 65 && letra <= 90) // transforma letras maiusculas em minusculas
+		letra += 32;
+	return letra;
+}
+
+void exibeTutorial(void) {
+	printf("->'i', PARA INSERIR UM ELEMENTO NA CASA CORRENTE DO LABIRINTO, SEGUIDO DO SEU PARAMETRO:\n\
+	PARAMETROS PARA INSERIR:\n\
+	%c'p', para inserir uma parede\n\
+	%c'v', para uma casa vazia\n\
+	%c'e', para setar a entrada do labirinto\n\
+	%c's', para setar a saida do labirinto\n\
+		Exemplo: i p  ----> Insere uma parede na casa corrente\n\n\
+->'a' PARA ANDAR PARA A PROXIMA CASA DO LABIRINTO, SEGUIDO DO SEU PARAMETRO:\n\
+	PARAMETROS PARA ANDAR:\n\
+	%c'n', para andar na direcao norte\n\
+	%c'l', para andar na direcao leste\n\
+	%c's', para andar na direcao sul\n\
+	%c'o', para andar na direcao oeste\n\
+		Exemplo: a l  ----> Anda na direcao leste\n\n\
+->'d' PARA DESTRUIR O LABIRINTO\n\
+->'m' PARA MOSTRAR O LABIRINTO\n\
+->'r' PARA RESOLVER O LABIRINTO\n\
+->'t' PARA REVER O TUTORIAL\n\
+->'q' PARA FINALIZAR O PROGRAMA\n\n", 250, 250, 250, 250, 250, 250, 250, 250);
+}
+
