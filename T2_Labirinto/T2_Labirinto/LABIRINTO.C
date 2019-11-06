@@ -118,6 +118,8 @@ static void ImprimirCasa( LAB_tpElemCasa elemento, int corrente, int solucao, LA
 
 static LAB_tpDirecao MenorDirecao( MTZ_tppMatriz pMtz );
 
+static void VerificaDirecao( MTZ_tppMatriz pMtz, MTZ_tpDirecao direcao, int * adjacentes );
+
 /*****  Código das funções exportadas pelo módulo  *****/
 
 /***************************************************************************
@@ -697,36 +699,16 @@ LAB_tpDirecao MenorDirecao( MTZ_tppMatriz pMtz ) {
 	tpConteudoPosicao * pConteudoAux = NULL;
 
 	// Verifica leste
-	if (MTZ_AndarDirecao( pMtz, MTZ_DirLeste ) == MTZ_CondRetOK) {
-		MTZ_ObterValorCorrente( pMtz, (void **) &pConteudoAux );
-		if ((pConteudoAux->elemento == LAB_ElemVazio || pConteudoAux->elemento == LAB_ElemSaida) && pConteudoAux->direcaoVolta == -1)
-			adjacentes[LAB_DirLeste] = pConteudoAux->numPassagens;
-		MTZ_AndarDirecao( pMtz, MTZ_DirOeste );
-	}
+	VerificaDirecao( pMtz, MTZ_DirLeste, adjacentes );
 
 	// Verifica oeste
-	if (MTZ_AndarDirecao( pMtz, MTZ_DirOeste ) == MTZ_CondRetOK) {
-		MTZ_ObterValorCorrente( pMtz, (void **) &pConteudoAux );
-		if ((pConteudoAux->elemento == LAB_ElemVazio || pConteudoAux->elemento == LAB_ElemSaida) && pConteudoAux->direcaoVolta == -1)
-			adjacentes[LAB_DirOeste] = pConteudoAux->numPassagens;
-		MTZ_AndarDirecao( pMtz, MTZ_DirLeste );
-	}
+	VerificaDirecao( pMtz, MTZ_DirOeste, adjacentes );
 
 	// Verifica norte
-	if (MTZ_AndarDirecao( pMtz, MTZ_DirNorte ) == MTZ_CondRetOK) {
-		MTZ_ObterValorCorrente( pMtz, (void **) &pConteudoAux );
-		if ((pConteudoAux->elemento == LAB_ElemVazio || pConteudoAux->elemento == LAB_ElemSaida) && pConteudoAux->direcaoVolta == -1)
-			adjacentes[LAB_DirNorte] = pConteudoAux->numPassagens;
-		MTZ_AndarDirecao( pMtz, MTZ_DirSul );
-	}
+	VerificaDirecao( pMtz, MTZ_DirNorte, adjacentes );
 
 	// Verifica sul
-	if (MTZ_AndarDirecao( pMtz, MTZ_DirSul ) == MTZ_CondRetOK) {
-		MTZ_ObterValorCorrente( pMtz, (void **) &pConteudoAux );
-		if ((pConteudoAux->elemento == LAB_ElemVazio || pConteudoAux->elemento == LAB_ElemSaida) && pConteudoAux->direcaoVolta == -1)
-			adjacentes[LAB_DirSul] = pConteudoAux->numPassagens;
-		MTZ_AndarDirecao( pMtz, MTZ_DirNorte );
-	}
+	VerificaDirecao( pMtz, MTZ_DirSul, adjacentes );
 
 	// Verifica qual o menor (assume de início que o 0 (norte) é o menor)
 	for (i = 1; i < 4; i++) {
@@ -741,5 +723,42 @@ LAB_tpDirecao MenorDirecao( MTZ_tppMatriz pMtz ) {
 		return (LAB_tpDirecao) menorIndice;
 
 } /* Fim função: LAB Menor direção */
+
+/***********************************************************************
+*
+*  $FC Função: LAB Verifica direção
+*
+***********************************************************************/
+
+void VerificaDirecao( MTZ_tppMatriz pMtz, MTZ_tpDirecao direcao, int * adjacentes ) {
+
+	tpConteudoPosicao * pConteudoAux = NULL;
+	MTZ_tpDirecao direcaoOposta;
+
+	switch(direcao) {
+	case LAB_DirNorte:
+		direcaoOposta = MTZ_DirSul;
+		break;
+	case MTZ_DirSul:
+		direcaoOposta = LAB_DirNorte;
+		break;
+	case MTZ_DirLeste:
+		direcaoOposta = MTZ_DirOeste;
+		break;
+	default:
+		direcaoOposta = MTZ_DirLeste;
+		break;
+	}
+
+	// Verifica a direcao se ela existir
+	if (MTZ_AndarDirecao( pMtz, direcao ) == MTZ_CondRetOK) {
+		MTZ_ObterValorCorrente( pMtz, (void **) &pConteudoAux );
+		if ((pConteudoAux->elemento == LAB_ElemVazio || pConteudoAux->elemento == LAB_ElemSaida) && pConteudoAux->direcaoVolta == -1)
+			adjacentes[direcao] = pConteudoAux->numPassagens;
+		// Volta para a casa anterior
+		MTZ_AndarDirecao( pMtz, direcaoOposta );
+	}
+
+} /* Fim função: LAB Verifica direção */
 
 /********** Fim do módulo de implementação: Módulo labirinto **********/
