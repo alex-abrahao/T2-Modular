@@ -307,6 +307,14 @@ LAB_tpCondRet LAB_ImprimirLabirinto( LAB_tppLabirinto pLab ) ;
 *  $ED Descrição da função
 *     Caso o labirinto possua uma solução, ela é exibida na tela e retorna LAB_CondRetOK.
 *     Caso contrário, é exibida uma mensagem informativa na tela e retorna LAB_CondRetNaoTemSolucao.
+*     O número de tentativas é exibido na tela.
+*     A solução é exibida de trás para frente, ou seja, o caminho da saída até a entrada.
+*     Significado dos caracteres impressos:
+*     - 'n': Próximo passo da solução é andar para norte
+*     - 's': Próximo passo da solução é andar para sul
+*     - 'l': Próximo passo da solução é andar para leste
+*     - 'o': Próximo passo da solução é andar para oeste
+*     - Os demais caracteres são os mesmos da função LAB_ImprimirLabirinto
 *
 *  $EP Parametros
 *     $P pLab - Ponteiro para um labirinto
@@ -323,6 +331,7 @@ LAB_tpCondRet LAB_ImprimirLabirinto( LAB_tppLabirinto pLab ) ;
 *
 *  $EAS Assertivas de saída esperadas
 *     Valem as assertivas estruturais do Labirinto
+*     A posição corrente estará em (0, 0)
 *
 ***********************************************************************/
 

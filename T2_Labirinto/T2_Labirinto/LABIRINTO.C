@@ -17,7 +17,8 @@
 *     Versão  Autor    Data     Observações
 *       1.00   phd   26/09/2019 Início do desenvolvimento
 *       1.10   aaf   03/10/2019 Término da implementação das funções do T2
-*       1.10   aaf   28/10/2019 Início da implementação das funções do T3
+*       1.20   aaf   28/10/2019 Início da implementação das funções do T3
+*       1.21   aaf   04/11/2019 Implementado o desvendador do labirinto
 *
 ***************************************************************************/
 
