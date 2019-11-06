@@ -34,6 +34,8 @@
 =destruir				LabNaoExiste
 =andar		Leste		LabNaoExiste
 =inselm		ElemEntrada	LabNaoExiste
+=imprimir		LabNaoExiste
+=receber	0	1	LabNaoExiste
 
 == Teste criar labirinto
 =criar	0	ErroEstrut
@@ -113,9 +115,26 @@
 =andar		Leste		OK
 =receber	1	0	OK
 
+== Exibir a solucao do labirinto
+=resolver	OK
 
-== Destruir o labirinto usado nos testes
-=destruir	OK
+== Labirinto sem solucao
+=andar	Leste	OK
+=inselm		ElemParede	OK
+=andar	Sul	OK
+=inselm		ElemParede	OK
+=andar	Sul	OK
+=inselm		ElemParede	OK
+=andar	Sul	OK
+=inselm		ElemParede	OK
+=andar	Sul	OK
+=inselm		ElemParede	OK
+=andar	Sul	OK
+=inselm		ElemParede	OK
+=resolver	SemSolucao
+
+== Imprimir o labirinto
+=imprimir	OK
 
 
 

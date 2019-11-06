@@ -26,7 +26,7 @@
 #include <stdio.h>
 
 void exibeTutorial(void) {
-	printf("->'i', PARA INSERIR UM ELEMENTO NA CASA CORRENTE DO LABIRINTO, SEGUIDO DO SEU PARAMETRO APOS TER APERTADO A TECLA 'ENTER' OU TER DADO UM ESPACO ENTRE AS LETRAS:\n%c'p', para inserir uma parede\n%c'v', para uma casa vazia\n%c'e', para setar a entrada da matriz\n%c's', para setar a saida da matriz\n\n\n->'a' PARA ANDAR PARA A PROXIMA CASA DO LABIRINTO, SEGUIDO DO SEU PARAMETRO APOS TER APERTADO A TECLA 'ENTER' OU TER DADO UM ESPACO ENTRE AS LETRAS:\n%c'n', para andar na direcao norte\n%c'l', para andar na direcao leste\n%c's', para andar na direcao sul\n%c'o', para andar na direcao oeste\n\n->'d' PARA DESTRUIR O LABIRINTO\n->'m' PARA MOSTRAR O LABIRINTO\n->'r' PARA RESOLVER O LABIRINTO\n->'t' PARA REVER O TUTORIAL\n->'q' PARA FINALIZAR O PROGRAMA\n\n", 250, 250, 250, 250, 250, 250, 250, 250);
+	printf("->'i', PARA INSERIR UM ELEMENTO NA CASA CORRENTE DO LABIRINTO, SEGUIDO DO SEU PARAMETRO APOS TER APERTADO A TECLA 'ENTER' OU TER DADO UM ESPACO ENTRE AS LETRAS:\n\n%c'p', para inserir uma parede\n%c'v', para uma casa vazia\n%c'e', para setar a entrada da matriz\n%c's', para setar a saida da matriz\n\n\n->'a' PARA ANDAR PARA A PROXIMA CASA DO LABIRINTO, SEGUIDO DO SEU PARAMETRO APOS TER APERTADO A TECLA 'ENTER' OU TER DADO UM ESPACO ENTRE AS LETRAS:\n%c'n', para andar na direcao norte\n%c'l', para andar na direcao leste\n%c's', para andar na direcao sul\n%c'o', para andar na direcao oeste\n\n->'d' PARA DESTRUIR O LABIRINTO\n->'m' PARA MOSTRAR O LABIRINTO\n->'r' PARA RESOLVER O LABIRINTO\n->'t' PARA REVER O TUTORIAL\n->'q' PARA FINALIZAR O PROGRAMA\n\n", 250, 250, 250, 250, 250, 250, 250, 250);
 }
 
 char paraMinuscula(char letra) {
@@ -138,6 +138,7 @@ int main(void) {
 		}
 
 		else if (comando == 'm'){ // imprimir labirinto
+			printf("\n'C' simboliza a casa corrente do labirinto\n");
 			CondRetObtido = LAB_ImprimirLabirinto( labTeste );
 
 			if (CondRetObtido == LAB_CondRetLabirintoNaoExiste)

@@ -32,13 +32,23 @@
 *                     Obs. notação: <Int> é o tamanho do labirinto a ser criado.
 *     "=inselm" <Int> <Int>
 *                   - chama a função LAB_InserirElemento( <Int> )
-*                     Obs. notação: <Int> é o valor do parâmetro
+*                     Obs. notação: <Int> é o valor do parâmetro.
 *                     que se encontra no comando de teste.
 *     "=andar" <Int>    
 *                   - chama a função LAB_AndarDirecao( )
 *     "=destroi" <Int>
 *                   - chama a função LAB_DestruirLabirinto( )
 *
+*	  "=receber" <Int> <Int>
+*					- chama a função LAB_ReceberCoordenadas ( <Int> )
+*					  Obs. notação: <Int> são as coordenadas x e y da casa corrente.
+*
+*	  "=exibir" <Int>
+*					- chama a função LAB_ImprimirLabirinto ( )
+*
+*
+*	  "=resolver" <Int> 
+					- chama a função LAB_ExibeSolucao ( )
 ***************************************************************************/
 
 #include    <string.h>
@@ -58,6 +68,8 @@
 #define     ANDAR_CMD           "=andar"
 #define     DESTROI_CMD         "=destruir"
 #define		RECEBER_CMD			"=receber"
+#define		IMPRIMIR_CMD		"=imprimir"
+#define		RESOLVER_CMD		"=resolver"
 
 /*****  Dados encapsulados no módulo  *****/
 
@@ -179,6 +191,35 @@ TST_tpCondRet TST_EfetuarComando( char * ComandoTeste ) {
         return TST_CompararInt( CondRetEsperada , CondRetObtido ,
             "Retorno errado ao andar." );
 	}
+
+	else if ( strcmp( ComandoTeste , IMPRIMIR_CMD ) == 0 ) {
+
+        NumLidos = LER_LerParametros( "i" ,
+			&CondRetEsperada ) ;
+        if ( NumLidos != 1 ) {
+            return TST_CondRetParm ;
+        } /* if */
+
+        CondRetObtido = LAB_ImprimirLabirinto(labirintoTeste);
+
+        return TST_CompararInt( CondRetEsperada , CondRetObtido ,
+            "Retorno errado ao andar." );
+	}
+
+		else if ( strcmp( ComandoTeste , RESOLVER_CMD ) == 0 ) {
+
+        NumLidos = LER_LerParametros( "i" ,
+			&CondRetEsperada ) ;
+        if ( NumLidos != 1 ) {
+            return TST_CondRetParm ;
+        } /* if */
+
+        CondRetObtido = LAB_ExibeSolucao(labirintoTeste);
+
+        return TST_CompararInt( CondRetEsperada , CondRetObtido ,
+            "Retorno errado ao andar." );
+		}
+
 
     return TST_CondRetNaoConhec ;
 
