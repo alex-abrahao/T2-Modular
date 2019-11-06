@@ -36,6 +36,7 @@
 =inselm		ElemEntrada	LabNaoExiste
 =imprimir		LabNaoExiste
 =receber	0	1	LabNaoExiste
+=resolver	LabNaoExiste
 
 == Teste criar labirinto
 =criar	0	ErroEstrut
