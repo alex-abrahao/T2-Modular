@@ -695,9 +695,8 @@ void ImprimirCasa( LAB_tpElemCasa elemento, int corrente, int solucao, LAB_tpDir
 LAB_tpDirecao MenorDirecao( MTZ_tppMatriz pMtz ) {
 
 	// Inicializa tudo com INT_MAX para caso haja posições adjacentes inválidas
-	int i, menorIndice = 0;
+	int i = 0, menorIndice = 0;
 	int adjacentes[4] = {INT_MAX, INT_MAX, INT_MAX, INT_MAX};
-	tpConteudoPosicao * pConteudoAux = NULL;
 
 	// Verifica leste
 	VerificaDirecao( pMtz, LAB_DirLeste, adjacentes );
@@ -712,7 +711,6 @@ LAB_tpDirecao MenorDirecao( MTZ_tppMatriz pMtz ) {
 	VerificaDirecao( pMtz, LAB_DirSul, adjacentes );
 
 	// Verifica qual o menor (assume de início que o 0 (norte) é o menor)
-	i = 0;
 	while (i < 4) {
 		if (adjacentes[i] < adjacentes[menorIndice])
 			menorIndice = i;

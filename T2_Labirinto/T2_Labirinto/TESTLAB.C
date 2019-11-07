@@ -45,13 +45,10 @@
 *	  "=receber" <Int> <Int>
 *					- chama a função LAB_ReceberCoordenadas ( <Int> )
 *					  Obs. notação: <Int> são as coordenadas x e y da casa corrente.
-*
 *	  "=exibir" <Int>
 *					- chama a função LAB_ImprimirLabirinto ( )
-*
-*
 *	  "=resolver" <Int> 
-					- chama a função LAB_ExibeSolucao ( )
+*					- chama a função LAB_ExibeSolucao ( )
 ***************************************************************************/
 
 #include    <string.h>
