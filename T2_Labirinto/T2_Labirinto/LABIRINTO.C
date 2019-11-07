@@ -330,13 +330,14 @@ LAB_tpCondRet LAB_ExibeSolucao( LAB_tppLabirinto pLab ) {
 	// Definição do limite de iterações como tam^4
 	limiteIteracoes = pLab->tam * pLab->tam * pLab->tam * pLab->tam;
 
-	// Limpar as casas antes (colocar -1 na direcao de volta, caso o lab já tenha sido solucionado previamente e o user alterou depois)
+	// Limpar as casas primeiro (colocar -1 na direcao de volta e 0 nas passagens, caso o lab tenha sido solucionado previamente e o user alterou depois)
 	MTZ_VoltarParaPrimeiro(pLab->pMatriz);
 	do {
 		contLinha = 0;
 		do {
 			MTZ_ObterValorCorrente(pLab->pMatriz, (void **) &pConteudoAux);
 			pConteudoAux->direcaoVolta = -1;
+			pConteudoAux->numPassagens = 0;
 			contLinha++;
 		} while (MTZ_AndarDirecao(pLab->pMatriz, MTZ_DirLeste) != MTZ_CondRetDirecaoNaoExisteOuInvalida);
 
