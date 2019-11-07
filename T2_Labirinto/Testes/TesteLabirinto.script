@@ -152,6 +152,16 @@
 =inselm		ElemSaida	OK
 =resolver	OK
 
+== Solucionar pela segunda vez, com alteracao do mesmo labirinto entre as solucoes
+=andar		Sul		OK
+=andar		Sul		OK
+=inselm		ElemSaida	OK
+=andar		Sul		OK
+=inselm		ElemParede	OK
+=andar		Sul		OK
+=inselm		ElemEntrada	OK
+=resolver	OK
+
 == Imprimir o labirinto
 =imprimir	OK
 
