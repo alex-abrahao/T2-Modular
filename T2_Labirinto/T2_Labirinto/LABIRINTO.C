@@ -712,9 +712,11 @@ LAB_tpDirecao MenorDirecao( MTZ_tppMatriz pMtz ) {
 	VerificaDirecao( pMtz, LAB_DirSul, adjacentes );
 
 	// Verifica qual o menor (assume de início que o 0 (norte) é o menor)
-	for (i = 1; i < 4; i++) {
+	i = 0;
+	while (i < 4) {
 		if (adjacentes[i] < adjacentes[menorIndice])
 			menorIndice = i;
+		i++;
 	}
 
 	// Se o índice apontar para INT_MAX é porque todas as direções são inválidas
