@@ -398,7 +398,7 @@ MTZ_tpCondRet MTZ_CriarMatriz(MTZ_tppMatriz * ppMtz, int n, void ( * ExcluirValo
 
 /***********************************************************************
 *
-*  $FC Função: MTZ  &Verificar uma matriz
+*  $FC Função: MTZ  Verificar uma matriz
 *
 *  $ED Descrição da função
 *     Função da interface de teste.
@@ -411,7 +411,7 @@ MTZ_tpCondRet MTZ_CriarMatriz(MTZ_tppMatriz * ppMtz, int n, void ( * ExcluirValo
 
 /***********************************************************************
 *
-*  $FC Função: MTZ  &Verificar um nó cabeça
+*  $FC Função: MTZ  Verificar um nó cabeça
 *
 *  $ED Descrição da função
 *     Função da interface de teste.
@@ -430,7 +430,7 @@ MTZ_tpCondRet MTZ_CriarMatriz(MTZ_tppMatriz * ppMtz, int n, void ( * ExcluirValo
 
 /***********************************************************************
 *
-*  $FC Função: MTZ  &Verificar uma casa de estrutura
+*  $FC Função: MTZ  Verificar uma casa de estrutura
 *
 *  $ED Descrição da função
 *     Função da interface de teste.
@@ -448,7 +448,7 @@ MTZ_tpCondRet MTZ_CriarMatriz(MTZ_tppMatriz * ppMtz, int n, void ( * ExcluirValo
 
 /***********************************************************************
 *
-*  $FC Função: MTZ  &Deturpar matriz
+*  $FC Função: MTZ  Deturpar matriz
 *
 *  $ED Descrição da função
 *     Função da interface de teste.

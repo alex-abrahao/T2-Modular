@@ -520,6 +520,61 @@ typedef struct tgMatriz tpMatriz;
 
    } /* Fim função: MTZ Voltar para o primeiro */
 
+#ifdef _DEBUG
+
+/***************************************************************************
+*
+*  Função: MTZ Verificar uma matriz
+*  ****/
+
+   MTZ_tpCondRet MTZ_VerificarMatriz( void * pMatrizParm ) {
+
+      // tpArvore * pArvore = NULL ;
+
+      // if ( MTZ_VerificarCabeca( pMatrizParm ) != MTZ_CondRetOK )
+      // {
+      //    return ARV_CondRetErroEstrutura ;
+      // } /* if */
+
+      // CED_MarcarEspacoAtivo( pArvoreParm ) ;
+
+      // pArvore = ( tpArvore * ) ( pArvoreParm ) ;
+      // FIXME
+      // return VerificarNo( pArvore->pNoRaiz ) ;
+      return MTZ_CondRetOK;
+
+   } /* Fim função: MTZ Verificar uma matriz */
+
+/***************************************************************************
+*
+*  Função: MTZ Verificar um nó cabeça
+*  ****/
+
+   MTZ_tpCondRet MTZ_VerificarCabeca( void * pCabecaParm ) {
+
+      return MTZ_CondRetOK;
+   } /* Fim função: MTZ Verificar um nó cabeça */
+
+/***************************************************************************
+*
+*  Função: MTZ Verificar uma casa de estrutura
+*  ****/
+
+   MTZ_tpCondRet MTZ_VerificarElem( void * pElemParm ) {
+
+      return MTZ_CondRetOK;
+   } /* Fim função: MTZ Verificar uma casa de estrutura */
+
+/***************************************************************************
+*
+*  Função: MTZ Deturpar matriz
+*  ****/
+
+   void MTZ_Deturpar( void * pMatrizParm , MTZ_tpModosDeturpacao ModoDeturpar ) {
+
+   } /* Fim função: MTZ Deturpar matriz */
+
+#endif
 
 /*****  Código das funções encapsuladas no módulo  *****/
 
