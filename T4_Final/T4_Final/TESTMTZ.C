@@ -162,7 +162,11 @@ TST_tpCondRet TST_EfetuarComando( char * ComandoTeste ) {
 
         *pChar = ValorDado;
 
-        CondRetObtido = MTZ_InserirElementoNaCasaCorrente( matDada , (void *) pChar ) ;
+        CondRetObtido = MTZ_InserirElementoNaCasaCorrente( matDada , (void *) pChar 
+                                                                                #ifdef _DEBUG
+                                                                                , "CHAR", sizeof(char)
+                                                                                #endif
+                                                                                ) ;
 
         return TST_CompararInt( CondRetEsperada , CondRetObtido ,
             "Retorno errado inserir o elemento." );

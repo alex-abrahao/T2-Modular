@@ -316,6 +316,8 @@ MTZ_tpCondRet MTZ_CriarMatriz(MTZ_tppMatriz * ppMtz, int n, void ( * ExcluirValo
 *  $EP Parâmetros
 *     $P pMtz - Ponteiro para uma matriz
 *     $P pElemento - Ponteiro para valor a ser inserido na casa corrente
+*     $P tipoConteudo - Debug: String com o nome do tipo do conteudo
+*     $P tamBytes - Debug: Tamanho do conteúdo em bytes
 *
 *  $FV Valor retornado
 *     MTZ_CondRetOK
@@ -333,8 +335,11 @@ MTZ_tpCondRet MTZ_CriarMatriz(MTZ_tppMatriz * ppMtz, int n, void ( * ExcluirValo
 *
 ***********************************************************************/
 
-   MTZ_tpCondRet MTZ_InserirElementoNaCasaCorrente( MTZ_tppMatriz pMtz, void * pElemento ) ;
-
+   MTZ_tpCondRet MTZ_InserirElementoNaCasaCorrente( MTZ_tppMatriz pMtz, void * pElemento
+                                                                                       #ifdef _DEBUG
+                                                                                       , char * tipoConteudo, int tamBytes
+                                                                                       #endif
+                                                   ) ;
 
 /***********************************************************************
 *

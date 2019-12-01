@@ -31,6 +31,8 @@
 #include "CESPDIN.H"
 #include "CONTA.H"
 #include "TiposEspacosMatriz.def"
+#include <string.h>
+#define TAM_CONTEUDO 20
 #endif
 
 typedef struct tgMatriz tpMatriz;
@@ -54,7 +56,7 @@ typedef struct tgMatriz tpMatriz;
                /* Conteúdo da casa */
 
          #ifdef _DEBUG
-         char tipoConteudo[20];
+         char tipoConteudo[TAM_CONTEUDO];
                /* Tipo do conteúdo presente na casa */
 
          tpMatriz * pCabeca;
@@ -104,6 +106,13 @@ typedef struct tgMatriz tpMatriz;
    } ;
 
 /*****  Dados encapsulados no módulo  *****/
+
+#ifdef _DEBUG
+
+static char EspacoLixo[ 256 ] =
+       "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" ;
+      /* Espaço de dados lixo usado ao testar */
+#endif
 
 /***** Protótipos das funções encapuladas no módulo *****/
 
@@ -207,6 +216,7 @@ typedef struct tgMatriz tpMatriz;
       #ifdef _DEBUG
       CNT_Contar("MTZ_CriarMatriz, espaco para primeira casa ok", __LINE__);
       (*ppMtz)->numCasas++;
+      (*ppMtz)->tamBytes += sizeof(tpCasaMatriz);
       (*ppMtz)->pPrimeiro->pCabeca = (*ppMtz);
       #endif
 
@@ -217,7 +227,7 @@ typedef struct tgMatriz tpMatriz;
             CNT_Contar("MTZ_CriarMatriz, primeira linha da matriz", __LINE__); 
             #endif
             pCasaInicioLinha = (*ppMtz)->pPrimeiro;
-            pCasaNorte = NULL;            
+            pCasaNorte = NULL;
 
          } else {
             #ifdef _DEBUG
@@ -236,6 +246,7 @@ typedef struct tgMatriz tpMatriz;
             CNT_Contar("MTZ_CriarMatriz, primeira casa da linha alocada", __LINE__);
             (*ppMtz)->numCasas++;
             pCasaAtual->pCabeca = (*ppMtz);
+            (*ppMtz)->tamBytes += sizeof(tpCasaMatriz);
             #endif
             // Apontar a linha anterior como o norte da casa de inicio da nova linha, e vice-versa
             pCasaInicioLinha->pCasasAdjacentes[MTZ_DirSul] = pCasaAtual;
@@ -266,6 +277,7 @@ typedef struct tgMatriz tpMatriz;
             CNT_Contar("MTZ_CriarMatriz, casa alocada na coluna", __LINE__);
             (*ppMtz)->numCasas++;
             pCasaAtual->pCabeca = (*ppMtz);
+            (*ppMtz)->tamBytes += sizeof(tpCasaMatriz);
             #endif
 
             if (pCasaNorte != NULL) {
@@ -410,7 +422,11 @@ typedef struct tgMatriz tpMatriz;
 *  Função: MTZ Inserir elemento na casa corrente
 *  ****/
 
-   MTZ_tpCondRet MTZ_InserirElementoNaCasaCorrente( MTZ_tppMatriz pMtz, void * pElemento ) {
+   MTZ_tpCondRet MTZ_InserirElementoNaCasaCorrente( MTZ_tppMatriz pMtz, void * pElemento
+                                                                                       #ifdef _DEBUG
+                                                                                       , char * tipoConteudo, int tamBytes
+                                                                                       #endif
+                                                   ) {
 
       #ifdef _DEBUG
       CNT_Contar("MTZ_InserirElementoNaCasaCorrente, inicio", __LINE__);
@@ -444,6 +460,8 @@ typedef struct tgMatriz tpMatriz;
       #ifdef _DEBUG
       else
          CNT_Contar("MTZ_InserirElementoNaCasaCorrente, casa corrente previamente vazia", __LINE__);
+      strcpy_s(pMtz->pCasaCorr->tipoConteudo, TAM_CONTEUDO, tipoConteudo);
+      pMtz->pCasaCorr->tamBytes = tamBytes;
       #endif
 
       pMtz->pCasaCorr->conteudo = pElemento;
