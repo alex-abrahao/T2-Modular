@@ -30,6 +30,7 @@
 #ifdef _DEBUG
 #include "CESPDIN.H"
 #include "CONTA.H"
+#include "TiposEspacosMatriz.def"
 #endif
 
 typedef struct tgMatriz tpMatriz;
@@ -179,6 +180,7 @@ typedef struct tgMatriz tpMatriz;
       }
       #ifdef _DEBUG
       CNT_Contar("MTZ_CriarMatriz, espaco para matriz ok", __LINE__); 
+      CED_DefinirTipoEspaco( *ppMtz , MTZ_TipoEspacoCabeca ) ;
       #endif
       // Setup da head
       (*ppMtz)->id = 0;
@@ -204,7 +206,8 @@ typedef struct tgMatriz tpMatriz;
       }
       #ifdef _DEBUG
       CNT_Contar("MTZ_CriarMatriz, espaco para primeira casa ok", __LINE__);
-      (*ppMtz)->numCasas++; 
+      (*ppMtz)->numCasas++;
+      (*ppMtz)->pPrimeiro->pCabeca = (*ppMtz);
       #endif
 
       for (linha = 0; linha < n; linha++) {
@@ -232,6 +235,7 @@ typedef struct tgMatriz tpMatriz;
             #ifdef _DEBUG
             CNT_Contar("MTZ_CriarMatriz, primeira casa da linha alocada", __LINE__);
             (*ppMtz)->numCasas++;
+            pCasaAtual->pCabeca = (*ppMtz);
             #endif
             // Apontar a linha anterior como o norte da casa de inicio da nova linha, e vice-versa
             pCasaInicioLinha->pCasasAdjacentes[MTZ_DirSul] = pCasaAtual;
@@ -261,6 +265,7 @@ typedef struct tgMatriz tpMatriz;
             #ifdef _DEBUG
             CNT_Contar("MTZ_CriarMatriz, casa alocada na coluna", __LINE__);
             (*ppMtz)->numCasas++;
+            pCasaAtual->pCabeca = (*ppMtz);
             #endif
 
             if (pCasaNorte != NULL) {
@@ -320,7 +325,7 @@ typedef struct tgMatriz tpMatriz;
 
       if ( ppMtz == NULL ) {
          #ifdef _DEBUG
-         CNT_Contar("MTZ_DestruirMatriz, matriz inexistente", __LINE__); 
+         CNT_Contar("MTZ_DestruirMatriz, ponteiro para matriz inexistente", __LINE__); 
          #endif
          return MTZ_CondRetMatrizNaoExiste;
       }
@@ -346,7 +351,7 @@ typedef struct tgMatriz tpMatriz;
          return MTZ_CondRetOK;
       } /* if */
       #ifdef _DEBUG
-      CNT_Contar("MTZ_DestruirMatriz, pPrimeiro eh NULL", __LINE__); 
+      CNT_Contar("MTZ_DestruirMatriz, matriz inexistente", __LINE__); 
       #endif
       return MTZ_CondRetMatrizNaoExiste;
 
@@ -529,17 +534,17 @@ typedef struct tgMatriz tpMatriz;
 
    MTZ_tpCondRet MTZ_VerificarMatriz( void * pMatrizParm ) {
 
-      // tpArvore * pArvore = NULL ;
+      tpMatriz * pMatriz = NULL ;
 
-      // if ( MTZ_VerificarCabeca( pMatrizParm ) != MTZ_CondRetOK )
-      // {
-      //    return ARV_CondRetErroEstrutura ;
-      // } /* if */
+      if ( MTZ_VerificarCabeca( pMatrizParm ) != MTZ_CondRetOK )
+      {
+         return MTZ_CondRetErroEstrutura ;
+      } /* if */
 
-      // CED_MarcarEspacoAtivo( pArvoreParm ) ;
+      CED_MarcarEspacoAtivo( pMatrizParm ) ;
 
-      // pArvore = ( tpArvore * ) ( pArvoreParm ) ;
-      // FIXME
+      pMatriz = ( tpMatriz * ) ( pMatrizParm ) ;
+
       // return VerificarNo( pArvore->pNoRaiz ) ;
       return MTZ_CondRetOK;
 
@@ -609,7 +614,8 @@ typedef struct tgMatriz tpMatriz;
          return NULL ;
       } /* if */
       #ifdef _DEBUG
-      CNT_Contar("CriarCasa, memoria para casa ok", __LINE__); 
+      CNT_Contar("CriarCasa, memoria para casa ok", __LINE__);
+      CED_DefinirTipoEspaco( pCasa , MTZ_TipoEspacoCasa ) ;
 
       pCasa->pCasasAdjacentes = ( tpCasaMatriz ** ) CED_Malloc(8 * sizeof( tpCasaMatriz * ), __LINE__, __FILE__);
       #else
@@ -627,6 +633,7 @@ typedef struct tgMatriz tpMatriz;
       } /* if */
       #ifdef _DEBUG
       CNT_Contar("CriarCasa, memoria para adjacentes ok", __LINE__);
+      CED_DefinirTipoEspaco( pCasa->pCasasAdjacentes , MTZ_TipoEspacoVetorCasas ) ;
       #endif
 
       // Preenche os ponteiros com nulos

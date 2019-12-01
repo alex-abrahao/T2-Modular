@@ -89,6 +89,9 @@
     <ClCompile Include="MATRIZ.C" />
     <ClCompile Include="TESTMTZ.C" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="TiposEspacosMatriz.def" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

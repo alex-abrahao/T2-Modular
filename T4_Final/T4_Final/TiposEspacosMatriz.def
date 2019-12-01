@@ -1,0 +1,37 @@
+#if ! defined( TIPOS_MATRIZ_ )
+#define TIPOS_MATRIZ_
+/***************************************************************************
+*
+*  $MCD Arquivo de definição: TiposEspacosMatriz.def
+*
+*  Projeto: Automatização de testes
+*  Gestor:  LES/DI/PUC-Rio
+*  Autores: aaf
+*
+*  $ED Descrição do arquivo
+*     Este arquivo declara os identificadores de tipos dos espaços de dados
+*     a serem utilizados por um determinado construto.
+*     Para facilitar a evolução dos construtos, este tipo deverá ser
+*     redefinido sempre que um construto faça uso de algum módulo
+*     que utilize espaços de dados dinâmicos. Para cada módulo deve ser
+*     definido um arquivo do gênero "TiposEspacosXXX.def" e que contém
+*     os identificadores dos tipos de espaço utilizados naquele módulo.
+*     estes arquivos devem ser incluídos entre o identificador
+*     CED_ID_TIPO_VALOR_NULO  e  CED_ID_TIPO_ILEGAL 
+*
+***************************************************************************/
+
+typedef enum
+{
+
+   MTZ_TipoEspacoNulo = 0 ,
+   MTZ_TipoEspacoCabeca = 1 ,
+   MTZ_TipoEspacoCasa = 2,
+   MTZ_TipoEspacoVetorCasas = 3,
+   MTZ_TipoEspacoIlegal = 99999 
+
+} MTZ_tpIdTipoEspaco ;
+
+/********** Fim do arquivo de definição: TiposEspacosLista.def  **********/
+
+#endif
