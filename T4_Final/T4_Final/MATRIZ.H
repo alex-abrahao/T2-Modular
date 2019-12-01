@@ -138,35 +138,71 @@ typedef struct tgMatriz * MTZ_tppMatriz ;
 
    typedef enum {
 
-         EliminaCorrente = 1 ,
-               /* Elimina o elemento corrente. */
+        DeturpaEliminaCorrente = 1 ,
+            /* Elimina o elemento corrente. */
 
-         ProxPtrNulo = 2 ,
-               /* Atribui NULL ao ponteiro para o próximo elemento. */
+        DeturpaPtrNorteNulo = 2 ,
+            /* Atribui NULL ao ponteiro para o elemento norte. */
 
-		 AntPtrNulo = 3 ,
-               /* Atribui NULL ao ponteiro para o elemento anterior. */
+        DeturpaPtrNordesteNulo = 3 ,
+            /* Atribui NULL ao ponteiro para o elemento nordeste. */
 
-		 ProxPtrLixo = 4 ,
-               /* Atribui lixo ao ponteiro para o próximo elemento */
+        DeturpaPtrLesteNulo = 4 ,
+            /* Atribui NULL ao ponteiro para o elemento leste. */
 
-		 AntPtrLixo = 5 ,
-               /* Atribui lixo ao ponteiro o nó anterior. */
+        DeturpaPtrSudesteNulo = 5 ,
+            /* Atribui NULL ao ponteiro para o elemento sudeste. */
 
-		 ConteudoPtrNulo = 6 ,
-		       /* Atribui NULL ao ponteiro para o conteúdo do nó. */
-         
-		 AlteraTipoEstrutura = 7 ,
-               /* Altera tipo de estrutura apontado no nó */
+        DeturpaPtrSulNulo = 6 ,
+            /* Atribui NULL ao ponteiro para o elemento sul. */
 
-		 DesencadeiaNo = 8 ,
-			   /* Desencadeia nó sem liberá-lo com free */
+        DeturpaPtrSudoesteNulo = 7 ,
+            /* Atribui NULL ao ponteiro para o elemento sudoeste. */
 
-		 PtrCorrNulo = 9 ,
-               /* Anula ponteiro corrente */
+        DeturpaPtrOesteNulo = 8 ,
+            /* Atribui NULL ao ponteiro para o elemento oeste. */
 
-         PtrOrigNulo = 10 ,
-			   /* Atribui NULL ao ponteiro de origem. */
+        DeturpaPtrNoroesteNulo = 9 ,
+            /* Atribui NULL ao ponteiro para o elemento noroeste. */
+
+		    DeturpaPtrNorteLixo = 10 ,
+            /* Atribui lixo ao ponteiro para o elemento norte. */
+
+        DeturpaPtrNordesteLixo = 11 ,
+            /* Atribui lixo ao ponteiro para o elemento nordeste. */
+
+        DeturpaPtrLesteLixo = 12 ,
+            /* Atribui lixo ao ponteiro para o elemento leste. */
+
+        DeturpaPtrSudesteLixo = 13 ,
+            /* Atribui lixo ao ponteiro para o elemento sudeste. */
+
+        DeturpaPtrSulLixo = 14 ,
+            /* Atribui lixo ao ponteiro para o elemento sul. */
+
+        DeturpaPtrSudoesteLixo = 15 ,
+            /* Atribui lixo ao ponteiro para o elemento sudoeste. */
+
+        DeturpaPtrOesteLixo = 16 ,
+            /* Atribui lixo ao ponteiro para o elemento oeste. */
+
+        DeturpaPtrNoroesteLixo = 17 ,
+            /* Atribui lixo ao ponteiro para o elemento noroeste. */
+
+		    DeturpaConteudoPtrNulo = 18 ,
+		        /* Atribui NULL ao ponteiro para o conteúdo do nó. */
+
+		    DeturpaAlteraTipoEstrutura = 19 ,
+            /* Altera tipo de estrutura apontado na casa. */
+
+		    DeturpaDesencadeiaCasa = 20 ,
+            /* Desencadeia casa sem liberá-la com free. */
+
+		    DeturpaPtrCorrNulo = 21 ,
+            /* Atribui NULL ao ponteiro corrente. */
+
+        DeturpaPtrPrimNulo = 22 ,
+            /* Atribui NULL ao ponteiro primeiro. */
 
    } MTZ_tpModosDeturpacao ;
 
@@ -358,13 +394,80 @@ MTZ_tpCondRet MTZ_CriarMatriz(MTZ_tppMatriz * ppMtz, int n, void ( * ExcluirValo
    MTZ_tpCondRet MTZ_VoltarParaPrimeiro( MTZ_tppMatriz pMtz ) ;
 
 
-
 #ifdef _DEBUG
 
-   MTZ_tpCondRet MTZ_VerificarMatriz( void * pMatrizParm ); 
-   MTZ_tpCondRet MTZ_VerificarCabeca( void * pCabecaParm ); 
-   MTZ_tpCondRet MTZ_VerificarElem( void * pElemParm ); 
-   void MTZ_Deturpar( void * pListaParm , MTZ_tpModosDeturpacao ModoDeturpar ); 
+/***********************************************************************
+*
+*  $FC Função: MTZ  Verificar uma matriz
+*
+*  $ED Descrição da função
+*     Função da interface de teste.
+*     Verifica completamente uma determinada matriz.
+*     Também marca todos os espaços por ela ocupados.
+*
+***********************************************************************/
+
+   MTZ_tpCondRet MTZ_VerificarMatriz( void * pMatrizParm );
+
+/***********************************************************************
+*
+*  $FC Função: MTZ  Verificar um nó cabeça
+*
+*  $ED Descrição da função
+*     Função da interface de teste.
+*     Verifica a integridade de um nó cabeça da matriz.
+*
+*  $EP Parâmetros
+*     $P pCabecaParm - ponteiro para um espaço que deveria ser uma cabeça
+*                      de matriz.
+*
+*  $FV Valor retornado
+*     Condição de retorno de teste
+*
+***********************************************************************/
+
+   MTZ_tpCondRet MTZ_VerificarCabeca( void * pCabecaParm );
+
+/***********************************************************************
+*
+*  $FC Função: MTZ  Verificar uma casa de estrutura
+*
+*  $ED Descrição da função
+*     Função da interface de teste.
+*     Verifica a integridade de uma casa estrutural da matriz.
+*
+*  $EP Parâmetros
+*     $P pElemParm - ponteiro para espaço que deveria ser uma casa estrutural.
+*
+*  $FV Valor retornado
+*     Erro encontrado.
+*
+***********************************************************************/
+
+   MTZ_tpCondRet MTZ_VerificarElem( void * pElemParm );
+
+/***********************************************************************
+*
+*  $FC Função: MTZ  Deturpar matriz
+*
+*  $ED Descrição da função
+*     Função da interface de teste.
+*     Corrompe elementos específicos da estrutura da matriz.
+*     Essa função destina-se a preparar os cenários de teste dos
+*     casos de teste utilizados ao testar os verificadores estruturais
+*     da matriz.
+*     Esta função não tem proteção contra erros de uso, consequentemente
+*     poderá levar o programa a ser cancelado pelo sistema operacional.
+*
+*  $EP Parâmetros
+*     $P pMatrizParm  - matriz a ser deturpada
+*     $P ModoDeturpar - identifica como deve ser feita a deturpação
+*                       MTZ_tpModosDeturpacao identifica os modos de
+*                       deturpação conhecidos
+*
+***********************************************************************/
+
+   void MTZ_Deturpar( void * pMatrizParm , MTZ_tpModosDeturpacao ModoDeturpar ); 
 
 #endif
 
