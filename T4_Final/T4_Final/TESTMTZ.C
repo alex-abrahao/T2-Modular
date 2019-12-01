@@ -56,12 +56,20 @@
 
 /* Tabela dos nomes dos comandos de teste específicos */
 
-#define     CRIAR_MTZ_CMD       "=criar"
-#define     INS_ELM_CMD         "=inselm"
-#define     ANDAR_CMD           "=andar"
-#define     OBTER_VAL_CMD       "=obter"
-#define     DESTROI_CMD         "=destruir"
-#define     PRIMEIRO_CMD        "=primeiro"
+const char	   RESET_MATRIZ_CMD [ ] = "resetmatriz"   ;
+const char     CRIAR_MTZ_CMD    [ ] = "=criar"        ;
+const char     INS_ELM_CMD      [ ] = "=inselm"       ; 
+const char     ANDAR_CMD        [ ] = "=andar"        ;
+const char     OBTER_VAL_CMD    [ ] = "=obter"        ;
+const char     DESTROI_CMD      [ ] = "=destruir"     ;
+const char     PRIMEIRO_CMD     [ ] = "=primeiro"     ;
+
+/* Comandos que somente operam em modo _DEBUG */
+
+const char VER_CABECA_CMD[ ] = "=verificarcabeca" ;
+const char VER_MATRIZ_CMD[ ] = "=verificararvore" ;
+const char VER_MEMORIA_CMD[ ] = "=verificarmemoria" ;
+const char DETURPAR_CMD[ ]   = "=deturpar" ;
 
 /*****  Dados encapsulados no módulo  *****/
 
