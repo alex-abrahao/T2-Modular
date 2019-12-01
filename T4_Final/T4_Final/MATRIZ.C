@@ -28,10 +28,11 @@
 #undef MATRIZ_OWN
 
 #ifdef _DEBUG
-#include "TST_Espc.h"
 #include "CESPDIN.H"
 #include "CONTA.H"
 #endif
+
+typedef struct tgMatriz tpMatriz;
 
 /***********************************************************************
 *
@@ -50,6 +51,17 @@
        
          void * conteudo ;
                /* Conteúdo da casa */
+
+         #ifdef _DEBUG
+         char tipoConteudo[20];
+               /* Tipo do conteúdo presente na casa */
+
+         tpMatriz * pCabeca;
+               /* Ponteiro para cabeça da matriz */
+
+         int tamBytes;
+               /* Tamanho total do conteúdo da casa, em bytes */
+         #endif
        
    } tpCasaMatriz ;
 
@@ -61,12 +73,12 @@
 *  $ED Descrição do tipo
 *     A cabeça da matriz é o ponto de acesso para uma determinada matriz.
 *     Por intermédio da referência para a casa corrente pode-se navegar
-*	  pela matriz.
-*	  Contém a referência para a função que destroi o conteudo de uma casa.
+*     pela matriz.
+*     Contém a referência para a função que destroi o conteudo de uma casa.
 *
 ***********************************************************************/
 
-   typedef struct tgMatriz {
+   struct tgMatriz {
        
          tpCasaMatriz * pPrimeiro ;
                /* Ponteiro para a casa (0, 0) da matriz */
@@ -80,7 +92,18 @@
          void ( * ExcluirValor ) ( void * pValor ) ;
                /* Ponteiro para a função de destruição do valor contido em um elemento */
 
-   } tpMatriz ;
+         #ifdef _DEBUG
+         char tipoConteudo[20];
+               /* Tipo do conteúdo presente nas casas da matriz */
+
+         int numCasas;
+               /* Número de casas alocadas na matriz */
+
+         int tamBytes;
+               /* Tamanho total da estrutura, em bytes */
+         #endif
+
+   } ;
 
 /*****  Dados encapsulados no módulo  *****/
 
