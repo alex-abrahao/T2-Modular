@@ -28,6 +28,8 @@
 #undef MATRIZ_OWN
 
 #ifdef _DEBUG
+#include "GENERICO.H"
+#include "TST_ESPC.H"
 #include "CESPDIN.H"
 #include "CONTA.H"
 #include "TiposEspacosMatriz.def"
@@ -575,6 +577,59 @@ static char EspacoLixo[ 256 ] =
 
    MTZ_tpCondRet MTZ_VerificarCabeca( void * pCabecaParm ) {
 
+      tpMatriz * pMatriz = NULL ;
+
+      /* Verifica o tipo do espaço */
+
+         if ( pCabecaParm == NULL )
+         {
+            TST_NotificarFalha( "Tentou verificar cabeça inexistente." ) ;
+            return MTZ_CondRetErroEstrutura ;
+         } /* if */
+
+         if ( ! CED_VerificarEspaco( pCabecaParm , NULL ))
+         {
+            TST_NotificarFalha( "Controle do espaço acusou erro." ) ;
+            return MTZ_CondRetErroEstrutura ;
+         } /* if */
+
+         if ( TST_CompararInt( MTZ_TipoEspacoCabeca ,
+              CED_ObterTipoEspaco( pCabecaParm ) ,
+              "Tipo do espaço de dados não é cabeça de matriz." ) != TST_CondRetOK )
+         {
+            return MTZ_CondRetErroEstrutura ;
+         } /* if */
+
+         pMatriz = ( tpMatriz * )( pCabecaParm ) ;
+
+      /* Verifica primeiro da matriz */
+
+         if ( pMatriz->pPrimeiro != NULL )
+         {
+            if ( TST_CompararPonteiro( pCabecaParm , pMatriz->pPrimeiro->pCabeca ,
+                 "Primeiro não aponta para cabeça." ) != TST_CondRetOK )
+            {
+               return MTZ_CondRetErroEstrutura ;
+            } /* if */
+         } else {
+            TST_NotificarFalha( "Primeiro inexistente." ) ;
+            return MTZ_CondRetErroEstrutura ;
+         } /* if */
+
+      /* Verifica corrente */
+
+         if ( pMatriz->pCasaCorr != NULL )
+         {
+            if ( TST_CompararPonteiro( pCabecaParm , pMatriz->pCasaCorr->pCabeca ,
+                 "Casa corrente não aponta para cabeça." ) != TST_CondRetOK )
+            {
+               return MTZ_CondRetErroEstrutura ;
+            } /* if */
+         } else {
+            TST_NotificarFalha( "Casa corrente inexistente." ) ;
+            return MTZ_CondRetErroEstrutura ;
+         } /* if */
+
       return MTZ_CondRetOK;
    } /* Fim função: MTZ Verificar um nó cabeça */
 
@@ -652,6 +707,8 @@ static char EspacoLixo[ 256 ] =
       #ifdef _DEBUG
       CNT_Contar("CriarCasa, memoria para adjacentes ok", __LINE__);
       CED_DefinirTipoEspaco( pCasa->pCasasAdjacentes , MTZ_TipoEspacoVetorCasas ) ;
+      pCasa->tipoConteudo[0] = '\0';
+      pCasa->tamBytes = 0;
       #endif
 
       // Preenche os ponteiros com nulos
