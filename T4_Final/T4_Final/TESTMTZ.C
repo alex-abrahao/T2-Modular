@@ -116,7 +116,7 @@ TST_tpCondRet TST_EfetuarComando( char * ComandoTeste ) {
 
     TST_tpCondRet Ret ;
 
-    int indiceMtz;
+    int indiceMtz, modoDeturpar;
 
       /* Testar MTZ Criar matriz */
 
@@ -277,7 +277,8 @@ TST_tpCondRet TST_EfetuarComando( char * ComandoTeste ) {
 
     } /* fim ativa: Testar MTZ Voltar primeiro */
 
-#ifdef _DEBUG
+	/* Testar verificador de cabeça */
+	#ifdef _DEBUG
 
 	else if ( strcmp( ComandoTeste, VER_CABECA_CMD) == 0) {
 		NumLidos = LER_LerParametros( "i" , 
@@ -287,10 +288,49 @@ TST_tpCondRet TST_EfetuarComando( char * ComandoTeste ) {
 		}
 
 		matDada = EncontrarMatriz( indiceMtz );
+		CondRetObtido = MTZ_VerificarCabeca( matDada );
 
-    return MTZ_VerificarCabeca( matDada );
-	}
-#endif
+    return TST_CompararInt( CondRetEsperada , CondRetObtido ,
+            "Retorno errado ao verificar a cabeca" );
+	} /* fim ativa: Testar verificador de cabeça */
+
+	/* Testar verificador de matriz */
+	else if ( strcmp( ComandoTeste , VER_MATRIZ_CMD ) == 0 )
+	{
+		NumLidos = LER_LerParametros( "ii" ,
+                                    &indiceMtz , &CondRetEsperada ) ;
+		if ( NumLidos != 2 ){
+			return TST_CondRetParm ;
+		} /* if */
+
+		matDada = EncontrarMatriz( indiceMtz );
+		
+		return TST_CompararInt( CondRetEsperada , MTZ_VerificarMatriz( matDada ) ,
+               "Retorno incorreto ao verificar matriz." ) ;
+	} /* fim ativa: Testar verificador de matriz */
+
+	 /* Deturpar uma árvore */
+	else if ( strcmp( ComandoTeste , DETURPAR_CMD ) == 0 )
+         {
+
+            NumLidos = LER_LerParametros( "ii" ,
+                               &indiceMtz , &modoDeturpar ) ;
+
+            if ( ( NumLidos != 2 )) {
+               return TST_CondRetParm ;
+            } /* if */
+
+			matDada = EncontrarMatriz( indiceMtz );
+
+            MTZ_Deturpar ( matDada , modoDeturpar ) ;
+
+            return TST_CondRetOK ;
+
+         } /* fim ativa: Deturpar uma matriz */
+
+      #endif
+
+	  
 } /* Fim função: TMTZ Efetuar operações de teste específicas para matriz */
 
 /*****  Código das funções encapsuladas no módulo  *****/
