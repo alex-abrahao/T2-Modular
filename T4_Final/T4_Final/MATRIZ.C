@@ -166,8 +166,7 @@ typedef struct tgMatriz tpMatriz;
 
       // Alocar espaço para a head
       #ifdef _DEBUG
-      CNT_Contar("MTZ_CriarMatriz, alocando nova matriz", __LINE__);
-      *ppMtz = CED_Malloc(sizeof( tpMatriz ), __LINE__, __FILE__);
+      *ppMtz = ( tpMatriz * ) CED_Malloc(sizeof( tpMatriz ), __LINE__, __FILE__);
       #else
       *ppMtz = ( tpMatriz * ) malloc( sizeof( tpMatriz )) ;
       #endif
@@ -185,30 +184,55 @@ typedef struct tgMatriz tpMatriz;
       (*ppMtz)->id = 0;
       (*ppMtz)->ExcluirValor = ExcluirValor;
       (*ppMtz)->pCasaCorr = NULL;
+      #ifdef _DEBUG
+      (*ppMtz)->numCasas = 0;
+      (*ppMtz)->tamBytes = 0;
+      #endif
 
       // Criar a primeira casa
       (*ppMtz)->pPrimeiro = CriarCasa();
       if ((*ppMtz)->pPrimeiro == NULL) {
          // Libera a head
+         #ifdef _DEBUG
+         CNT_Contar("MTZ_CriarMatriz, nao teve espaco para primeira casa", __LINE__);
+         CED_Free(*ppMtz);
+         #else
          free(*ppMtz);
+         #endif
          *ppMtz = NULL;
          return MTZ_CondRetFaltouMemoria;
       }
+      #ifdef _DEBUG
+      CNT_Contar("MTZ_CriarMatriz, espaco para primeira casa ok", __LINE__);
+      (*ppMtz)->numCasas++; 
+      #endif
 
       for (linha = 0; linha < n; linha++) {
 
          if (linha == 0) {
+            #ifdef _DEBUG
+            CNT_Contar("MTZ_CriarMatriz, primeira linha da matriz", __LINE__); 
+            #endif
             pCasaInicioLinha = (*ppMtz)->pPrimeiro;
             pCasaNorte = NULL;            
 
          } else {
+            #ifdef _DEBUG
+            CNT_Contar("MTZ_CriarMatriz, nao eh primeira linha da matriz", __LINE__); 
+            #endif
             pCasaAtual = CriarCasa();
 
             if (pCasaAtual == NULL) {
-
+               #ifdef _DEBUG
+               CNT_Contar("MTZ_CriarMatriz, faltou memoria para casa", __LINE__); 
+               #endif
                MTZ_DestruirMatriz(ppMtz);
                return MTZ_CondRetFaltouMemoria;
             }
+            #ifdef _DEBUG
+            CNT_Contar("MTZ_CriarMatriz, primeira casa da linha alocada", __LINE__);
+            (*ppMtz)->numCasas++;
+            #endif
             // Apontar a linha anterior como o norte da casa de inicio da nova linha, e vice-versa
             pCasaInicioLinha->pCasasAdjacentes[MTZ_DirSul] = pCasaAtual;
             pCasaAtual->pCasasAdjacentes[MTZ_DirNorte] = pCasaInicioLinha;
@@ -228,11 +252,21 @@ typedef struct tgMatriz tpMatriz;
 
             pCasaAtual = CriarCasa();
             if (pCasaAtual == NULL) {
-
+               #ifdef _DEBUG
+               CNT_Contar("MTZ_CriarMatriz, faltou memoria para casa", __LINE__); 
+               #endif
                MTZ_DestruirMatriz(ppMtz);
                return MTZ_CondRetFaltouMemoria;
             }
+            #ifdef _DEBUG
+            CNT_Contar("MTZ_CriarMatriz, casa alocada na coluna", __LINE__);
+            (*ppMtz)->numCasas++;
+            #endif
+
             if (pCasaNorte != NULL) {
+               #ifdef _DEBUG
+               CNT_Contar("MTZ_CriarMatriz, tem casa a norte", __LINE__); 
+               #endif
                // Preenche o noroeste
                pCasaAtual->pCasasAdjacentes[MTZ_DirNoroeste] = pCasaNorte;
                pCasaNorte->pCasasAdjacentes[MTZ_DirSudeste] = pCasaAtual;
@@ -245,8 +279,19 @@ typedef struct tgMatriz tpMatriz;
                   tpCasaMatriz * pCasaNordeste = pCasaNorte->pCasasAdjacentes[MTZ_DirLeste];
                   pCasaNordeste->pCasasAdjacentes[MTZ_DirSudoeste] = pCasaAtual;
                   pCasaAtual->pCasasAdjacentes[MTZ_DirNordeste] = pCasaNordeste;
+                  #ifdef _DEBUG
+                  CNT_Contar("MTZ_CriarMatriz, tem nordeste", __LINE__); 
+                  #endif
                }
+               #ifdef _DEBUG
+               else
+                  CNT_Contar("MTZ_CriarMatriz, nao tem nordeste", __LINE__); 
+               #endif
             }
+            #ifdef _DEBUG
+            else
+               CNT_Contar("MTZ_CriarMatriz, casa na primeira linha", __LINE__); 
+            #endif
             // Preenche a casa oeste
             pCasaAtual->pCasasAdjacentes[MTZ_DirOeste] = pCasaOeste;
             pCasaOeste->pCasasAdjacentes[MTZ_DirLeste] = pCasaAtual;
@@ -269,12 +314,17 @@ typedef struct tgMatriz tpMatriz;
 
    MTZ_tpCondRet MTZ_DestruirMatriz( MTZ_tppMatriz * ppMtz ) {
 
+
       if ( ppMtz == NULL ) return MTZ_CondRetMatrizNaoExiste;
       if ( *ppMtz != NULL ) {
          if ( (*ppMtz)->pPrimeiro != NULL ) {
             DestroiMatriz( *ppMtz ) ;
          } /* if */
-         free( *ppMtz ) ;
+         #ifdef _DEBUG
+         CED_Free(*ppMtz);
+         #else
+         free(*ppMtz);
+         #endif
          *ppMtz = NULL ;
          return MTZ_CondRetOK;
       } /* if */
@@ -381,17 +431,38 @@ typedef struct tgMatriz tpMatriz;
 	   int i = 0;
       tpCasaMatriz * pCasa ;
 
+      #ifdef _DEBUG
+      pCasa = ( tpCasaMatriz * ) CED_Malloc(sizeof( tpCasaMatriz ), __LINE__, __FILE__);
+      #else
       pCasa = ( tpCasaMatriz * ) malloc( sizeof( tpCasaMatriz )) ;
+      #endif
+      
       if ( pCasa == NULL ) {
+         #ifdef _DEBUG
+         CNT_Contar("CriarCasa, faltou memoria para casa", __LINE__); 
+         #endif
          return NULL ;
       } /* if */
+      #ifdef _DEBUG
+      CNT_Contar("CriarCasa, memoria para casa ok", __LINE__); 
 
-	  pCasa->pCasasAdjacentes = ( tpCasaMatriz ** ) malloc(8 * sizeof(tpCasaMatriz *));
+      pCasa->pCasasAdjacentes = ( tpCasaMatriz ** ) CED_Malloc(8 * sizeof( tpCasaMatriz * ), __LINE__, __FILE__);
+      #else
+      pCasa->pCasasAdjacentes = ( tpCasaMatriz ** ) malloc(8 * sizeof(tpCasaMatriz *));
+      #endif
 
-	  if ( pCasa->pCasasAdjacentes == NULL ) {
-		 free(pCasa);
+      if ( pCasa->pCasasAdjacentes == NULL ) {
+         #ifdef _DEBUG
+         CNT_Contar("CriarCasa, faltou memoria para casa", __LINE__);
+         CED_Free(pCasa); 
+         #else
+         free(pCasa);
+         #endif
          return NULL ;
       } /* if */
+      #ifdef _DEBUG
+      CNT_Contar("CriarCasa, memoria para adjacentes ok", __LINE__);
+      #endif
 
       // Preenche os ponteiros com nulos
       for (; i < 8; i++) {
