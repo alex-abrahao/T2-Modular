@@ -93,9 +93,6 @@ typedef struct tgMatriz tpMatriz;
                /* Ponteiro para a função de destruição do valor contido em um elemento */
 
          #ifdef _DEBUG
-         char tipoConteudo[20];
-               /* Tipo do conteúdo presente nas casas da matriz */
-
          int numCasas;
                /* Número de casas alocadas na matriz */
 
@@ -129,20 +126,61 @@ typedef struct tgMatriz tpMatriz;
       // setar nessas casas as direcoes inversas para o ponteiro da casa atual que está sendo criada.
       tpCasaMatriz * pCasaOeste, * pCasaInicioLinha, * pCasaAtual, * pCasaNorte;
 
-      if (n <= 0) return MTZ_CondRetErroEstrutura;
+      #ifdef _DEBUG
+      CNT_Contar("MTZ_CriarMatriz, inicio", __LINE__); 
+      #endif
 
-      if (ppMtz == NULL)
+      if (n <= 0) {
+         #ifdef _DEBUG
+         CNT_Contar("MTZ_CriarMatriz, tam invalido", __LINE__); 
+         #endif
          return MTZ_CondRetErroEstrutura;
+      }
+
+      #ifdef _DEBUG
+      CNT_Contar("MTZ_CriarMatriz, tam valido", __LINE__); 
+      #endif
+
+      if (ppMtz == NULL) {
+         #ifdef _DEBUG
+         CNT_Contar("MTZ_CriarMatriz, ponteiro para matriz inexistente", __LINE__); 
+         #endif
+         return MTZ_CondRetErroEstrutura;
+      }
+
+      #ifdef _DEBUG
+      CNT_Contar("MTZ_CriarMatriz, ponteiro ppMtz ok", __LINE__); 
+      #endif
 
       // Se já havia uma matriz anteriormente, destrua-a primeiro
-      if (*ppMtz != NULL)
+      if (*ppMtz != NULL) {
+         #ifdef _DEBUG
+         CNT_Contar("MTZ_CriarMatriz, ja havia matriz em ppMtz", __LINE__); 
+         #endif
          MTZ_DestruirMatriz(ppMtz);
+      }
+      #ifdef _DEBUG
+      else
+         CNT_Contar("MTZ_CriarMatriz, ppMtz nao continha matriz", __LINE__); 
+      #endif
 
       // Alocar espaço para a head
+      #ifdef _DEBUG
+      CNT_Contar("MTZ_CriarMatriz, alocando nova matriz", __LINE__);
+      *ppMtz = CED_Malloc(sizeof( tpMatriz ), __LINE__, __FILE__);
+      #else
       *ppMtz = ( tpMatriz * ) malloc( sizeof( tpMatriz )) ;
-      if (*ppMtz == NULL)
-         return MTZ_CondRetFaltouMemoria;
+      #endif
 
+      if (*ppMtz == NULL) {
+         #ifdef _DEBUG
+         CNT_Contar("MTZ_CriarMatriz, faltou memoria", __LINE__); 
+         #endif
+         return MTZ_CondRetFaltouMemoria;
+      }
+      #ifdef _DEBUG
+      CNT_Contar("MTZ_CriarMatriz, espaco para matriz ok", __LINE__); 
+      #endif
       // Setup da head
       (*ppMtz)->id = 0;
       (*ppMtz)->ExcluirValor = ExcluirValor;
