@@ -134,6 +134,44 @@ typedef struct tgMatriz * MTZ_tppMatriz ;
     } MTZ_tpDirecao ;
 
 
+#ifdef _DEBUG
+
+   typedef enum {
+
+         EliminaCorrente = 1 ,
+               /* Elimina o elemento corrente. */
+
+         ProxPtrNulo = 2 ,
+               /* Atribui NULL ao ponteiro para o próximo elemento. */
+
+		 AntPtrNulo = 3 ,
+               /* Atribui NULL ao ponteiro para o elemento anterior. */
+
+		 ProxPtrLixo = 4 ,
+               /* Atribui lixo ao ponteiro para o próximo elemento */
+
+		 AntPtrLixo = 5 ,
+               /* Atribui lixo ao ponteiro o nó anterior. */
+
+		 ConteudoPtrNulo = 6 ,
+		       /* Atribui NULL ao ponteiro para o conteúdo do nó. */
+         
+		 AlteraTipoEstrutura = 7 ,
+               /* Altera tipo de estrutura apontado no nó */
+
+		 DesencadeiaNo = 8 ,
+			   /* Desencadeia nó sem liberá-lo com free */
+
+		 PtrCorrNulo = 9 ,
+               /* Anula ponteiro corrente */
+
+         PtrOrigNulo = 10 ,
+			   /* Atribui NULL ao ponteiro de origem. */
+
+   } MTZ_tpModosDeturpacao ;
+
+#endif
+
 /***********************************************************************
 *
 *  $FC Função: MTZ Criar matriz
@@ -319,6 +357,16 @@ MTZ_tpCondRet MTZ_CriarMatriz(MTZ_tppMatriz * ppMtz, int n, void ( * ExcluirValo
 
    MTZ_tpCondRet MTZ_VoltarParaPrimeiro( MTZ_tppMatriz pMtz ) ;
 
+
+
+#ifdef _DEBUG
+
+   MTZ_tpCondRet MTZ_VerificarMatriz( void * pMatrizParm ); 
+   MTZ_tpCondRet MTZ_VerificarCabeca( void * pCabecaParm ); 
+   MTZ_tpCondRet MTZ_VerificarElem( void * pElemParm ); 
+   void MTZ_Deturpar( void * pListaParm , MTZ_tpModosDeturpacao ModoDeturpar ); 
+
+#endif
 
 #undef MATRIZ_EXT
 
