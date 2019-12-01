@@ -661,6 +661,9 @@ typedef struct tgMatriz tpMatriz;
 
    void DestroiCasa( tpCasaMatriz * pCasa, void ( * ExcluirValor ) ( void * pValor ) ) {
 
+      #ifdef _DEBUG
+      CNT_Contar("DestroiCasa, inicio", __LINE__);
+      #endif
       if (pCasa->conteudo != NULL) {
          #ifdef _DEBUG
          CNT_Contar("DestroiCasa, conteudo nao nulo sera destruido", __LINE__);
