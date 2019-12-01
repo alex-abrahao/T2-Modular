@@ -314,13 +314,30 @@ typedef struct tgMatriz tpMatriz;
 
    MTZ_tpCondRet MTZ_DestruirMatriz( MTZ_tppMatriz * ppMtz ) {
 
+      #ifdef _DEBUG
+      CNT_Contar("MTZ_DestruirMatriz, inicio", __LINE__); 
+      #endif
 
-      if ( ppMtz == NULL ) return MTZ_CondRetMatrizNaoExiste;
+      if ( ppMtz == NULL ) {
+         #ifdef _DEBUG
+         CNT_Contar("MTZ_DestruirMatriz, matriz inexistente", __LINE__); 
+         #endif
+         return MTZ_CondRetMatrizNaoExiste;
+      }
+      #ifdef _DEBUG
+      CNT_Contar("MTZ_DestruirMatriz, matriz existe", __LINE__); 
+      #endif
       if ( *ppMtz != NULL ) {
          if ( (*ppMtz)->pPrimeiro != NULL ) {
+            #ifdef _DEBUG
+            CNT_Contar("MTZ_DestruirMatriz, matriz inexistente", __LINE__); 
+            #endif
             DestroiMatriz( *ppMtz ) ;
          } /* if */
          #ifdef _DEBUG
+         else
+            CNT_Contar("MTZ_DestruirMatriz, pPrimeiro eh NULL", __LINE__); 
+
          CED_Free(*ppMtz);
          #else
          free(*ppMtz);
@@ -328,7 +345,9 @@ typedef struct tgMatriz tpMatriz;
          *ppMtz = NULL ;
          return MTZ_CondRetOK;
       } /* if */
-
+      #ifdef _DEBUG
+      CNT_Contar("MTZ_DestruirMatriz, pPrimeiro eh NULL", __LINE__); 
+      #endif
       return MTZ_CondRetMatrizNaoExiste;
 
    } /* Fim função: MTZ Destruir matriz */
@@ -340,17 +359,41 @@ typedef struct tgMatriz tpMatriz;
 
    MTZ_tpCondRet MTZ_AndarDirecao( MTZ_tppMatriz pMtz, MTZ_tpDirecao direcao ) {
       
+      #ifdef _DEBUG
+      CNT_Contar("MTZ_AndarDirecao, inicio", __LINE__);
+      #endif
       // Tratar erro na estrutura
-      if (pMtz == NULL)
+      if (pMtz == NULL) {
+         #ifdef _DEBUG
+         CNT_Contar("MTZ_AndarDirecao, matriz inexistente", __LINE__);
+         #endif
          return MTZ_CondRetMatrizNaoExiste;
+      }
+      #ifdef _DEBUG
+      CNT_Contar("MTZ_AndarDirecao, matriz existe", __LINE__);
+      #endif
 
       // Tratar erro na direção
-      if (direcao < 0 || direcao > 7)
+      if (direcao < 0 || direcao > 7) {
+         #ifdef _DEBUG
+         CNT_Contar("MTZ_AndarDirecao, direcao inexistente", __LINE__);
+         #endif
          return MTZ_CondRetDirecaoNaoExisteOuInvalida;
+      }
+      #ifdef _DEBUG
+      CNT_Contar("MTZ_AndarDirecao, direcao existe", __LINE__);
+      #endif
 
       // Tratar se está andando para uma direção que contém nulo
-      if (pMtz->pCasaCorr->pCasasAdjacentes[direcao] == NULL)
+      if (pMtz->pCasaCorr->pCasasAdjacentes[direcao] == NULL) {
+         #ifdef _DEBUG
+         CNT_Contar("MTZ_AndarDirecao, direcao invalida", __LINE__);
+         #endif
          return MTZ_CondRetDirecaoNaoExisteOuInvalida;
+      }
+      #ifdef _DEBUG
+      CNT_Contar("MTZ_AndarDirecao, direcao valida", __LINE__);
+      #endif
 
       pMtz->pCasaCorr = pMtz->pCasaCorr->pCasasAdjacentes[direcao];
       return MTZ_CondRetOK;
@@ -364,14 +407,40 @@ typedef struct tgMatriz tpMatriz;
 
    MTZ_tpCondRet MTZ_InserirElementoNaCasaCorrente( MTZ_tppMatriz pMtz, void * pElemento ) {
 
+      #ifdef _DEBUG
+      CNT_Contar("MTZ_InserirElementoNaCasaCorrente, inicio", __LINE__);
+      #endif
       // Tratar se a matriz existe
-      if (pMtz == NULL)
+      if (pMtz == NULL) {
+         #ifdef _DEBUG
+         CNT_Contar("MTZ_InserirElementoNaCasaCorrente, matriz inexistente", __LINE__);
+         #endif
          return MTZ_CondRetMatrizNaoExiste;
+      }
+      #ifdef _DEBUG
+      CNT_Contar("MTZ_InserirElementoNaCasaCorrente, matriz existe", __LINE__);
+      #endif
       // Tratar se o ponteiro para o elemento é nulo
-      if (pElemento == NULL)
+      if (pElemento == NULL) {
+         #ifdef _DEBUG
+         CNT_Contar("MTZ_InserirElementoNaCasaCorrente, ponteiro para elemento eh nulo", __LINE__);
+         #endif
          return MTZ_CondRetErroEstrutura;
-      if (pMtz->pCasaCorr->conteudo != NULL)
+      }
+      #ifdef _DEBUG
+      CNT_Contar("MTZ_InserirElementoNaCasaCorrente, pElemento tem conteudo", __LINE__);
+      #endif
+      if (pMtz->pCasaCorr->conteudo != NULL){
+         #ifdef _DEBUG
+         CNT_Contar("MTZ_InserirElementoNaCasaCorrente, casa corrente possuia conteudo", __LINE__);
+         #endif
          pMtz->ExcluirValor(pMtz->pCasaCorr->conteudo);
+      }
+      #ifdef _DEBUG
+      else
+         CNT_Contar("MTZ_InserirElementoNaCasaCorrente, casa corrente previamente vazia", __LINE__);
+      #endif
+
       pMtz->pCasaCorr->conteudo = pElemento;
 
       return MTZ_CondRetOK;
@@ -384,11 +453,39 @@ typedef struct tgMatriz tpMatriz;
 
    MTZ_tpCondRet MTZ_ObterValorCorrente( MTZ_tppMatriz pMtz, void ** valor ) {
 
-	   if (pMtz == NULL) return MTZ_CondRetMatrizNaoExiste;
+      #ifdef _DEBUG
+      CNT_Contar("MTZ_ObterValorCorrente, inicio", __LINE__);
+      #endif
 
-      if (valor == NULL) return MTZ_CondRetErroEstrutura;
+	   if (pMtz == NULL) {
+         #ifdef _DEBUG
+         CNT_Contar("MTZ_ObterValorCorrente, matriz inexistente", __LINE__);
+         #endif
+         return MTZ_CondRetMatrizNaoExiste;
+      }
+      #ifdef _DEBUG
+      CNT_Contar("MTZ_ObterValorCorrente, matriz existe", __LINE__);
+      #endif
 
-	   if(pMtz->pCasaCorr->conteudo == NULL) return MTZ_CondRetCasaVazia;
+      if (valor == NULL) {
+         #ifdef _DEBUG
+         CNT_Contar("MTZ_ObterValorCorrente, ponteiro para valor inexistente", __LINE__);
+         #endif
+         return MTZ_CondRetErroEstrutura;
+      }
+      #ifdef _DEBUG
+      CNT_Contar("MTZ_ObterValorCorrente, ponteiro para valor existe", __LINE__);
+      #endif
+
+	   if(pMtz->pCasaCorr->conteudo == NULL) {
+         #ifdef _DEBUG
+         CNT_Contar("MTZ_ObterValorCorrente, casa corrente sem conteudo", __LINE__);
+         #endif
+         return MTZ_CondRetCasaVazia;
+      }
+      #ifdef _DEBUG
+      CNT_Contar("MTZ_ObterValorCorrente, casa corrente possui conteudo", __LINE__);
+      #endif
 
 	   *valor = pMtz->pCasaCorr->conteudo; 
 
@@ -403,7 +500,19 @@ typedef struct tgMatriz tpMatriz;
 
    MTZ_tpCondRet MTZ_VoltarParaPrimeiro( MTZ_tppMatriz pMtz ) {
 
-      if (pMtz == NULL) return MTZ_CondRetMatrizNaoExiste;
+      #ifdef _DEBUG
+      CNT_Contar("MTZ_VoltarParaPrimeiro, inicio", __LINE__); 
+      #endif
+
+      if (pMtz == NULL) {
+         #ifdef _DEBUG
+         CNT_Contar("MTZ_VoltarParaPrimeiro, matriz inexistente", __LINE__); 
+         #endif
+         return MTZ_CondRetMatrizNaoExiste;
+      }
+      #ifdef _DEBUG
+      CNT_Contar("MTZ_VoltarParaPrimeiro, matriz existe", __LINE__); 
+      #endif
 
       pMtz->pCasaCorr = pMtz->pPrimeiro; 
 
@@ -432,6 +541,7 @@ typedef struct tgMatriz tpMatriz;
       tpCasaMatriz * pCasa ;
 
       #ifdef _DEBUG
+      CNT_Contar("CriarCasa, inicio", __LINE__);
       pCasa = ( tpCasaMatriz * ) CED_Malloc(sizeof( tpCasaMatriz ), __LINE__, __FILE__);
       #else
       pCasa = ( tpCasaMatriz * ) malloc( sizeof( tpCasaMatriz )) ;
@@ -487,6 +597,10 @@ typedef struct tgMatriz tpMatriz;
 
       tpCasaMatriz * pDestruir = NULL;
 
+      #ifdef _DEBUG
+      CNT_Contar("DestroiMatriz, inicio", __LINE__);
+      #endif
+
       // Destruir linha a linha
       while (pMtz->pPrimeiro != NULL) {
          // Marca que não há casas a serem destruídas
@@ -499,17 +613,31 @@ typedef struct tgMatriz tpMatriz;
          while(MTZ_AndarDirecao(pMtz, MTZ_DirLeste) != MTZ_CondRetDirecaoNaoExisteOuInvalida) {
 
             // Destroi se houver casa marcada
-            if (pDestruir != NULL)
+            if (pDestruir != NULL) {
+               #ifdef _DEBUG
+               CNT_Contar("DestroiMatriz, ponteiro a destruir existe", __LINE__);
+               #endif
                DestroiCasa(pDestruir, pMtz->ExcluirValor);
-
+            }
+            #ifdef _DEBUG
+            else
+               CNT_Contar("DestroiMatriz, ponteiro a destruir nulo", __LINE__);
+            #endif
             // Marca a casa para ser destruída na próxima iteração ou no fim da coluna
             pDestruir = pMtz->pCasaCorr;
          }
 		    
          // Destroi se houver uma marcada
-         if (pDestruir != NULL)
-          DestroiCasa(pDestruir, pMtz->ExcluirValor);
-
+         if (pDestruir != NULL) {
+            #ifdef _DEBUG
+            CNT_Contar("DestroiMatriz, ponteiro a destruir existe", __LINE__);
+            #endif
+            DestroiCasa(pDestruir, pMtz->ExcluirValor);
+         }
+         #ifdef _DEBUG
+         else
+            CNT_Contar("DestroiMatriz, ponteiro a destruir nulo", __LINE__);
+         #endif
          // Atualiza para começar a destruir a próxima linha e destroi a primeira casa da coluna
          pDestruir = pMtz->pPrimeiro;
 		 
@@ -533,10 +661,21 @@ typedef struct tgMatriz tpMatriz;
 
    void DestroiCasa( tpCasaMatriz * pCasa, void ( * ExcluirValor ) ( void * pValor ) ) {
 
-	  if (pCasa->conteudo != NULL)
-		ExcluirValor(pCasa->conteudo);
-	  free(pCasa->pCasasAdjacentes);
+      if (pCasa->conteudo != NULL) {
+         #ifdef _DEBUG
+         CNT_Contar("DestroiCasa, conteudo nao nulo sera destruido", __LINE__);
+         #endif
+         ExcluirValor(pCasa->conteudo);
+      }
+      #ifdef _DEBUG
+      else
+         CNT_Contar("DestroiCasa, conteudo nulo", __LINE__);
+      CED_Free(pCasa->pCasasAdjacentes);
+      CED_Free(pCasa);
+      #else
+      free(pCasa->pCasasAdjacentes);
       free(pCasa);
+      #endif
       pCasa = NULL;
 
    } /* Fim função: MTZ Destruir uma casa da matriz */
