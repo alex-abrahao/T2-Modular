@@ -555,6 +555,9 @@ static char EspacoLixo[ 256 ] =
    MTZ_tpCondRet MTZ_VerificarMatriz( void * pMatrizParm ) {
 
       tpMatriz * pMatriz = NULL ;
+      tpCasaMatriz * pCasaInicioLinha = NULL;
+      tpCasaMatriz * pCasaAtual = NULL;
+      MTZ_tpCondRet condRetObtida = MTZ_CondRetOK;
 
       if ( MTZ_VerificarCabeca( pMatrizParm ) != MTZ_CondRetOK ) {
          return MTZ_CondRetErroEstrutura ;
@@ -563,7 +566,21 @@ static char EspacoLixo[ 256 ] =
       CED_MarcarEspacoAtivo( pMatrizParm ) ;
 
       pMatriz = ( tpMatriz * ) ( pMatrizParm ) ;
+      pCasaInicioLinha = pMatriz->pPrimeiro;
+      // Percorrer todas as casas da linha
+      do {
+         pCasaAtual = pCasaInicioLinha;
+         // Percorrer todas as casas da coluna
+         do {
+            condRetObtida = MTZ_VerificarElem( (void *) pCasaAtual );
+            if (condRetObtida != MTZ_CondRetOK) {
+            return MTZ_CondRetErroEstrutura;
+         }
+            pCasaAtual = pCasaAtual->pCasasAdjacentes[MTZ_DirLeste];
+         } while ((condRetObtida == MTZ_CondRetOK) && (pCasaAtual != NULL)) ;
 
+         pCasaInicioLinha = pCasaInicioLinha->pCasasAdjacentes[MTZ_DirSul];
+      } while ((condRetObtida == MTZ_CondRetOK) && (pCasaInicioLinha != NULL)) ;
       // return VerificarNo( pArvore->pNoRaiz ) ;
       return MTZ_CondRetOK;
 
@@ -605,11 +622,11 @@ static char EspacoLixo[ 256 ] =
                  "Primeiro não aponta para cabeca." ) != TST_CondRetOK ) {
                return MTZ_CondRetErroEstrutura ;
             } /* if */
-            if (pMatriz->pPrimeiro[MTZ_DirNordeste] ||
-                  pMatriz->pPrimeiro[MTZ_DirNorte] ||
-                  pMatriz->pPrimeiro[MTZ_DirNoroeste] ||
-                  pMatriz->pPrimeiro[MTZ_DirOeste] ||
-                  pMatriz->pPrimeiro[MTZ_DirSudoeste]) {
+            if (pMatriz->pPrimeiro->pCasasAdjacentes[MTZ_DirNordeste] ||
+                  pMatriz->pPrimeiro->pCasasAdjacentes[MTZ_DirNorte] ||
+                  pMatriz->pPrimeiro->pCasasAdjacentes[MTZ_DirNoroeste] ||
+                  pMatriz->pPrimeiro->pCasasAdjacentes[MTZ_DirOeste] ||
+                  pMatriz->pPrimeiro->pCasasAdjacentes[MTZ_DirSudoeste] ) {
                TST_NotificarFalha( "Primeiro nao esta na posicao (0,0)." ) ;
                return MTZ_CondRetErroEstrutura ;
             }
