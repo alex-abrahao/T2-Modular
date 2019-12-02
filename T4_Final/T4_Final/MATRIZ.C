@@ -556,8 +556,7 @@ static char EspacoLixo[ 256 ] =
 
       tpMatriz * pMatriz = NULL ;
 
-      if ( MTZ_VerificarCabeca( pMatrizParm ) != MTZ_CondRetOK )
-      {
+      if ( MTZ_VerificarCabeca( pMatrizParm ) != MTZ_CondRetOK ) {
          return MTZ_CondRetErroEstrutura ;
       } /* if */
 
@@ -581,22 +580,19 @@ static char EspacoLixo[ 256 ] =
 
       /* Verifica o tipo do espaço */
 
-         if ( pCabecaParm == NULL )
-         {
+         if ( pCabecaParm == NULL ) {
             TST_NotificarFalha( "Tentou verificar cabeça inexistente." ) ;
             return MTZ_CondRetErroEstrutura ;
          } /* if */
 
-         if ( ! CED_VerificarEspaco( pCabecaParm , NULL ))
-         {
+         if ( ! CED_VerificarEspaco( pCabecaParm , NULL )) {
             TST_NotificarFalha( "Controle do espaço acusou erro." ) ;
             return MTZ_CondRetErroEstrutura ;
          } /* if */
 
          if ( TST_CompararInt( MTZ_TipoEspacoCabeca ,
               CED_ObterTipoEspaco( pCabecaParm ) ,
-              "Tipo do espaço de dados não é cabeça de matriz." ) != TST_CondRetOK )
-         {
+              "Tipo do espaço de dados não é cabeça de matriz." ) != TST_CondRetOK ) {
             return MTZ_CondRetErroEstrutura ;
          } /* if */
 
@@ -604,13 +600,19 @@ static char EspacoLixo[ 256 ] =
 
       /* Verifica primeiro da matriz */
 
-         if ( pMatriz->pPrimeiro != NULL )
-         {
+         if ( pMatriz->pPrimeiro != NULL ) {
             if ( TST_CompararPonteiro( pCabecaParm , pMatriz->pPrimeiro->pCabeca ,
-                 "Primeiro não aponta para cabeça." ) != TST_CondRetOK )
-            {
+                 "Primeiro não aponta para cabeca." ) != TST_CondRetOK ) {
                return MTZ_CondRetErroEstrutura ;
             } /* if */
+            if (pMatriz->pPrimeiro[MTZ_DirNordeste] ||
+                  pMatriz->pPrimeiro[MTZ_DirNorte] ||
+                  pMatriz->pPrimeiro[MTZ_DirNoroeste] ||
+                  pMatriz->pPrimeiro[MTZ_DirOeste] ||
+                  pMatriz->pPrimeiro[MTZ_DirSudoeste]) {
+               TST_NotificarFalha( "Primeiro nao esta na posicao (0,0)." ) ;
+               return MTZ_CondRetErroEstrutura ;
+            }
          } else {
             TST_NotificarFalha( "Primeiro inexistente." ) ;
             return MTZ_CondRetErroEstrutura ;
@@ -618,11 +620,9 @@ static char EspacoLixo[ 256 ] =
 
       /* Verifica corrente */
 
-         if ( pMatriz->pCasaCorr != NULL )
-         {
+         if ( pMatriz->pCasaCorr != NULL ) {
             if ( TST_CompararPonteiro( pCabecaParm , pMatriz->pCasaCorr->pCabeca ,
-                 "Casa corrente não aponta para cabeça." ) != TST_CondRetOK )
-            {
+                 "Casa corrente não aponta para cabeça." ) != TST_CondRetOK ) {
                return MTZ_CondRetErroEstrutura ;
             } /* if */
          } else {
@@ -639,6 +639,175 @@ static char EspacoLixo[ 256 ] =
 *  ****/
 
    MTZ_tpCondRet MTZ_VerificarElem( void * pElemParm ) {
+
+      tpCasaMatriz * pCasa = NULL ;
+      tpMatriz * pMatriz = NULL ;
+
+      /* Verificar se é casa estrutural */
+
+      if ( pElemParm == NULL ) {
+         TST_NotificarFalha( "Tentou verificar casa inexistente." ) ;
+         return MTZ_CondRetErroEstrutura ;
+
+      } /* if */
+
+      if ( ! CED_VerificarEspaco( pElemParm , NULL )) {
+         TST_NotificarFalha( "Controle do espaço acusou erro." ) ;
+         return MTZ_CondRetErroEstrutura ;
+      } /* if */
+
+      if ( TST_CompararInt( MTZ_TipoEspacoCasa ,
+           CED_ObterTipoEspaco( pElemParm ) ,
+           "Tipo do espaço de dados não é casa de matriz." ) != TST_CondRetOK ) {
+         return MTZ_CondRetErroEstrutura ;
+      } /* if */
+
+      pCasa   = ( tpCasaMatriz * )( pElemParm ) ;
+      pMatriz = pCasa->pCabeca ;
+
+      /* Verificar cabeça */
+
+      if ( pMatriz->pPrimeiro != NULL ) {
+         if ( TST_CompararPonteiro( pMatriz , pMatriz->pPrimeiro->pCabeca ,
+              "Casa não pertence à matriz." ) != TST_CondRetOK ) {
+            return MTZ_CondRetErroEstrutura ;
+         } /* if */
+      } else {
+         TST_NotificarFalha( "Matriz nao tem primeiro" ) ;
+         return MTZ_CondRetErroEstrutura ;
+      } /* if */
+
+      /* Verificar norte */
+
+      if ( pCasa->pCasasAdjacentes[MTZ_DirNorte] != NULL ) {
+         if ( TST_CompararPonteiro( pCasa , pCasa->pCasasAdjacentes[MTZ_DirNorte]->pCasasAdjacentes[MTZ_DirSul] ,
+              "Sul da casa norte nao aponta para a mesma." ) != TST_CondRetOK ) {
+            return MTZ_CondRetErroEstrutura ;
+         } /* if */
+      } else {
+         if ( pCasa->pCasasAdjacentes[MTZ_DirNoroeste] || pCasa->pCasasAdjacentes[MTZ_DirNordeste] ) {
+            TST_NotificarFalha( "Casa sem norte nao esta na primeira linha" ) ;
+            return MTZ_CondRetErroEstrutura ;
+         } /* if */
+      } /* if */
+
+      /* Verificar noroeste */
+
+      if ( pCasa->pCasasAdjacentes[MTZ_DirNoroeste] != NULL ) {
+         if ( TST_CompararPonteiro( pCasa , pCasa->pCasasAdjacentes[MTZ_DirNoroeste]->pCasasAdjacentes[MTZ_DirSudeste] ,
+              "Sudeste da casa noroeste nao aponta para a mesma." ) != TST_CondRetOK ) {
+            return MTZ_CondRetErroEstrutura ;
+         } /* if */
+      } else {
+         if (pCasa->pCasasAdjacentes[MTZ_DirNorte] != NULL) {
+            if ( pCasa->pCasasAdjacentes[MTZ_DirOeste] || pCasa->pCasasAdjacentes[MTZ_DirSudoeste] ) {
+               TST_NotificarFalha( "Casa sem noroeste e com norte nao esta na primeira coluna" ) ;
+               return MTZ_CondRetErroEstrutura ;
+            } /* if */
+         } else if ( pCasa->pCasasAdjacentes[MTZ_DirNordeste] != NULL) {
+            TST_NotificarFalha( "Casa sem noroeste nem norte nao esta na primeira linha" ) ;
+            return MTZ_CondRetErroEstrutura ;
+         }
+      } /* if */
+
+      /* Verificar oeste */
+
+      if ( pCasa->pCasasAdjacentes[MTZ_DirOeste] != NULL ) {
+         if ( TST_CompararPonteiro( pCasa , pCasa->pCasasAdjacentes[MTZ_DirOeste]->pCasasAdjacentes[MTZ_DirLeste] ,
+              "Leste da casa oeste nao aponta para a mesma." ) != TST_CondRetOK ) {
+            return MTZ_CondRetErroEstrutura ;
+         } /* if */
+      } else {
+         if ( pCasa->pCasasAdjacentes[MTZ_DirNoroeste] || pCasa->pCasasAdjacentes[MTZ_DirSudoeste] ) {
+            TST_NotificarFalha( "Casa sem oeste nao esta na primeira coluna" ) ;
+            return MTZ_CondRetErroEstrutura ;
+         } /* if */
+      } /* if */
+
+      /* Verificar sul */
+
+      if ( pCasa->pCasasAdjacentes[MTZ_DirSul] != NULL ) {
+         if ( TST_CompararPonteiro( pCasa , pCasa->pCasasAdjacentes[MTZ_DirSul]->pCasasAdjacentes[MTZ_DirNorte] ,
+              "Norte da casa sul nao aponta para a mesma." ) != TST_CondRetOK ) {
+            return MTZ_CondRetErroEstrutura ;
+         } /* if */
+      } else {
+         if ( pCasa->pCasasAdjacentes[MTZ_DirSudoeste] || pCasa->pCasasAdjacentes[MTZ_DirSudeste] ) {
+            TST_NotificarFalha( "Casa sem sul nao esta na ultima linha" ) ;
+            return MTZ_CondRetErroEstrutura ;
+         } /* if */
+      } /* if */
+
+      /* Verificar leste */
+
+      if ( pCasa->pCasasAdjacentes[MTZ_DirLeste] != NULL ) {
+         if ( TST_CompararPonteiro( pCasa , pCasa->pCasasAdjacentes[MTZ_DirLeste]->pCasasAdjacentes[MTZ_DirOeste] ,
+              "Oeste da casa leste nao aponta para a mesma." ) != TST_CondRetOK ) {
+            return MTZ_CondRetErroEstrutura ;
+         } /* if */
+      } else {
+         if ( pCasa->pCasasAdjacentes[MTZ_DirNordeste] || pCasa->pCasasAdjacentes[MTZ_DirSudeste] ) {
+            TST_NotificarFalha( "Casa sem leste nao esta na ultima coluna" ) ;
+            return MTZ_CondRetErroEstrutura ;
+         } /* if */
+      } /* if */
+
+      /* Verificar nordeste */
+
+      if ( pCasa->pCasasAdjacentes[MTZ_DirNordeste] != NULL ) {
+         if ( TST_CompararPonteiro( pCasa , pCasa->pCasasAdjacentes[MTZ_DirNordeste]->pCasasAdjacentes[MTZ_DirSudoeste] ,
+              "Sudoeste da casa nordeste nao aponta para a mesma." ) != TST_CondRetOK ) {
+            return MTZ_CondRetErroEstrutura ;
+         } /* if */
+      } else {
+         if (pCasa->pCasasAdjacentes[MTZ_DirNorte] != NULL) {
+            if ( pCasa->pCasasAdjacentes[MTZ_DirLeste] || pCasa->pCasasAdjacentes[MTZ_DirSudeste] ) {
+               TST_NotificarFalha( "Casa sem nordeste e com norte nao esta na ultima coluna" ) ;
+               return MTZ_CondRetErroEstrutura ;
+            } /* if */
+         } else if ( pCasa->pCasasAdjacentes[MTZ_DirNoroeste] ) {
+            TST_NotificarFalha( "Casa sem nordeste nem norte nao esta na primeira linha" ) ;
+            return MTZ_CondRetErroEstrutura ;
+         }
+      } /* if */
+
+      /* Verificar sudeste */
+
+      if ( pCasa->pCasasAdjacentes[MTZ_DirSudeste] != NULL ) {
+         if ( TST_CompararPonteiro( pCasa , pCasa->pCasasAdjacentes[MTZ_DirSudeste]->pCasasAdjacentes[MTZ_DirNoroeste] ,
+              "Noroeste da casa sudeste nao aponta para a mesma." ) != TST_CondRetOK ) {
+            return MTZ_CondRetErroEstrutura ;
+         } /* if */
+      } else {
+         if (pCasa->pCasasAdjacentes[MTZ_DirSul] != NULL) {
+            if ( pCasa->pCasasAdjacentes[MTZ_DirLeste] || pCasa->pCasasAdjacentes[MTZ_DirNordeste] ) {
+               TST_NotificarFalha( "Casa sem sudeste e com sul nao esta na ultima coluna" ) ;
+               return MTZ_CondRetErroEstrutura ;
+            } /* if */
+         } else if ( pCasa->pCasasAdjacentes[MTZ_DirSudoeste] ) {
+            TST_NotificarFalha( "Casa sem sudeste nem sul nao esta na ultima linha" ) ;
+            return MTZ_CondRetErroEstrutura ;
+         }
+      } /* if */
+
+      /* Verificar sudoeste */
+
+      if ( pCasa->pCasasAdjacentes[MTZ_DirSudoeste] != NULL ) {
+         if ( TST_CompararPonteiro( pCasa , pCasa->pCasasAdjacentes[MTZ_DirSudoeste]->pCasasAdjacentes[MTZ_DirNordeste] ,
+              "Nordeste da casa sudoeste nao aponta para a mesma." ) != TST_CondRetOK ) {
+            return MTZ_CondRetErroEstrutura ;
+         } /* if */
+      } else {
+         if (pCasa->pCasasAdjacentes[MTZ_DirSul] != NULL) {
+            if ( pCasa->pCasasAdjacentes[MTZ_DirOeste] || pCasa->pCasasAdjacentes[MTZ_DirNoroeste] ) {
+               TST_NotificarFalha( "Casa sem sudoeste e com sul nao esta na primeira coluna" ) ;
+               return MTZ_CondRetErroEstrutura ;
+            } /* if */
+         } else if ( pCasa->pCasasAdjacentes[MTZ_DirSudeste] ) {
+            TST_NotificarFalha( "Casa sem sudoeste nem sul nao esta na ultima linha" ) ;
+            return MTZ_CondRetErroEstrutura ;
+         }
+      } /* if */
 
       return MTZ_CondRetOK;
    } /* Fim função: MTZ Verificar uma casa de estrutura */
