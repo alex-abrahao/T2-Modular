@@ -37,7 +37,7 @@
 #define TAM_CONTEUDO 20
 #endif
 
-typedef struct tgMatriz tpMatriz;
+// typedef struct tgMatriz tpMatriz;
 
 /***********************************************************************
 *
@@ -61,7 +61,7 @@ typedef struct tgMatriz tpMatriz;
          char tipoConteudo[TAM_CONTEUDO];
                /* Tipo do conteúdo presente na casa */
 
-         tpMatriz * pCabeca;
+         MTZ_tppMatriz pCabeca;
                /* Ponteiro para cabeça da matriz */
 
          int tamBytes;
@@ -83,7 +83,7 @@ typedef struct tgMatriz tpMatriz;
 *
 ***********************************************************************/
 
-   struct tgMatriz {
+   typedef struct tgMatriz {
        
          tpCasaMatriz * pPrimeiro ;
                /* Ponteiro para a casa (0, 0) da matriz */
@@ -105,7 +105,7 @@ typedef struct tgMatriz tpMatriz;
                /* Tamanho total da estrutura, em bytes */
          #endif
 
-   } ;
+   } tpMatriz ;
 
 /*****  Dados encapsulados no módulo  *****/
 
@@ -710,7 +710,7 @@ static char EspacoLixo[ 256 ] =
 
       if ( pMatrizParm == NULL ) { return ; } /* if */
 
-      pMatriz = ( tpArvore * )( pMatrizParm ) ;
+      pMatriz = ( tpMatriz * )( pMatrizParm ) ;
 
       switch ( ModoDeturpar ) {
 
@@ -742,7 +742,7 @@ static char EspacoLixo[ 256 ] =
 
          case DeturpaPtrPrimLixo : {
 
-            pMatriz->pPrimeiro = ( tpNoArvore * )( EspacoLixo ) ;
+            pMatriz->pPrimeiro = ( tpCasaMatriz * )( EspacoLixo ) ;
             break ;
          } /* fim ativa: Faz raiz apontar para lixo */
 
@@ -851,7 +851,7 @@ static char EspacoLixo[ 256 ] =
       } /* if */
       #ifdef _DEBUG
       CED_DefinirTipoEspaco( pCasa->pCasasAdjacentes , MTZ_TipoEspacoVetorCasas ) ;
-      CED_MarcarEspacoAtivo(pcasa->pCasasAdjacentes);
+      CED_MarcarEspacoAtivo(pCasa->pCasasAdjacentes);
       pCasa->tipoConteudo[0] = '\0';
       pCasa->tamBytes = 0;
       #endif
@@ -911,7 +911,6 @@ static char EspacoLixo[ 256 ] =
          
          DestroiCasa(pDestruir, pMtz->ExcluirValor);
       }
-
 
    } /* Fim função: MTZ Destruir a estrutura da matriz */
 
