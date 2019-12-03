@@ -122,6 +122,12 @@ static char EspacoLixo[ 256 ] =
 
    static void DestroiCasa( tpCasaMatriz * pCasa, void ( * ExcluirValor ) ( void * pValor ) ) ;
 
+   #ifdef _DEBUG
+
+   static int TamConteudo(const char * nome) ;
+
+   #endif
+
 /*****  Código das funções exportadas pelo módulo  *****/
 
 /***************************************************************************
@@ -631,6 +637,14 @@ static char EspacoLixo[ 256 ] =
          CNT_CONTAR( "MTZ_VerificarElem, pCasa nao tem sudoeste" );
       } /* if */
 
+      // Verificar tipo conteudo
+      if (pCasa->tamBytes != TamConteudo(pCasa->tipoConteudo)) {
+         contadorErros++;
+         CNT_CONTAR( "MTZ_VerificarElem, tipoConteudo errado" );
+      } else {
+         CNT_CONTAR( "MTZ_VerificarElem, tipoConteudo ok" );
+      }
+
       return contadorErros;
    } /* Fim função: MTZ Verificar uma casa de estrutura */
 
@@ -878,6 +892,31 @@ static char EspacoLixo[ 256 ] =
       pCasa = NULL;
 
    } /* Fim função: MTZ Destruir uma casa da matriz */
+
+#ifdef _DEBUG
+
+/***********************************************************************
+*
+*  $FC Função: MTZ Tamanho de um conteúdo
+*
+***********************************************************************/
+
+int TamConteudo(const char * nome) {
+
+   if (strcmp( nome, "INT" ) == 0) {
+      return sizeof(int);
+   } else if (strcmp( nome, "CHAR" ) == 0) {
+      return sizeof(char);
+   } else if (strcmp( nome, "SHORT" ) == 0) {
+      return sizeof(short);
+   } else if (strcmp( nome, "LONG" ) == 0) {
+      return sizeof(long);
+   } else {
+      return 0;
+   }
+} /* Fim função: MTZ Tamanho de um conteúdo */
+
+#endif
 
 /********** Fim do módulo de implementação: Módulo matriz **********/
 

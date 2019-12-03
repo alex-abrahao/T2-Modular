@@ -59,3 +59,6 @@ MTZ_VerificarElem, pCasa tem sudoeste/=-1
 MTZ_VerificarElem, pCasa nao tem sudoeste=/-1
 MTZ_VerificarElem, pCasa tem erro no sudoeste/=-1
 MTZ_VerificarElem, pCasa sudoeste ok/=-1
+
+MTZ_VerificarElem, tipoConteudo errado
+MTZ_VerificarElem, tipoConteudo ok
