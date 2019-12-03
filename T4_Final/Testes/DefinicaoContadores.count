@@ -1,0 +1,64 @@
+MTZ_VerificarMatriz, pMatrizParm nulo\=-2
+MTZ_VerificarMatriz, pMatrizParm ok
+MTZ_VerificarMatriz, pCasaCorr nulo
+MTZ_VerificarMatriz, pCasaCorr existe
+MTZ_VerificarMatriz, pPrimeiro existe
+MTZ_VerificarMatriz, pPrimeiro nulo
+MTZ_VerificarMatriz, pPrimeiro posicao errada\=-1
+MTZ_VerificarMatriz, pPrimeiro posicao ok
+MTZ_VerificarMatriz, tamBytes eh zero\=-1
+MTZ_VerificarMatriz, tamBytes maior que zero
+MTZ_VerificarMatriz, numCasas eh zero\=-1
+MTZ_VerificarMatriz, numCasas maior que zero
+MTZ_VerificarMatriz, numCasas diferente do esperado
+MTZ_VerificarMatriz, numCasas ok
+MTZ_VerificarMatriz, tamBytes diferente do esperado
+MTZ_VerificarMatriz, tamBytes ok
+
+MTZ_VerificarElem, pElemParm nulo
+MTZ_VerificarElem, pElemParm ok
+MTZ_VerificarElem, pCasa eh da matriz
+MTZ_VerificarElem, pCasa nao eh da matriz
+
+MTZ_VerificarElem, pCasa tem norte\=-1
+MTZ_VerificarElem, pCasa nao tem norte\=-1
+MTZ_VerificarElem, pCasa tem erro no norte\=-1
+MTZ_VerificarElem, pCasa norte ok\=-1
+
+MTZ_VerificarElem, pCasa tem noroeste\=-1
+MTZ_VerificarElem, pCasa nao tem noroeste\=-1
+MTZ_VerificarElem, pCasa tem erro no noroeste\=-1
+MTZ_VerificarElem, pCasa noroeste ok\=-1
+
+MTZ_VerificarElem, pCasa tem oeste\=-1
+MTZ_VerificarElem, pCasa nao tem oeste\=-1
+MTZ_VerificarElem, pCasa tem erro no oeste\=-1
+MTZ_VerificarElem, pCasa oeste ok\=-1
+
+MTZ_VerificarElem, pCasa tem leste\=-1
+MTZ_VerificarElem, pCasa nao tem leste\=-1
+MTZ_VerificarElem, pCasa tem erro no leste\=-1
+MTZ_VerificarElem, pCasa leste ok\=-1
+
+MTZ_VerificarElem, pCasa tem sul\=-1
+MTZ_VerificarElem, pCasa nao tem sul\=-1
+MTZ_VerificarElem, pCasa tem erro no sul\=-1
+MTZ_VerificarElem, pCasa sul ok\=-1
+
+MTZ_VerificarElem, pCasa tem nordeste\=-1
+MTZ_VerificarElem, pCasa nao tem nordeste\=-1
+MTZ_VerificarElem, pCasa tem erro no nordeste\=-1
+MTZ_VerificarElem, pCasa nordeste ok\=-1
+
+MTZ_VerificarElem, pCasa tem sudeste\=-1
+MTZ_VerificarElem, pCasa nao tem sudeste\=-1
+MTZ_VerificarElem, pCasa tem erro no sudeste\=-1
+MTZ_VerificarElem, pCasa sudeste ok\=-1
+
+MTZ_VerificarElem, pCasa tem sudoeste\=-1
+MTZ_VerificarElem, pCasa nao tem sudoeste\=-1
+MTZ_VerificarElem, pCasa tem erro no sudoeste\=-1
+MTZ_VerificarElem, pCasa sudoeste ok\=-1
+
+MTZ_VerificarElem, tipoConteudo errado
+MTZ_VerificarElem, tipoConteudo ok
