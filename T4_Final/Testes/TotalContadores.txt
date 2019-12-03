@@ -1,0 +1,62 @@
+//////////////////////////////////////////////////////////////////////
+// Contadores acumulados, gerado: 2019/12/03-04:45:13
+//////////////////////////////////////////////////////////////////////
+
+MTZ_VerificarElem, pCasa eh da matriz\=0
+MTZ_VerificarElem, pCasa leste ok\=-1
+MTZ_VerificarElem, pCasa nao eh da matriz\=0
+MTZ_VerificarElem, pCasa nao tem leste\=-1
+MTZ_VerificarElem, pCasa nao tem nordeste\=-1
+MTZ_VerificarElem, pCasa nao tem noroeste\=-1
+MTZ_VerificarElem, pCasa nao tem norte\=-1
+MTZ_VerificarElem, pCasa nao tem oeste\=-1
+MTZ_VerificarElem, pCasa nao tem sudeste\=-1
+MTZ_VerificarElem, pCasa nao tem sudoeste\=-1
+MTZ_VerificarElem, pCasa nao tem sul\=-1
+MTZ_VerificarElem, pCasa nordeste ok\=-1
+MTZ_VerificarElem, pCasa noroeste ok\=-1
+MTZ_VerificarElem, pCasa norte ok\=-1
+MTZ_VerificarElem, pCasa oeste ok\=-1
+MTZ_VerificarElem, pCasa sudeste ok\=-1
+MTZ_VerificarElem, pCasa sudoeste ok\=-1
+MTZ_VerificarElem, pCasa sul ok\=-1
+MTZ_VerificarElem, pCasa tem erro no leste\=-1
+MTZ_VerificarElem, pCasa tem erro no nordeste\=-1
+MTZ_VerificarElem, pCasa tem erro no noroeste\=-1
+MTZ_VerificarElem, pCasa tem erro no norte\=-1
+MTZ_VerificarElem, pCasa tem erro no oeste\=-1
+MTZ_VerificarElem, pCasa tem erro no sudeste\=-1
+MTZ_VerificarElem, pCasa tem erro no sudoeste\=-1
+MTZ_VerificarElem, pCasa tem erro no sul\=-1
+MTZ_VerificarElem, pCasa tem leste\=-1
+MTZ_VerificarElem, pCasa tem nordeste\=-1
+MTZ_VerificarElem, pCasa tem noroeste\=-1
+MTZ_VerificarElem, pCasa tem norte\=-1
+MTZ_VerificarElem, pCasa tem oeste\=-1
+MTZ_VerificarElem, pCasa tem sudeste\=-1
+MTZ_VerificarElem, pCasa tem sudoeste\=-1
+MTZ_VerificarElem, pCasa tem sul\=-1
+MTZ_VerificarElem, pElemParm nulo\=0
+MTZ_VerificarElem, pElemParm ok\=0
+MTZ_VerificarElem, tipoConteudo errado\=0
+MTZ_VerificarElem, tipoConteudo ok\=0
+MTZ_VerificarMatriz, numCasas diferente do esperado\=0
+MTZ_VerificarMatriz, numCasas eh zero\=-1
+MTZ_VerificarMatriz, numCasas maior que zero\=0
+MTZ_VerificarMatriz, numCasas ok\=0
+MTZ_VerificarMatriz, pCasaCorr existe\=0
+MTZ_VerificarMatriz, pCasaCorr nulo\=0
+MTZ_VerificarMatriz, pMatrizParm nulo\=-2
+MTZ_VerificarMatriz, pMatrizParm ok\=0
+MTZ_VerificarMatriz, pPrimeiro existe\=0
+MTZ_VerificarMatriz, pPrimeiro nulo\=0
+MTZ_VerificarMatriz, pPrimeiro posicao errada\=-1
+MTZ_VerificarMatriz, pPrimeiro posicao ok\=0
+MTZ_VerificarMatriz, tamBytes diferente do esperado\=0
+MTZ_VerificarMatriz, tamBytes eh zero\=-1
+MTZ_VerificarMatriz, tamBytes maior que zero\=0
+MTZ_VerificarMatriz, tamBytes ok\=0
+
+//////////////////////////////////////////////////////////////////////
+// Fim arquivo de contadores acumulados
+//////////////////////////////////////////////////////////////////////

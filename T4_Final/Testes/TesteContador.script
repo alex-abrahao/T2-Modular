@@ -124,6 +124,8 @@
 =destruir	mat1	OK
 =destruir	mat2	OK
 
+=gravarcontadores "TotalContadores.txt"
+
 == Terminar controlar contadores
 =pararcontagem
 =verificarcontagens	0
