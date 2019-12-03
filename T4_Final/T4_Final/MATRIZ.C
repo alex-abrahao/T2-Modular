@@ -37,8 +37,6 @@
 #define TAM_CONTEUDO 20
 #endif
 
-// typedef struct tgMatriz tpMatriz;
-
 /***********************************************************************
 *
 *  $TC Tipo de dados: MTZ Descritor do casa da matriz
