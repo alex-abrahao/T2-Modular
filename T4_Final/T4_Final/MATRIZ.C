@@ -642,6 +642,7 @@ static char EspacoLixo[ 256 ] =
    void MTZ_Deturpar( void * pMatrizParm , MTZ_tpModosDeturpacao ModoDeturpar ) {
 
       tpMatriz * pMatriz = NULL ;
+      int i;
 
       if ( pMatrizParm == NULL ) { return ; } /* if */
 
@@ -649,13 +650,13 @@ static char EspacoLixo[ 256 ] =
 
       switch ( ModoDeturpar ) {
 
-      /* Modifica o tipo da cabeça */
+      /* Elimina corrente */
 
-         case DeturpaTipoCabeca : {
+         case DeturpaEliminaCorrente : {
 
-            CED_DefinirTipoEspaco( pMatriz , MTZ_TipoEspacoNulo ) ;
+            CED_Free(pMatriz->pCasaCorr) ;
             break ;
-         } /* fim ativa: Modifica o tipo da cabeça */
+         } /* fim ativa: Elimina corrente */
 
       /* Anula ponteiro corrente */
 
@@ -673,22 +674,6 @@ static char EspacoLixo[ 256 ] =
             break ;
          } /* fim ativa: Anula ponteiro corrente */
 
-      /* Faz primeiro apontar para lixo */
-
-         case DeturpaPtrPrimLixo : {
-
-            pMatriz->pPrimeiro = ( tpCasaMatriz * )( EspacoLixo ) ;
-            break ;
-         } /* fim ativa: Faz raiz apontar para lixo */
-
-      /* Faz corrente apontar para lixo */
-
-         case DeturpaPtrCorrLixo : {
-
-            pMatriz->pCasaCorr = ( tpCasaMatriz * )( EspacoLixo ) ;
-            break ;
-         } /* fim ativa: Faz corrente apontar para lixo */
-
       /* Deturpa casa */
 
          default :
@@ -697,37 +682,54 @@ static char EspacoLixo[ 256 ] =
 
             switch ( ModoDeturpar ) {
 
-            /* Modifica tipo casa corrente */
+            /* Anula norte */
+
+               case DeturpaPtrNorteNulo : {
+
+                  pMatriz->pCasaCorr->pCasasAdjacentes[MTZ_DirNorte] = NULL ;
+                  break ;
+               } /* fim ativa: Anula norte */
+
+            /* Anula sudeste */
+
+               case DeturpaPtrSudesteNulo : {
+
+                  pMatriz->pCasaCorr->pCasasAdjacentes[MTZ_DirSudeste] = NULL ;
+                  break ;
+               } /* fim ativa: Anula sudeste */
+
+            /* Faz ponteiro norte apontar para lixo */
+
+               case DeturpaPtrNorteLixo : {
+
+                  pMatriz->pCasaCorr->pCasasAdjacentes[MTZ_DirNorte] = ( tpCasaMatriz * )( EspacoLixo ) ;
+                  break ;
+               } /* fim ativa: Faz ponteiro norte apontar para lixo */
+
+            /* Faz ponteiro sudeste apontar para lixo */
+
+               case DeturpaPtrSudesteLixo : {
+
+                  pMatriz->pCasaCorr->pCasasAdjacentes[MTZ_DirSudeste] = ( tpCasaMatriz * )( EspacoLixo ) ;
+                  break ;
+               } /* fim ativa: Faz ponteiro sudeste apontar para lixo */
+
+            /* Altera conteudo */
 
                case DeturpaAlteraTipoEstrutura : {
 
-                  CED_DefinirTipoEspaco( pMatriz->pCasaCorr , MTZ_TipoEspacoNulo ) ;
+                  strcpy_s(pMatriz->pCasaCorr->tipoConteudo, 3, "INT") ;
                   break ;
-               } /* fim ativa: Modifica tipo nó corrente */
+               } /* fim ativa: Altera conteudo */
 
-            /* Anula ponteiro cabeça */
+            /* Faz ponteiro sudeste apontar para lixo */
 
-               case DeturpaPtCabecaNulo : {
+               case DeturpaDesencadeiaCasa : {
 
-                  pMatriz->pCasaCorr->pCabeca = NULL ;
+                  for (i = 0; i < 8; i++)
+                     pMatriz->pCasaCorr->pCasasAdjacentes[i] = NULL ;
                   break ;
-               } /* fim ativa: Anula ponteiro cabeça */
-
-            /* Faz ponteiro cabeça apontar para lixo */
-
-               case DeturpaPtCabecaLixo : {
-
-                  pMatriz->pCasaCorr->pCabeca = ( tpMatriz * )( EspacoLixo ) ;
-                  break ;
-               } /* fim ativa: Faz ponteiro cabeça apontar para lixo */
-
-            /* Faz ponteiro cabeça apontar para lixo */
-
-               case DeturpaPtCabecaLixo : {
-
-                  pMatriz->pCasaCorr->pCabeca = ( tpMatriz * )( EspacoLixo ) ;
-                  break ;
-               } /* fim ativa: Faz ponteiro cabeça apontar para lixo */
+               } /* fim ativa: Faz ponteiro sudeste apontar para lixo */
 
             } /* fim seleciona: Deturpa nó */
 
