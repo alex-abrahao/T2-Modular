@@ -69,8 +69,6 @@
 
 #ifdef _DEBUG
 #define VERIFICA_CMD			"=verifica" 
-#define INICIAR_CONT_CMD    	"=iniciarcontadores"
-#define GRAVAR_CMD			    "=gravar" 
 #define DETURPAR_CMD			"=deturpar"
 #endif
 
@@ -116,6 +114,11 @@ TST_tpCondRet TST_EfetuarComando( char * ComandoTeste ) {
     char ValorDado     = '\0' ;
     char * pChar = NULL;
     MTZ_tppMatriz matDada;
+
+    #ifdef _DEBUG
+    int ErrosEsperados = 0;
+    int ErrosObtidos = 0;
+    #endif
 
     int  NumLidos = -1 ;
 
@@ -292,53 +295,40 @@ TST_tpCondRet TST_EfetuarComando( char * ComandoTeste ) {
 	#ifdef _DEBUG
 
 	else if ( strcmp( ComandoTeste, VERIFICA_CMD) == 0) {
-		NumLidos = LER_LerParametros( "i" , 
-									&indiceMtz);
-		if (NumLidos != 1) {
+		NumLidos = LER_LerParametros( "ii" , 
+									&indiceMtz, &ErrosEsperados);
+		if (NumLidos != 2) {
 			return TST_CondRetParm;
 		}
 
 		matDada = EncontrarMatriz( indiceMtz );
-		CondRetObtido = MTZ_VerificarCabeca( matDada );
+		ErrosObtidos = MTZ_VerificarMatriz( matDada );
 
-    return TST_CompararInt( CondRetEsperada , CondRetObtido ,
-            "Retorno errado ao verificar a cabeca" );
+        return TST_CompararInt( ErrosEsperados , ErrosObtidos ,
+            "Retorno errado no num de erros ao verificar a matriz" );
 	} /* fim ativa: Verificar estrutura */
-
-	/* Iniciar contadores */
-	else if ( strcmp( ComandoTeste , INICIAR_CONT_CMD ) == 0 ) {
-		NumLidos = LER_LerParametros( "ii" ,
-                                    &indiceMtz , &CondRetEsperada ) ;
-		if ( NumLidos != 2 ){
-			return TST_CondRetParm ;
-		} /* if */
-
-		matDada = EncontrarMatriz( indiceMtz );
-		
-		return TST_CompararInt( CondRetEsperada , MTZ_VerificarMatriz( matDada ) ,
-               "Retorno incorreto ao verificar matriz." ) ;
-	} /* fim ativa: Iniciar contadores */
 
 	/* Deturpar uma matriz */
 	else if ( strcmp( ComandoTeste , DETURPAR_CMD ) == 0 ) {
 
-            NumLidos = LER_LerParametros( "ii" ,
-                               &indiceMtz , &modoDeturpar ) ;
+        NumLidos = LER_LerParametros( "ii" ,
+                           &indiceMtz , &modoDeturpar ) ;
 
-            if ( ( NumLidos != 2 )) {
-               return TST_CondRetParm ;
-            } /* if */
+        if ( ( NumLidos != 2 )) {
+           return TST_CondRetParm ;
+        } /* if */
 
-			matDada = EncontrarMatriz( indiceMtz );
+		matDada = EncontrarMatriz( indiceMtz );
 
-            MTZ_Deturpar ( matDada , modoDeturpar ) ;
+        MTZ_Deturpar ( matDada , modoDeturpar ) ;
 
-            return TST_CondRetOK ;
+        return TST_CondRetOK ;
 
-         } /* fim ativa: Deturpar uma matriz */
+    } /* fim ativa: Deturpar uma matriz */
 
-      #endif
-
+    #endif
+    
+    return TST_CondRetNaoConhec;
 	  
 } /* Fim função: TMTZ Efetuar operações de teste específicas para matriz */
 

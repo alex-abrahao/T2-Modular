@@ -383,25 +383,6 @@ MTZ_tpCondRet MTZ_CriarMatriz(MTZ_tppMatriz * ppMtz, int n, void ( * ExcluirValo
 
 /***********************************************************************
 *
-*  $FC Função: MTZ  Verificar um nó cabeça
-*
-*  $ED Descrição da função
-*     Função da interface de teste.
-*     Verifica a integridade de um nó cabeça da matriz.
-*
-*  $EP Parâmetros
-*     $P pCabecaParm - ponteiro para um espaço que deveria ser uma cabeça
-*                      de matriz.
-*
-*  $FV Valor retornado
-*     Número de erros encontrados, 0 se não encontrar nenhum.
-*
-***********************************************************************/
-
-   int MTZ_VerificarCabeca( void * pCabecaParm );
-
-/***********************************************************************
-*
 *  $FC Função: MTZ  Verificar uma casa de estrutura
 *
 *  $ED Descrição da função

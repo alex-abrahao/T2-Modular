@@ -78,6 +78,7 @@
     <ClInclude Include="CESPDIN.H" />
     <ClInclude Include="CONTA.H" />
     <ClInclude Include="GENERICO.H" />
+    <ClInclude Include="INTRPCNT.H" />
     <ClInclude Include="LERPARM.H" />
     <ClInclude Include="MATRIZ.H" />
     <ClInclude Include="TST_ESPC.H" />

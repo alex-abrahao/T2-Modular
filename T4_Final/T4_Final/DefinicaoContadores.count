@@ -1,1 +1,16 @@
-Tentou verificar cabeça inexistente.
+MTZ_VerificarMatriz, pMatrizParm nulo/=-2
+MTZ_VerificarMatriz, pMatrizParm ok
+MTZ_VerificarMatriz, pCasaCorr nulo
+MTZ_VerificarMatriz, pCasaCorr existe
+MTZ_VerificarMatriz, pPrimeiro existe
+MTZ_VerificarMatriz, pPrimeiro nulo
+MTZ_VerificarMatriz, pPrimeiro posicao errada/=-1
+MTZ_VerificarMatriz, pPrimeiro posicao ok
+MTZ_VerificarMatriz, tamBytes eh zero/=-1
+MTZ_VerificarMatriz, tamBytes maior que zero
+MTZ_VerificarMatriz, numCasas eh zero/=-1
+MTZ_VerificarMatriz, numCasas maior que zero
+MTZ_VerificarMatriz, numCasas diferente do esperado
+MTZ_VerificarMatriz, numCasas ok
+MTZ_VerificarMatriz, tamBytes diferente do esperado
+MTZ_VerificarMatriz, tamBytes ok

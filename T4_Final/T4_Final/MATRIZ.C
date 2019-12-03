@@ -181,7 +181,6 @@ static char EspacoLixo[ 256 ] =
          return MTZ_CondRetFaltouMemoria;
       }
       #ifdef _DEBUG
-      CNT_Contar("MTZ_CriarMatriz, espaco para primeira casa ok", __LINE__);
       (*ppMtz)->numCasas++;
       (*ppMtz)->tamBytes += sizeof(tpCasaMatriz);
       (*ppMtz)->pPrimeiro->pCabeca = (*ppMtz);
@@ -190,27 +189,18 @@ static char EspacoLixo[ 256 ] =
       for (linha = 0; linha < n; linha++) {
 
          if (linha == 0) {
-            #ifdef _DEBUG
-            CNT_Contar("MTZ_CriarMatriz, primeira linha da matriz", __LINE__); 
-            #endif
+
             pCasaInicioLinha = (*ppMtz)->pPrimeiro;
             pCasaNorte = NULL;
 
          } else {
-            #ifdef _DEBUG
-            CNT_Contar("MTZ_CriarMatriz, nao eh primeira linha da matriz", __LINE__); 
-            #endif
             pCasaAtual = CriarCasa();
 
             if (pCasaAtual == NULL) {
-               #ifdef _DEBUG
-               CNT_Contar("MTZ_CriarMatriz, faltou memoria para casa", __LINE__); 
-               #endif
                MTZ_DestruirMatriz(ppMtz);
                return MTZ_CondRetFaltouMemoria;
             }
             #ifdef _DEBUG
-            CNT_Contar("MTZ_CriarMatriz, primeira casa da linha alocada", __LINE__);
             (*ppMtz)->numCasas++;
             pCasaAtual->pCabeca = (*ppMtz);
             (*ppMtz)->tamBytes += sizeof(tpCasaMatriz);
@@ -234,23 +224,16 @@ static char EspacoLixo[ 256 ] =
 
             pCasaAtual = CriarCasa();
             if (pCasaAtual == NULL) {
-               #ifdef _DEBUG
-               CNT_Contar("MTZ_CriarMatriz, faltou memoria para casa", __LINE__); 
-               #endif
                MTZ_DestruirMatriz(ppMtz);
                return MTZ_CondRetFaltouMemoria;
             }
             #ifdef _DEBUG
-            CNT_Contar("MTZ_CriarMatriz, casa alocada na coluna", __LINE__);
             (*ppMtz)->numCasas++;
             pCasaAtual->pCabeca = (*ppMtz);
             (*ppMtz)->tamBytes += sizeof(tpCasaMatriz);
             #endif
 
             if (pCasaNorte != NULL) {
-               #ifdef _DEBUG
-               CNT_Contar("MTZ_CriarMatriz, tem casa a norte", __LINE__); 
-               #endif
                // Preenche o noroeste
                pCasaAtual->pCasasAdjacentes[MTZ_DirNoroeste] = pCasaNorte;
                pCasaNorte->pCasasAdjacentes[MTZ_DirSudeste] = pCasaAtual;
@@ -263,19 +246,8 @@ static char EspacoLixo[ 256 ] =
                   tpCasaMatriz * pCasaNordeste = pCasaNorte->pCasasAdjacentes[MTZ_DirLeste];
                   pCasaNordeste->pCasasAdjacentes[MTZ_DirSudoeste] = pCasaAtual;
                   pCasaAtual->pCasasAdjacentes[MTZ_DirNordeste] = pCasaNordeste;
-                  #ifdef _DEBUG
-                  CNT_Contar("MTZ_CriarMatriz, tem nordeste", __LINE__); 
-                  #endif
                }
-               #ifdef _DEBUG
-               else
-                  CNT_Contar("MTZ_CriarMatriz, nao tem nordeste", __LINE__); 
-               #endif
             }
-            #ifdef _DEBUG
-            else
-               CNT_Contar("MTZ_CriarMatriz, casa na primeira linha", __LINE__); 
-            #endif
             // Preenche a casa oeste
             pCasaAtual->pCasasAdjacentes[MTZ_DirOeste] = pCasaOeste;
             pCasaOeste->pCasasAdjacentes[MTZ_DirLeste] = pCasaAtual;
@@ -421,102 +393,97 @@ static char EspacoLixo[ 256 ] =
       int linha = 0, coluna = 0;
       int contadorErros = 0;
 
-      if ( MTZ_VerificarCabeca( pMatrizParm ) != MTZ_CondRetOK ) {
-
-         return MTZ_CondRetErroEstrutura ;
-      } /* if */
-
-      CED_MarcarEspacoAtivo( pMatrizParm ) ;
+      // Verifica cabeça
+      if (pMatrizParm == NULL) {
+         contadorErros++;
+         // Não tem sentido continuar se o ponteiro cabeça é NULL (vai voar)
+         CNT_CONTAR( "MTZ_VerificarMatriz, pMatrizParm nulo" );
+         return contadorErros;
+      }
+      // else
+      CNT_CONTAR( "MTZ_VerificarMatriz, pMatrizParm ok" );
 
       pMatriz = ( tpMatriz * ) ( pMatrizParm ) ;
-      pCasaInicioLinha = pMatriz->pPrimeiro;
-      // Percorrer todas as casas da linha
-      do {
-         pCasaAtual = pCasaInicioLinha;
-         coluna = 0;
-         // Percorrer todas as casas da coluna
-         do {
-            condRetObtida = MTZ_VerificarElem( (void *) pCasaAtual );
-            if (condRetObtida != MTZ_CondRetOK) {
-               return MTZ_CondRetErroEstrutura;
-            }
-            pCasaAtual = pCasaAtual->pCasasAdjacentes[MTZ_DirLeste];
-            coluna++;
-         } while ((condRetObtida == MTZ_CondRetOK) && (pCasaAtual != NULL)) ;
 
-         linha++;
-         pCasaInicioLinha = pCasaInicioLinha->pCasasAdjacentes[MTZ_DirSul];
-      } while ((condRetObtida == MTZ_CondRetOK) && (pCasaInicioLinha != NULL)) ;
+      if (pMatriz->tamBytes == 0) {
+         contadorErros++;
+         CNT_CONTAR( "MTZ_VerificarMatriz, tamBytes eh zero" );
+      } else {
+         CNT_CONTAR( "MTZ_VerificarMatriz, tamBytes maior que zero" );
+      }
 
-      // Verificar se tamanho condiz
-
-      return MTZ_CondRetOK;
-
-   } /* Fim função: MTZ Verificar uma matriz */
-
-/***************************************************************************
-*
-*  Função: MTZ Verificar um nó cabeça
-*  ****/
-
-   int MTZ_VerificarCabeca( void * pCabecaParm ) {
-
-      tpMatriz * pMatriz = NULL ;
-
-      /* Verifica o tipo do espaço */
-
-         if ( pCabecaParm == NULL ) {
-            TST_NotificarFalha( "Tentou verificar cabeça inexistente." ) ;
-            return 1 ;
-         } /* if */
-
-         if ( ! CED_VerificarEspaco( pCabecaParm , NULL )) {
-            TST_NotificarFalha( "Controle do espaço acusou erro." ) ;
-            return MTZ_CondRetErroEstrutura ;
-         } /* if */
-
-         if ( TST_CompararInt( MTZ_TipoEspacoCabeca ,
-              CED_ObterTipoEspaco( pCabecaParm ) ,
-              "Tipo do espaço de dados não é cabeça de matriz." ) != TST_CondRetOK ) {
-            return MTZ_CondRetErroEstrutura ;
-         } /* if */
-
-         pMatriz = ( tpMatriz * )( pCabecaParm ) ;
-
-      /* Verifica primeiro da matriz */
-
-         if ( pMatriz->pPrimeiro != NULL ) {
-            if ( TST_CompararPonteiro( pCabecaParm , pMatriz->pPrimeiro->pCabeca ,
-                 "Primeiro não aponta para cabeca." ) != TST_CondRetOK ) {
-               return MTZ_CondRetErroEstrutura ;
-            } /* if */
-            if (pMatriz->pPrimeiro->pCasasAdjacentes[MTZ_DirNordeste] ||
-                  pMatriz->pPrimeiro->pCasasAdjacentes[MTZ_DirNorte] ||
-                  pMatriz->pPrimeiro->pCasasAdjacentes[MTZ_DirNoroeste] ||
-                  pMatriz->pPrimeiro->pCasasAdjacentes[MTZ_DirOeste] ||
-                  pMatriz->pPrimeiro->pCasasAdjacentes[MTZ_DirSudoeste] ) {
-               TST_NotificarFalha( "Primeiro nao esta na posicao (0,0)." ) ;
-               return MTZ_CondRetErroEstrutura ;
-            }
-         } else {
-            TST_NotificarFalha( "Primeiro inexistente." ) ;
-            return MTZ_CondRetErroEstrutura ;
-         } /* if */
+      if (pMatriz->numCasas == 0) {
+         contadorErros++;
+         CNT_CONTAR( "MTZ_VerificarMatriz, numCasas eh zero" );
+      } else {
+         CNT_CONTAR( "MTZ_VerificarMatriz, numCasas maior que zero" );
+      }
 
       /* Verifica corrente */
 
-         if ( pMatriz->pCasaCorr != NULL ) {
-            if ( TST_CompararPonteiro( pCabecaParm , pMatriz->pCasaCorr->pCabeca ,
-                 "Casa corrente não aponta para cabeça." ) != TST_CondRetOK ) {
-               return MTZ_CondRetErroEstrutura ;
-            } /* if */
-         } else {
-            TST_NotificarFalha( "Casa corrente inexistente." ) ;
-            return MTZ_CondRetErroEstrutura ;
-         } /* if */
+      if ( pMatriz->pCasaCorr == NULL ) {
+         contadorErros++;
+         CNT_CONTAR( "MTZ_VerificarMatriz, pCasaCorr nulo" );
+      } else {
+         CNT_CONTAR( "MTZ_VerificarMatriz, pCasaCorr existe" );
+      } /* if */
 
-      return MTZ_CondRetOK;
-   } /* Fim função: MTZ Verificar um nó cabeça */
+      /* Verifica primeiro da matriz */
+
+      if ( pMatriz->pPrimeiro != NULL ) {
+         CNT_CONTAR( "MTZ_VerificarMatriz, pPrimeiro existe" );
+
+         // próximos casos só tem sentido se pPrimeiro existe, caso contrario voa
+         if (pMatriz->pPrimeiro->pCasasAdjacentes[MTZ_DirNordeste] ||
+               pMatriz->pPrimeiro->pCasasAdjacentes[MTZ_DirNorte] ||
+               pMatriz->pPrimeiro->pCasasAdjacentes[MTZ_DirNoroeste] ||
+               pMatriz->pPrimeiro->pCasasAdjacentes[MTZ_DirOeste] ||
+               pMatriz->pPrimeiro->pCasasAdjacentes[MTZ_DirSudoeste] ) {
+            contadorErros++;
+            CNT_CONTAR( "MTZ_VerificarMatriz, pPrimeiro posicao errada" );
+         } else {
+            CNT_CONTAR( "MTZ_VerificarMatriz, pPrimeiro posicao ok" );
+         }
+         
+         pCasaInicioLinha = pMatriz->pPrimeiro;
+         // Percorrer todas as casas da linha
+         do {
+            pCasaAtual = pCasaInicioLinha;
+            coluna = 0;
+            // Percorrer todas as casas da coluna
+            do {
+               contadorErros += MTZ_VerificarElem( (void *) pCasaAtual );
+               pCasaAtual = pCasaAtual->pCasasAdjacentes[MTZ_DirLeste];
+               coluna++;
+            } while (pCasaAtual != NULL) ;
+
+            linha++;
+            pCasaInicioLinha = pCasaInicioLinha->pCasasAdjacentes[MTZ_DirSul];
+         } while (pCasaInicioLinha != NULL) ;
+
+         // Verificar se tamanho condiz
+         if (pMatriz->numCasas != linha*coluna) {
+            contadorErros++;
+            CNT_CONTAR( "MTZ_VerificarMatriz, numCasas diferente do esperado" );
+         } else {
+            CNT_CONTAR( "MTZ_VerificarMatriz, numCasas ok" );
+         }
+
+         if (pMatriz->tamBytes != linha*coluna*sizeof(tpCasaMatriz)) {
+            contadorErros++;
+            CNT_CONTAR( "MTZ_VerificarMatriz, tamBytes diferente do esperado" );
+         } else {
+            CNT_CONTAR( "MTZ_VerificarMatriz, tamBytes ok" );
+         }
+
+      } else {
+         contadorErros++;
+         CNT_CONTAR( "MTZ_VerificarMatriz, pPrimeiro nulo" );
+      } /* if */
+
+      return contadorErros;
+
+   } /* Fim função: MTZ Verificar uma matriz */
 
 /***************************************************************************
 *
@@ -533,11 +500,6 @@ static char EspacoLixo[ 256 ] =
 
       if ( pElemParm == NULL ) {
          TST_NotificarFalha( "Tentou verificar casa inexistente." ) ;
-         return MTZ_CondRetErroEstrutura ;
-      } /* if */
-
-      if ( ! CED_VerificarEspaco( pElemParm , NULL )) {
-         TST_NotificarFalha( "Controle do espaço acusou erro." ) ;
          return MTZ_CondRetErroEstrutura ;
       } /* if */
 

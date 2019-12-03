@@ -33,6 +33,9 @@
     <ClInclude Include="TST_ESPC.H">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="INTRPCNT.H">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\..\T2_Labirinto\T2_Labirinto\ArcaboucoTeste.lib">
