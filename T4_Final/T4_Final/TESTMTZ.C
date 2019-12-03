@@ -51,6 +51,8 @@
 #include    "TST_ESPC.H"
 #include    "generico.h"
 #include    "lerparm.h"
+#include    "CESPDIN.H"
+#include    "CONTA.H"
 
 #include    "MATRIZ.h"
 
@@ -62,12 +64,15 @@
 #define     OBTER_VAL_CMD       "=obter"
 #define     DESTROI_CMD         "=destruir"
 #define     PRIMEIRO_CMD        "=primeiro"
+
 /* Comandos que somente operam em modo _DEBUG */
 
-#define VER_CABECA_CMD			"=verificarcabeca" 
-#define VER_MATRIZ_CMD			"=verificarmatriz" 
-#define VER_MEMORIA_CMD			"=verificarmemoria" 
-#define DETURPAR_CMD			"=deturpar" 
+#ifdef _DEBUG
+#define VERIFICA_CMD			"=verifica" 
+#define INICIAR_CONT_CMD    	"=iniciarcontadores"
+#define GRAVAR_CMD			    "=gravar" 
+#define DETURPAR_CMD			"=deturpar"
+#endif
 
 /*****  Dados encapsulados no módulo  *****/
 
@@ -154,12 +159,18 @@ TST_tpCondRet TST_EfetuarComando( char * ComandoTeste ) {
         } /* if */
 
         matDada = EncontrarMatriz(indiceMtz);
+        #ifdef _DEBUG
+        pChar = (char *) CED_Malloc(sizeof(char), __LINE__, __FILE__);
+        #else
         pChar = (char *) malloc(sizeof(char));
+        #endif
 
         if ( pChar == NULL ) {
             return TST_CondRetMemoria ;
         } /* if */
-
+        #ifdef _DEBUG
+        CED_MarcarEspacoAtivo( pChar );
+        #endif
         *pChar = ValorDado;
 
         CondRetObtido = MTZ_InserirElementoNaCasaCorrente( matDada , (void *) pChar 
@@ -277,10 +288,10 @@ TST_tpCondRet TST_EfetuarComando( char * ComandoTeste ) {
 
     } /* fim ativa: Testar MTZ Voltar primeiro */
 
-	/* Testar verificador de cabeça */
+	/* Verificar estrutura */
 	#ifdef _DEBUG
 
-	else if ( strcmp( ComandoTeste, VER_CABECA_CMD) == 0) {
+	else if ( strcmp( ComandoTeste, VERIFICA_CMD) == 0) {
 		NumLidos = LER_LerParametros( "i" , 
 									&indiceMtz);
 		if (NumLidos != 1) {
@@ -292,11 +303,10 @@ TST_tpCondRet TST_EfetuarComando( char * ComandoTeste ) {
 
     return TST_CompararInt( CondRetEsperada , CondRetObtido ,
             "Retorno errado ao verificar a cabeca" );
-	} /* fim ativa: Testar verificador de cabeça */
+	} /* fim ativa: Verificar estrutura */
 
-	/* Testar verificador de matriz */
-	else if ( strcmp( ComandoTeste , VER_MATRIZ_CMD ) == 0 )
-	{
+	/* Iniciar contadores */
+	else if ( strcmp( ComandoTeste , INICIAR_CONT_CMD ) == 0 ) {
 		NumLidos = LER_LerParametros( "ii" ,
                                     &indiceMtz , &CondRetEsperada ) ;
 		if ( NumLidos != 2 ){
@@ -307,11 +317,10 @@ TST_tpCondRet TST_EfetuarComando( char * ComandoTeste ) {
 		
 		return TST_CompararInt( CondRetEsperada , MTZ_VerificarMatriz( matDada ) ,
                "Retorno incorreto ao verificar matriz." ) ;
-	} /* fim ativa: Testar verificador de matriz */
+	} /* fim ativa: Iniciar contadores */
 
-	 /* Deturpar uma árvore */
-	else if ( strcmp( ComandoTeste , DETURPAR_CMD ) == 0 )
-         {
+	/* Deturpar uma matriz */
+	else if ( strcmp( ComandoTeste , DETURPAR_CMD ) == 0 ) {
 
             NumLidos = LER_LerParametros( "ii" ,
                                &indiceMtz , &modoDeturpar ) ;
@@ -343,8 +352,14 @@ TST_tpCondRet TST_EfetuarComando( char * ComandoTeste ) {
 
 void ExcluirCaracter( void * pValor ) {
 
-    if (pValor != NULL)
+    if (pValor != NULL) {
+        #ifdef _DEBUG
+        CED_MarcarEspacoNaoAtivo(pValor);
+        CED_Free(pValor);
+        #else
         free( pValor ) ;
+        #endif
+    }
 
 } /* Fim função: TMTZ Excluir caracter */
 

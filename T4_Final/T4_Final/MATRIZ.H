@@ -144,64 +144,28 @@ typedef struct tgMatriz * MTZ_tppMatriz ;
         DeturpaPtrNorteNulo = 2 ,
             /* Atribui NULL ao ponteiro para o elemento norte. */
 
-        DeturpaPtrNordesteNulo = 3 ,
-            /* Atribui NULL ao ponteiro para o elemento nordeste. */
-
-        DeturpaPtrLesteNulo = 4 ,
-            /* Atribui NULL ao ponteiro para o elemento leste. */
-
-        DeturpaPtrSudesteNulo = 5 ,
-            /* Atribui NULL ao ponteiro para o elemento sudeste. */
-
-        DeturpaPtrSulNulo = 6 ,
-            /* Atribui NULL ao ponteiro para o elemento sul. */
-
-        DeturpaPtrSudoesteNulo = 7 ,
-            /* Atribui NULL ao ponteiro para o elemento sudoeste. */
-
-        DeturpaPtrOesteNulo = 8 ,
-            /* Atribui NULL ao ponteiro para o elemento oeste. */
-
-        DeturpaPtrNoroesteNulo = 9 ,
-            /* Atribui NULL ao ponteiro para o elemento noroeste. */
-
-		    DeturpaPtrNorteLixo = 10 ,
-            /* Atribui lixo ao ponteiro para o elemento norte. */
-
-        DeturpaPtrNordesteLixo = 11 ,
-            /* Atribui lixo ao ponteiro para o elemento nordeste. */
-
-        DeturpaPtrLesteLixo = 12 ,
+        DeturpaPtrSudesteNulo = 3 ,
             /* Atribui lixo ao ponteiro para o elemento leste. */
 
-        DeturpaPtrSudesteLixo = 13 ,
+		    DeturpaPtrNorteLixo = 4 ,
+            /* Atribui lixo ao ponteiro para o elemento norte. */
+
+        DeturpaPtrSudesteLixo = 5 ,
             /* Atribui lixo ao ponteiro para o elemento sudeste. */
 
-        DeturpaPtrSulLixo = 14 ,
-            /* Atribui lixo ao ponteiro para o elemento sul. */
+		    DeturpaConteudoPtrNulo = 6 ,
+		        /* Atribui NULL ao ponteiro para o conteúdo da casa. */
 
-        DeturpaPtrSudoesteLixo = 15 ,
-            /* Atribui lixo ao ponteiro para o elemento sudoeste. */
-
-        DeturpaPtrOesteLixo = 16 ,
-            /* Atribui lixo ao ponteiro para o elemento oeste. */
-
-        DeturpaPtrNoroesteLixo = 17 ,
-            /* Atribui lixo ao ponteiro para o elemento noroeste. */
-
-		    DeturpaConteudoPtrNulo = 18 ,
-		        /* Atribui NULL ao ponteiro para o conteúdo do nó. */
-
-		    DeturpaAlteraTipoEstrutura = 19 ,
+		    DeturpaAlteraTipoEstrutura = 7 ,
             /* Altera tipo de estrutura apontado na casa. */
 
-		    DeturpaDesencadeiaCasa = 20 ,
+		    DeturpaDesencadeiaCasa = 8 ,
             /* Desencadeia casa sem liberá-la com free. */
 
-		    DeturpaPtrCorrNulo = 21 ,
+		    DeturpaPtrCorrNulo = 9 ,
             /* Atribui NULL ao ponteiro corrente. */
 
-        DeturpaPtrPrimNulo = 22 ,
+        DeturpaPtrPrimNulo = 10 ,
             /* Atribui NULL ao ponteiro primeiro. */
 
    } MTZ_tpModosDeturpacao ;
@@ -410,9 +374,12 @@ MTZ_tpCondRet MTZ_CriarMatriz(MTZ_tppMatriz * ppMtz, int n, void ( * ExcluirValo
 *     Verifica completamente uma determinada matriz.
 *     Também marca todos os espaços por ela ocupados.
 *
+*  $FV Valor retornado
+*     Número de erros encontrados, 0 se não encontrar nenhum.
+*
 ***********************************************************************/
 
-   MTZ_tpCondRet MTZ_VerificarMatriz( void * pMatrizParm );
+   int MTZ_VerificarMatriz( void * pMatrizParm );
 
 /***********************************************************************
 *
@@ -427,11 +394,11 @@ MTZ_tpCondRet MTZ_CriarMatriz(MTZ_tppMatriz * ppMtz, int n, void ( * ExcluirValo
 *                      de matriz.
 *
 *  $FV Valor retornado
-*     Condição de retorno de teste
+*     Número de erros encontrados, 0 se não encontrar nenhum.
 *
 ***********************************************************************/
 
-   MTZ_tpCondRet MTZ_VerificarCabeca( void * pCabecaParm );
+   int MTZ_VerificarCabeca( void * pCabecaParm );
 
 /***********************************************************************
 *
@@ -445,11 +412,11 @@ MTZ_tpCondRet MTZ_CriarMatriz(MTZ_tppMatriz * ppMtz, int n, void ( * ExcluirValo
 *     $P pElemParm - ponteiro para espaço que deveria ser uma casa estrutural.
 *
 *  $FV Valor retornado
-*     Erro encontrado.
+*     Número de erros encontrados, 0 se não encontrar nenhum.
 *
 ***********************************************************************/
 
-   MTZ_tpCondRet MTZ_VerificarElem( void * pElemParm );
+   int MTZ_VerificarElem( void * pElemParm );
 
 /***********************************************************************
 *

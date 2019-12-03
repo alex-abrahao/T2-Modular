@@ -138,43 +138,14 @@ static char EspacoLixo[ 256 ] =
       // setar nessas casas as direcoes inversas para o ponteiro da casa atual que está sendo criada.
       tpCasaMatriz * pCasaOeste, * pCasaInicioLinha, * pCasaAtual, * pCasaNorte;
 
-      #ifdef _DEBUG
-      CNT_Contar("MTZ_CriarMatriz, inicio", __LINE__); 
-      #endif
+      if (n <= 0) return MTZ_CondRetErroEstrutura;
 
-      if (n <= 0) {
-         #ifdef _DEBUG
-         CNT_Contar("MTZ_CriarMatriz, tam invalido", __LINE__); 
-         #endif
-         return MTZ_CondRetErroEstrutura;
-      }
-
-      #ifdef _DEBUG
-      CNT_Contar("MTZ_CriarMatriz, tam valido", __LINE__); 
-      #endif
-
-      if (ppMtz == NULL) {
-         #ifdef _DEBUG
-         CNT_Contar("MTZ_CriarMatriz, ponteiro para matriz inexistente", __LINE__); 
-         #endif
-         return MTZ_CondRetErroEstrutura;
-      }
-
-      #ifdef _DEBUG
-      CNT_Contar("MTZ_CriarMatriz, ponteiro ppMtz ok", __LINE__); 
-      #endif
+      if (ppMtz == NULL) return MTZ_CondRetErroEstrutura;
 
       // Se já havia uma matriz anteriormente, destrua-a primeiro
       if (*ppMtz != NULL) {
-         #ifdef _DEBUG
-         CNT_Contar("MTZ_CriarMatriz, ja havia matriz em ppMtz", __LINE__); 
-         #endif
          MTZ_DestruirMatriz(ppMtz);
       }
-      #ifdef _DEBUG
-      else
-         CNT_Contar("MTZ_CriarMatriz, ppMtz nao continha matriz", __LINE__); 
-      #endif
 
       // Alocar espaço para a head
       #ifdef _DEBUG
@@ -183,15 +154,11 @@ static char EspacoLixo[ 256 ] =
       *ppMtz = ( tpMatriz * ) malloc( sizeof( tpMatriz )) ;
       #endif
 
-      if (*ppMtz == NULL) {
-         #ifdef _DEBUG
-         CNT_Contar("MTZ_CriarMatriz, faltou memoria", __LINE__); 
-         #endif
-         return MTZ_CondRetFaltouMemoria;
-      }
+      if (*ppMtz == NULL) return MTZ_CondRetFaltouMemoria;
+
       #ifdef _DEBUG
-      CNT_Contar("MTZ_CriarMatriz, espaco para matriz ok", __LINE__); 
       CED_DefinirTipoEspaco( *ppMtz , MTZ_TipoEspacoCabeca ) ;
+      CED_MarcarEspacoAtivo( *ppMtz );
       #endif
       // Setup da head
       (*ppMtz)->id = 0;
@@ -207,7 +174,7 @@ static char EspacoLixo[ 256 ] =
       if ((*ppMtz)->pPrimeiro == NULL) {
          // Libera a head
          #ifdef _DEBUG
-         CNT_Contar("MTZ_CriarMatriz, nao teve espaco para primeira casa", __LINE__);
+         CED_MarcarEspacoNaoAtivo( *ppMtz ) ;
          CED_Free(*ppMtz);
          #else
          free(*ppMtz);
@@ -333,30 +300,14 @@ static char EspacoLixo[ 256 ] =
 
    MTZ_tpCondRet MTZ_DestruirMatriz( MTZ_tppMatriz * ppMtz ) {
 
-      #ifdef _DEBUG
-      CNT_Contar("MTZ_DestruirMatriz, inicio", __LINE__); 
-      #endif
-
-      if ( ppMtz == NULL ) {
-         #ifdef _DEBUG
-         CNT_Contar("MTZ_DestruirMatriz, ponteiro para matriz inexistente", __LINE__); 
-         #endif
-         return MTZ_CondRetMatrizNaoExiste;
-      }
-      #ifdef _DEBUG
-      CNT_Contar("MTZ_DestruirMatriz, matriz existe", __LINE__); 
-      #endif
+      if ( ppMtz == NULL ) return MTZ_CondRetMatrizNaoExiste;
+      
       if ( *ppMtz != NULL ) {
          if ( (*ppMtz)->pPrimeiro != NULL ) {
-            #ifdef _DEBUG
-            CNT_Contar("MTZ_DestruirMatriz, matriz inexistente", __LINE__); 
-            #endif
             DestroiMatriz( *ppMtz ) ;
          } /* if */
-         #ifdef _DEBUG
-         else
-            CNT_Contar("MTZ_DestruirMatriz, pPrimeiro eh NULL", __LINE__); 
 
+         #ifdef _DEBUG
          CED_Free(*ppMtz);
          #else
          free(*ppMtz);
@@ -364,9 +315,7 @@ static char EspacoLixo[ 256 ] =
          *ppMtz = NULL ;
          return MTZ_CondRetOK;
       } /* if */
-      #ifdef _DEBUG
-      CNT_Contar("MTZ_DestruirMatriz, matriz inexistente", __LINE__); 
-      #endif
+
       return MTZ_CondRetMatrizNaoExiste;
 
    } /* Fim função: MTZ Destruir matriz */
@@ -378,41 +327,14 @@ static char EspacoLixo[ 256 ] =
 
    MTZ_tpCondRet MTZ_AndarDirecao( MTZ_tppMatriz pMtz, MTZ_tpDirecao direcao ) {
       
-      #ifdef _DEBUG
-      CNT_Contar("MTZ_AndarDirecao, inicio", __LINE__);
-      #endif
       // Tratar erro na estrutura
-      if (pMtz == NULL) {
-         #ifdef _DEBUG
-         CNT_Contar("MTZ_AndarDirecao, matriz inexistente", __LINE__);
-         #endif
-         return MTZ_CondRetMatrizNaoExiste;
-      }
-      #ifdef _DEBUG
-      CNT_Contar("MTZ_AndarDirecao, matriz existe", __LINE__);
-      #endif
+      if (pMtz == NULL) return MTZ_CondRetMatrizNaoExiste;
 
       // Tratar erro na direção
-      if (direcao < 0 || direcao > 7) {
-         #ifdef _DEBUG
-         CNT_Contar("MTZ_AndarDirecao, direcao inexistente", __LINE__);
-         #endif
-         return MTZ_CondRetDirecaoNaoExisteOuInvalida;
-      }
-      #ifdef _DEBUG
-      CNT_Contar("MTZ_AndarDirecao, direcao existe", __LINE__);
-      #endif
+      if (direcao < 0 || direcao > 7) return MTZ_CondRetDirecaoNaoExisteOuInvalida;
 
       // Tratar se está andando para uma direção que contém nulo
-      if (pMtz->pCasaCorr->pCasasAdjacentes[direcao] == NULL) {
-         #ifdef _DEBUG
-         CNT_Contar("MTZ_AndarDirecao, direcao invalida", __LINE__);
-         #endif
-         return MTZ_CondRetDirecaoNaoExisteOuInvalida;
-      }
-      #ifdef _DEBUG
-      CNT_Contar("MTZ_AndarDirecao, direcao valida", __LINE__);
-      #endif
+      if (pMtz->pCasaCorr->pCasasAdjacentes[direcao] == NULL) return MTZ_CondRetDirecaoNaoExisteOuInvalida;
 
       pMtz->pCasaCorr = pMtz->pCasaCorr->pCasasAdjacentes[direcao];
       return MTZ_CondRetOK;
@@ -430,38 +352,17 @@ static char EspacoLixo[ 256 ] =
                                                                                        #endif
                                                    ) {
 
-      #ifdef _DEBUG
-      CNT_Contar("MTZ_InserirElementoNaCasaCorrente, inicio", __LINE__);
-      #endif
       // Tratar se a matriz existe
-      if (pMtz == NULL) {
-         #ifdef _DEBUG
-         CNT_Contar("MTZ_InserirElementoNaCasaCorrente, matriz inexistente", __LINE__);
-         #endif
-         return MTZ_CondRetMatrizNaoExiste;
-      }
-      #ifdef _DEBUG
-      CNT_Contar("MTZ_InserirElementoNaCasaCorrente, matriz existe", __LINE__);
-      #endif
+      if (pMtz == NULL) return MTZ_CondRetMatrizNaoExiste;
+
       // Tratar se o ponteiro para o elemento é nulo
-      if (pElemento == NULL) {
-         #ifdef _DEBUG
-         CNT_Contar("MTZ_InserirElementoNaCasaCorrente, ponteiro para elemento eh nulo", __LINE__);
-         #endif
-         return MTZ_CondRetErroEstrutura;
-      }
-      #ifdef _DEBUG
-      CNT_Contar("MTZ_InserirElementoNaCasaCorrente, pElemento tem conteudo", __LINE__);
-      #endif
+      if (pElemento == NULL) return MTZ_CondRetErroEstrutura;
+
       if (pMtz->pCasaCorr->conteudo != NULL){
-         #ifdef _DEBUG
-         CNT_Contar("MTZ_InserirElementoNaCasaCorrente, casa corrente possuia conteudo", __LINE__);
-         #endif
          pMtz->ExcluirValor(pMtz->pCasaCorr->conteudo);
       }
+
       #ifdef _DEBUG
-      else
-         CNT_Contar("MTZ_InserirElementoNaCasaCorrente, casa corrente previamente vazia", __LINE__);
       strcpy_s(pMtz->pCasaCorr->tipoConteudo, TAM_CONTEUDO, tipoConteudo);
       pMtz->pCasaCorr->tamBytes = tamBytes;
       #endif
@@ -469,6 +370,7 @@ static char EspacoLixo[ 256 ] =
       pMtz->pCasaCorr->conteudo = pElemento;
 
       return MTZ_CondRetOK;
+
    } /* Fim função: MTZ Inserir elemento na casa corrente */
 
 /***************************************************************************
@@ -478,39 +380,11 @@ static char EspacoLixo[ 256 ] =
 
    MTZ_tpCondRet MTZ_ObterValorCorrente( MTZ_tppMatriz pMtz, void ** valor ) {
 
-      #ifdef _DEBUG
-      CNT_Contar("MTZ_ObterValorCorrente, inicio", __LINE__);
-      #endif
+	   if (pMtz == NULL) return MTZ_CondRetMatrizNaoExiste;
 
-	   if (pMtz == NULL) {
-         #ifdef _DEBUG
-         CNT_Contar("MTZ_ObterValorCorrente, matriz inexistente", __LINE__);
-         #endif
-         return MTZ_CondRetMatrizNaoExiste;
-      }
-      #ifdef _DEBUG
-      CNT_Contar("MTZ_ObterValorCorrente, matriz existe", __LINE__);
-      #endif
+      if (valor == NULL) return MTZ_CondRetErroEstrutura;
 
-      if (valor == NULL) {
-         #ifdef _DEBUG
-         CNT_Contar("MTZ_ObterValorCorrente, ponteiro para valor inexistente", __LINE__);
-         #endif
-         return MTZ_CondRetErroEstrutura;
-      }
-      #ifdef _DEBUG
-      CNT_Contar("MTZ_ObterValorCorrente, ponteiro para valor existe", __LINE__);
-      #endif
-
-	   if(pMtz->pCasaCorr->conteudo == NULL) {
-         #ifdef _DEBUG
-         CNT_Contar("MTZ_ObterValorCorrente, casa corrente sem conteudo", __LINE__);
-         #endif
-         return MTZ_CondRetCasaVazia;
-      }
-      #ifdef _DEBUG
-      CNT_Contar("MTZ_ObterValorCorrente, casa corrente possui conteudo", __LINE__);
-      #endif
+	   if(pMtz->pCasaCorr->conteudo == NULL) return MTZ_CondRetCasaVazia;
 
 	   *valor = pMtz->pCasaCorr->conteudo; 
 
@@ -525,19 +399,7 @@ static char EspacoLixo[ 256 ] =
 
    MTZ_tpCondRet MTZ_VoltarParaPrimeiro( MTZ_tppMatriz pMtz ) {
 
-      #ifdef _DEBUG
-      CNT_Contar("MTZ_VoltarParaPrimeiro, inicio", __LINE__); 
-      #endif
-
-      if (pMtz == NULL) {
-         #ifdef _DEBUG
-         CNT_Contar("MTZ_VoltarParaPrimeiro, matriz inexistente", __LINE__); 
-         #endif
-         return MTZ_CondRetMatrizNaoExiste;
-      }
-      #ifdef _DEBUG
-      CNT_Contar("MTZ_VoltarParaPrimeiro, matriz existe", __LINE__); 
-      #endif
+      if (pMtz == NULL) return MTZ_CondRetMatrizNaoExiste;
 
       pMtz->pCasaCorr = pMtz->pPrimeiro; 
 
@@ -552,14 +414,17 @@ static char EspacoLixo[ 256 ] =
 *  Função: MTZ Verificar uma matriz
 *  ****/
 
-   MTZ_tpCondRet MTZ_VerificarMatriz( void * pMatrizParm ) {
+   int MTZ_VerificarMatriz( void * pMatrizParm ) {
 
       tpMatriz * pMatriz = NULL ;
       tpCasaMatriz * pCasaInicioLinha = NULL;
       tpCasaMatriz * pCasaAtual = NULL;
       MTZ_tpCondRet condRetObtida = MTZ_CondRetOK;
+      int linha = 0, coluna = 0;
+      int contadorErros = 0;
 
       if ( MTZ_VerificarCabeca( pMatrizParm ) != MTZ_CondRetOK ) {
+
          return MTZ_CondRetErroEstrutura ;
       } /* if */
 
@@ -570,18 +435,23 @@ static char EspacoLixo[ 256 ] =
       // Percorrer todas as casas da linha
       do {
          pCasaAtual = pCasaInicioLinha;
+         coluna = 0;
          // Percorrer todas as casas da coluna
          do {
             condRetObtida = MTZ_VerificarElem( (void *) pCasaAtual );
             if (condRetObtida != MTZ_CondRetOK) {
-            return MTZ_CondRetErroEstrutura;
-         }
+               return MTZ_CondRetErroEstrutura;
+            }
             pCasaAtual = pCasaAtual->pCasasAdjacentes[MTZ_DirLeste];
+            coluna++;
          } while ((condRetObtida == MTZ_CondRetOK) && (pCasaAtual != NULL)) ;
 
+         linha++;
          pCasaInicioLinha = pCasaInicioLinha->pCasasAdjacentes[MTZ_DirSul];
       } while ((condRetObtida == MTZ_CondRetOK) && (pCasaInicioLinha != NULL)) ;
-      // return VerificarNo( pArvore->pNoRaiz ) ;
+
+      // Verificar se tamanho condiz
+
       return MTZ_CondRetOK;
 
    } /* Fim função: MTZ Verificar uma matriz */
@@ -591,7 +461,7 @@ static char EspacoLixo[ 256 ] =
 *  Função: MTZ Verificar um nó cabeça
 *  ****/
 
-   MTZ_tpCondRet MTZ_VerificarCabeca( void * pCabecaParm ) {
+   int MTZ_VerificarCabeca( void * pCabecaParm ) {
 
       tpMatriz * pMatriz = NULL ;
 
@@ -599,7 +469,7 @@ static char EspacoLixo[ 256 ] =
 
          if ( pCabecaParm == NULL ) {
             TST_NotificarFalha( "Tentou verificar cabeça inexistente." ) ;
-            return MTZ_CondRetErroEstrutura ;
+            return 1 ;
          } /* if */
 
          if ( ! CED_VerificarEspaco( pCabecaParm , NULL )) {
@@ -655,17 +525,17 @@ static char EspacoLixo[ 256 ] =
 *  Função: MTZ Verificar uma casa de estrutura
 *  ****/
 
-   MTZ_tpCondRet MTZ_VerificarElem( void * pElemParm ) {
+   int MTZ_VerificarElem( void * pElemParm ) {
 
       tpCasaMatriz * pCasa = NULL ;
       tpMatriz * pMatriz = NULL ;
+      int erros = 0;
 
       /* Verificar se é casa estrutural */
 
       if ( pElemParm == NULL ) {
          TST_NotificarFalha( "Tentou verificar casa inexistente." ) ;
          return MTZ_CondRetErroEstrutura ;
-
       } /* if */
 
       if ( ! CED_VerificarEspaco( pElemParm , NULL )) {
@@ -836,6 +706,101 @@ static char EspacoLixo[ 256 ] =
 
    void MTZ_Deturpar( void * pMatrizParm , MTZ_tpModosDeturpacao ModoDeturpar ) {
 
+      tpMatriz * pMatriz = NULL ;
+
+      if ( pMatrizParm == NULL ) { return ; } /* if */
+
+      pMatriz = ( tpArvore * )( pMatrizParm ) ;
+
+      switch ( ModoDeturpar ) {
+
+      /* Modifica o tipo da cabeça */
+
+         case DeturpaTipoCabeca : {
+
+            CED_DefinirTipoEspaco( pMatriz , MTZ_TipoEspacoNulo ) ;
+            break ;
+         } /* fim ativa: Modifica o tipo da cabeça */
+
+      /* Anula ponteiro corrente */
+
+         case DeturpaPtrCorrNulo : {
+
+            pMatriz->pCasaCorr = NULL ;
+            break ;
+         } /* fim ativa: Anula ponteiro raiz */
+
+      /* Anula ponteiro primeiro */
+
+         case DeturpaPtrPrimNulo : {
+
+            pMatriz->pPrimeiro = NULL ;
+            break ;
+         } /* fim ativa: Anula ponteiro corrente */
+
+      /* Faz primeiro apontar para lixo */
+
+         case DeturpaPtrPrimLixo : {
+
+            pMatriz->pPrimeiro = ( tpNoArvore * )( EspacoLixo ) ;
+            break ;
+         } /* fim ativa: Faz raiz apontar para lixo */
+
+      /* Faz corrente apontar para lixo */
+
+         case DeturpaPtrCorrLixo : {
+
+            pMatriz->pCasaCorr = ( tpCasaMatriz * )( EspacoLixo ) ;
+            break ;
+         } /* fim ativa: Faz corrente apontar para lixo */
+
+      /* Deturpa casa */
+
+         default :
+
+         if ( pMatriz->pCasaCorr != NULL ) {
+
+            switch ( ModoDeturpar ) {
+
+            /* Modifica tipo casa corrente */
+
+               case DeturpaAlteraTipoEstrutura : {
+
+                  CED_DefinirTipoEspaco( pMatriz->pCasaCorr , MTZ_TipoEspacoNulo ) ;
+                  break ;
+               } /* fim ativa: Modifica tipo nó corrente */
+
+            /* Anula ponteiro cabeça */
+
+               case DeturpaPtCabecaNulo : {
+
+                  pMatriz->pCasaCorr->pCabeca = NULL ;
+                  break ;
+               } /* fim ativa: Anula ponteiro cabeça */
+
+            /* Faz ponteiro cabeça apontar para lixo */
+
+               case DeturpaPtCabecaLixo : {
+
+                  pMatriz->pCasaCorr->pCabeca = ( tpMatriz * )( EspacoLixo ) ;
+                  break ;
+               } /* fim ativa: Faz ponteiro cabeça apontar para lixo */
+
+            /* Faz ponteiro cabeça apontar para lixo */
+
+               case DeturpaPtCabecaLixo : {
+
+                  pMatriz->pCasaCorr->pCabeca = ( tpMatriz * )( EspacoLixo ) ;
+                  break ;
+               } /* fim ativa: Faz ponteiro cabeça apontar para lixo */
+
+            } /* fim seleciona: Deturpa nó */
+
+            break ;
+
+         } /* fim ativa: Deturpa nó */
+
+      } /* fim seleciona: Raiz de ARV  &Deturpar árvore */
    } /* Fim função: MTZ Deturpar matriz */
 
 #endif
@@ -860,22 +825,16 @@ static char EspacoLixo[ 256 ] =
       tpCasaMatriz * pCasa ;
 
       #ifdef _DEBUG
-      CNT_Contar("CriarCasa, inicio", __LINE__);
       pCasa = ( tpCasaMatriz * ) CED_Malloc(sizeof( tpCasaMatriz ), __LINE__, __FILE__);
       #else
       pCasa = ( tpCasaMatriz * ) malloc( sizeof( tpCasaMatriz )) ;
       #endif
       
-      if ( pCasa == NULL ) {
-         #ifdef _DEBUG
-         CNT_Contar("CriarCasa, faltou memoria para casa", __LINE__); 
-         #endif
-         return NULL ;
-      } /* if */
-      #ifdef _DEBUG
-      CNT_Contar("CriarCasa, memoria para casa ok", __LINE__);
-      CED_DefinirTipoEspaco( pCasa , MTZ_TipoEspacoCasa ) ;
+      if ( pCasa == NULL ) return NULL ;
 
+      #ifdef _DEBUG
+      CED_DefinirTipoEspaco( pCasa , MTZ_TipoEspacoCasa ) ;
+      CED_MarcarEspacoAtivo( pCasa );
       pCasa->pCasasAdjacentes = ( tpCasaMatriz ** ) CED_Malloc(8 * sizeof( tpCasaMatriz * ), __LINE__, __FILE__);
       #else
       pCasa->pCasasAdjacentes = ( tpCasaMatriz ** ) malloc(8 * sizeof(tpCasaMatriz *));
@@ -883,7 +842,7 @@ static char EspacoLixo[ 256 ] =
 
       if ( pCasa->pCasasAdjacentes == NULL ) {
          #ifdef _DEBUG
-         CNT_Contar("CriarCasa, faltou memoria para casa", __LINE__);
+         CED_MarcarEspacoNaoAtivo(pCasa);
          CED_Free(pCasa); 
          #else
          free(pCasa);
@@ -891,8 +850,8 @@ static char EspacoLixo[ 256 ] =
          return NULL ;
       } /* if */
       #ifdef _DEBUG
-      CNT_Contar("CriarCasa, memoria para adjacentes ok", __LINE__);
       CED_DefinirTipoEspaco( pCasa->pCasasAdjacentes , MTZ_TipoEspacoVetorCasas ) ;
+      CED_MarcarEspacoAtivo(pcasa->pCasasAdjacentes);
       pCasa->tipoConteudo[0] = '\0';
       pCasa->tamBytes = 0;
       #endif
@@ -920,10 +879,6 @@ static char EspacoLixo[ 256 ] =
 
       tpCasaMatriz * pDestruir = NULL;
 
-      #ifdef _DEBUG
-      CNT_Contar("DestroiMatriz, inicio", __LINE__);
-      #endif
-
       // Destruir linha a linha
       while (pMtz->pPrimeiro != NULL) {
          // Marca que não há casas a serem destruídas
@@ -937,30 +892,18 @@ static char EspacoLixo[ 256 ] =
 
             // Destroi se houver casa marcada
             if (pDestruir != NULL) {
-               #ifdef _DEBUG
-               CNT_Contar("DestroiMatriz, ponteiro a destruir existe", __LINE__);
-               #endif
                DestroiCasa(pDestruir, pMtz->ExcluirValor);
             }
-            #ifdef _DEBUG
-            else
-               CNT_Contar("DestroiMatriz, ponteiro a destruir nulo", __LINE__);
-            #endif
+
             // Marca a casa para ser destruída na próxima iteração ou no fim da coluna
             pDestruir = pMtz->pCasaCorr;
          }
 		    
          // Destroi se houver uma marcada
          if (pDestruir != NULL) {
-            #ifdef _DEBUG
-            CNT_Contar("DestroiMatriz, ponteiro a destruir existe", __LINE__);
-            #endif
             DestroiCasa(pDestruir, pMtz->ExcluirValor);
          }
-         #ifdef _DEBUG
-         else
-            CNT_Contar("DestroiMatriz, ponteiro a destruir nulo", __LINE__);
-         #endif
+
          // Atualiza para começar a destruir a próxima linha e destroi a primeira casa da coluna
          pDestruir = pMtz->pPrimeiro;
 		 
@@ -984,18 +927,12 @@ static char EspacoLixo[ 256 ] =
 
    void DestroiCasa( tpCasaMatriz * pCasa, void ( * ExcluirValor ) ( void * pValor ) ) {
 
-      #ifdef _DEBUG
-      CNT_Contar("DestroiCasa, inicio", __LINE__);
-      #endif
       if (pCasa->conteudo != NULL) {
-         #ifdef _DEBUG
-         CNT_Contar("DestroiCasa, conteudo nao nulo sera destruido", __LINE__);
-         #endif
          ExcluirValor(pCasa->conteudo);
       }
       #ifdef _DEBUG
-      else
-         CNT_Contar("DestroiCasa, conteudo nulo", __LINE__);
+      CED_MarcarEspacoNaoAtivo(pCasa->pCasasAdjacentes);
+      CED_MarcarEspacoNaoAtivo(pCasa);
       CED_Free(pCasa->pCasasAdjacentes);
       CED_Free(pCasa);
       #else
